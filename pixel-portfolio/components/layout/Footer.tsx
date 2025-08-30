@@ -184,26 +184,9 @@ export const MainFooter: React.FC<Omit<IFooterProps, 'socialLinks' | 'footerLink
   // Get actual social links from navigation data
   const defaultSocialLinks: ISocialLink[] = getSocialLinks();
 
-  // Default footer links
-  const defaultFooterLinks = [
-    {
-      label: 'PRIVACY POLICY',
-      href: '/privacy'
-    },
-    {
-      label: 'TERMS OF SERVICE',
-      href: '/terms'
-    },
-    {
-      label: 'SITEMAP',
-      href: '/sitemap.xml'
-    }
-  ];
-
   return (
     <Footer
       socialLinks={defaultSocialLinks}
-      footerLinks={defaultFooterLinks}
       {...props}
     />
   );

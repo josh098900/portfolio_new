@@ -14,7 +14,7 @@ export const projects: IProject[] = [
     demoUrl: 'https://josh098900.github.io/travelglobe/',
     githubUrl: 'https://github.com/josh098900/travelglobe',
     featured: true,
-    completedDate: '2024-01-15'
+    completedDate: '10-04-2025'
   },
   {
     id: 'severance-review',
@@ -25,7 +25,7 @@ export const projects: IProject[] = [
     demoUrl: 'https://josh098900.github.io/severance_review/',
     githubUrl: 'https://github.com/josh098900/severance_review',
     featured: true,
-    completedDate: '2023-12-20'
+    completedDate: '12-12-2024'
   },
   {
     id: 'laptop-survival-101',
@@ -36,7 +36,7 @@ export const projects: IProject[] = [
     demoUrl: 'https://josh098900.github.io/laptop-survival-101/',
     githubUrl: 'https://github.com/josh098900/laptop-survival-101',
     featured: true,
-    completedDate: '2023-11-10'
+    completedDate: '21-01-2025'
   },
   {
     id: 'chaos-engine',
@@ -54,11 +54,11 @@ export const projects: IProject[] = [
     title: 'Live Flight Tracker',
     description: 'Real-time flight tracking application displaying live aircraft positions on an interactive 3D globe. Integrates with aviation APIs to provide up-to-date flight information.',
     technologies: ['HTML5', 'CSS3', 'JavaScript', 'Aviation API'],
-    imageUrl: '/images/placeholder-project.svg',
+    imageUrl: '/images/placeholder-project.png',
     demoUrl: 'https://liveflight.vercel.app',
     githubUrl: 'https://github.com/josh098900/liveflight',
     featured: true,
-    completedDate: '2024-02-08'
+    completedDate: '27-06-2025'
   }
 ];
 
@@ -87,8 +87,8 @@ export const getProjectById = (id: string): IProject | undefined => {
  * Get projects by technology
  */
 export const getProjectsByTechnology = (technology: string): IProject[] => {
-  return projects.filter(project => 
-    project.technologies.some(tech => 
+  return projects.filter(project =>
+    project.technologies.some(tech =>
       tech.toLowerCase().includes(technology.toLowerCase())
     )
   );
