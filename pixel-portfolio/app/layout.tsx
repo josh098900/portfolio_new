@@ -95,7 +95,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className="scroll-smooth dark" data-theme="dark">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
@@ -105,6 +105,7 @@ export default function RootLayout({
         <link rel="manifest" href="/site.webmanifest" />
         <meta name="theme-color" content="#00ff41" />
         <meta name="msapplication-TileColor" content="#0d1117" />
+        <meta name="color-scheme" content="dark" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${pixelFont.variable} antialiased min-h-screen flex flex-col`}

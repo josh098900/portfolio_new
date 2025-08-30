@@ -31,29 +31,32 @@
   --animate-blink: blink 1s infinite;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    --background: #f0f6fc;
-    --foreground: #0d1117;
-  }
+/* Force dark mode - override system preferences */
+html {
+  color-scheme: dark;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0d1117;
-    --foreground: #f0f6fc;
-  }
+/* Ensure dark mode regardless of system preference */
+:root {
+  --background: #0d1117 !important;
+  --foreground: #f0f6fc !important;
 }
 
 /* Custom pixel art styles */
 @layer base {
+  html {
+    background: #0d1117 !important;
+    color-scheme: dark;
+  }
+  
   body {
-    background: var(--background);
-    color: var(--foreground);
+    background: var(--background) !important;
+    color: var(--foreground) !important;
     font-family: var(--font-pixel), monospace;
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
     image-rendering: crisp-edges;
+    min-height: 100vh;
   }
   
   /* Pixel art background pattern */
