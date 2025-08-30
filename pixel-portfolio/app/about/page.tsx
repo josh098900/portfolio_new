@@ -40,21 +40,21 @@ export default function AboutPage() {
             <div className="bg-pixel-dark border-2 border-pixel-primary p-6">
               <h3 className="font-pixel text-pixel-primary text-lg mb-4">QUICK INFO</h3>
               <div className="space-y-3">
-                <div className="flex justify-between">
+                <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
                   <span className="font-pixel text-pixel-light text-sm">NAME:</span>
-                  <span className="font-pixel text-pixel-secondary text-sm">{personalInfo.name}</span>
+                  <span className="font-pixel text-pixel-secondary text-sm break-words">{personalInfo.name}</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
                   <span className="font-pixel text-pixel-light text-sm">ROLE:</span>
                   <span className="font-pixel text-pixel-secondary text-sm">DEVELOPER</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
                   <span className="font-pixel text-pixel-light text-sm">LOCATION:</span>
-                  <span className="font-pixel text-pixel-secondary text-sm">{personalInfo.location}</span>
+                  <span className="font-pixel text-pixel-secondary text-sm break-words">{personalInfo.location}</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
                   <span className="font-pixel text-pixel-light text-sm">EMAIL:</span>
-                  <span className="font-pixel text-pixel-secondary text-sm">{personalInfo.email}</span>
+                  <span className="font-pixel text-pixel-secondary text-sm break-all">{personalInfo.email}</span>
                 </div>
               </div>
             </div>

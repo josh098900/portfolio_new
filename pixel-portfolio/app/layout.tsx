@@ -21,8 +21,8 @@ const pixelFont = Press_Start_2P({
 
 export const metadata: Metadata = {
   title: {
-    default: "Pixel Portfolio",
-    template: "%s | Pixel Portfolio"
+    default: "Josh's Portfolio",
+    template: "%s | Josh's Portfolio"
   },
   description: "A pixel art themed developer portfolio showcasing projects, skills, and experience in modern web development",
   keywords: [
@@ -37,9 +37,9 @@ export const metadata: Metadata = {
     "React",
     "Next.js"
   ],
-  authors: [{ name: "Pixel Developer" }],
-  creator: "Pixel Developer",
-  publisher: "Pixel Portfolio",
+  authors: [{ name: "Joshua Mathers" }],
+  creator: "Joshua Mathers",
+  publisher: "Josh's Portfolio",
   formatDetection: {
     email: false,
     address: false,
@@ -53,21 +53,21 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://pixel-portfolio.vercel.app",
-    title: "Pixel Portfolio - Developer Showcase",
+    title: "Josh's Portfolio - Developer Showcase",
     description: "A pixel art themed developer portfolio showcasing projects, skills, and experience",
-    siteName: "Pixel Portfolio",
+    siteName: "Josh's Portfolio",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Pixel Portfolio - Developer Showcase",
+        alt: "Josh's Portfolio - Developer Showcase",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Pixel Portfolio - Developer Showcase",
+    title: "Josh's Portfolio - Developer Showcase",
     description: "A pixel art themed developer portfolio showcasing projects, skills, and experience",
     images: ["/og-image.png"],
     creator: "@pixeldev",
