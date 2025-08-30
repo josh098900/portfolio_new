@@ -1,0 +1,16 @@
+{
+  "name": "Josh's Portfolio",
+  "short_name": "Josh's Portfolio",
+  "description": "Josh's pixel art style portfolio showcasing web development projects and skills",
+  "icons": [
+    {
+      "src": "/images/pixelavatar.png",
+      "sizes": "1056x992",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#00ff41",
+  "background_color": "#0a0a0a",
+  "display": "standalone",
+  "start_url": "/"
+}

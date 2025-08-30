@@ -26,7 +26,7 @@ interface INavbarProps {
 export const Navbar: React.FC<INavbarProps> = ({
   navItems = [],
   showLogo = true,
-  logoText = "PIXEL PORTFOLIO",
+  logoText = "JOSH'S PORTFOLIO",
   className = ''
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
