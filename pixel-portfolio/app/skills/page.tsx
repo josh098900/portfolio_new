@@ -33,8 +33,8 @@ export default function SkillsPage() {
               CONTINUOUS LEARNING
             </h3>
             <p className="font-pixel text-pixel-light text-sm leading-relaxed max-w-2xl mx-auto">
-              Technology evolves rapidly, and I&apos;m committed to staying current with the latest 
-              developments. I regularly explore new frameworks, tools, and best practices to 
+              Technology evolves rapidly, and I&apos;m committed to staying current with the latest
+              developments. I regularly explore new frameworks, tools, and best practices to
               deliver cutting-edge solutions.
             </p>
           </div>

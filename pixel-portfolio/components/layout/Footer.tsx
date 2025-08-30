@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { ISocialLink } from '@/data/types';
 import { SocialIcon } from '@/components/ui/Icon';
+import { getSocialLinks } from '@/data/navigation';
 
 /**
  * Props for the Footer component
@@ -180,8 +181,7 @@ export default Footer;
 
 // Export specialized footer variants
 export const MainFooter: React.FC<Omit<IFooterProps, 'socialLinks' | 'footerLinks'>> = (props) => {
-  // Import actual social links from navigation data
-  const { getSocialLinks } = require('@/data/navigation');
+  // Get actual social links from navigation data
   const defaultSocialLinks: ISocialLink[] = getSocialLinks();
 
   // Default footer links
