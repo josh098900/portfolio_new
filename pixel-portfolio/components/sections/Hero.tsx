@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Button } from '@/components/ui';
 import { IPersonalInfo } from '@/data/types';
 
@@ -238,16 +239,22 @@ export const Hero: React.FC<IHeroProps> = ({
         {/* Call to Action Buttons */}
         {showCTA && (
           <div className={ctaClasses}>
-            <Button variant="primary" size="large">
-              VIEW MY WORK
-            </Button>
-            <Button variant="outline" size="large">
-              GET IN TOUCH
-            </Button>
-            {personalInfo?.resumeUrl && (
-              <Button variant="secondary" size="large">
-                DOWNLOAD CV
+            <Link href="/projects">
+              <Button variant="primary" size="large">
+                VIEW MY WORK
               </Button>
+            </Link>
+            <Link href="/contact">
+              <Button variant="outline" size="large">
+                GET IN TOUCH
+              </Button>
+            </Link>
+            {personalInfo?.resumeUrl && (
+              <Link href={personalInfo.resumeUrl} target="_blank" rel="noopener noreferrer">
+                <Button variant="secondary" size="large">
+                  DOWNLOAD CV
+                </Button>
+              </Link>
             )}
           </div>
         )}
