@@ -1,91 +1,64 @@
 import { IProject } from './types';
 
 /**
- * Sample project data for the portfolio
- * This data demonstrates the structure and can be replaced with real projects
+ * Joshua Mathers' real project portfolio
+ * Showcasing interactive web applications and creative coding projects
  */
 export const projects: IProject[] = [
   {
-    id: 'pixel-game-engine',
-    title: 'Pixel Game Engine',
-    description: 'A lightweight 2D game engine built with TypeScript and Canvas API. Features sprite animation, collision detection, and a component-based architecture perfect for retro-style games.',
-    technologies: ['TypeScript', 'Canvas API', 'WebGL', 'Webpack'],
+    id: 'travelglobe',
+    title: 'TravelGlobe',
+    description: 'An interactive 3D visualization of my travel history using Globe.GL. Explore countries I\'ve visited with smooth animations and detailed information overlays.',
+    technologies: ['Globe.GL', 'JavaScript', 'CSS3', 'HTML5'],
     imageUrl: '/images/projects/project-1.png',
-    demoUrl: 'https://pixel-game-engine-demo.vercel.app',
-    githubUrl: 'https://github.com/developer/pixel-game-engine',
+    demoUrl: 'https://josh098900.github.io/travelglobe/',
+    githubUrl: 'https://github.com/josh098900/travelglobe',
     featured: true,
-    completedDate: '2024-03-15',
-    galleryImages: [
-      '/images/projects/pixel-game-engine-1.png',
-      '/images/projects/pixel-game-engine-2.png',
-      '/images/projects/pixel-game-engine-3.png'
-    ]
+    completedDate: '2024-01-15'
   },
   {
-    id: 'retro-portfolio',
-    title: 'Retro Portfolio Website',
-    description: 'A nostalgic portfolio website inspired by 80s computer interfaces. Built with Next.js and features terminal-style navigation and pixel art animations.',
-    technologies: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
+    id: 'severance-review',
+    title: 'Severance Fan Project',
+    description: 'Interactive fan-made web application for the Apple TV series "Severance". Features immersive UI design inspired by the show\'s aesthetic and interactive elements.',
+    technologies: ['HTML5', 'CSS3', 'JavaScript'],
     imageUrl: '/images/projects/project-2.png',
-    demoUrl: 'https://retro-portfolio.vercel.app',
-    githubUrl: 'https://github.com/developer/retro-portfolio',
+    demoUrl: 'https://josh098900.github.io/severance_review/',
+    githubUrl: 'https://github.com/josh098900/severance_review',
     featured: true,
-    completedDate: '2024-02-28',
-    galleryImages: [
-      '/images/projects/retro-portfolio-1.png',
-      '/images/projects/retro-portfolio-2.png'
-    ]
+    completedDate: '2023-12-20'
   },
   {
-    id: 'pixel-art-generator',
-    title: 'Pixel Art Generator',
-    description: 'An AI-powered tool that converts regular images into pixel art. Features customizable color palettes, dithering options, and export functionality.',
-    technologies: ['Python', 'OpenCV', 'Flask', 'React', 'PIL'],
+    id: 'laptop-survival-101',
+    title: 'Laptop Survival 101',
+    description: 'A humorous interactive game about a lecturer\'s daily struggles with technology. Features engaging gameplay mechanics and witty commentary on academic life.',
+    technologies: ['HTML5', 'CSS3', 'JavaScript'],
     imageUrl: '/images/projects/project-3.png',
-    demoUrl: 'https://pixel-art-gen.herokuapp.com',
-    githubUrl: 'https://github.com/developer/pixel-art-generator',
-    featured: false,
-    completedDate: '2024-01-20',
-    galleryImages: [
-      '/images/projects/pixel-art-generator-1.png'
-    ]
-  },
-  {
-    id: 'chip8-emulator',
-    title: 'CHIP-8 Emulator',
-    description: 'A fully functional CHIP-8 emulator written in Rust with WebAssembly bindings. Includes a debugger and supports all original CHIP-8 instructions.',
-    technologies: ['Rust', 'WebAssembly', 'JavaScript', 'HTML5 Canvas'],
-    imageUrl: '/images/placeholder-project.svg',
-    demoUrl: 'https://chip8-emu.netlify.app',
-    githubUrl: 'https://github.com/developer/chip8-emulator',
+    demoUrl: 'https://josh098900.github.io/laptop-survival-101/',
+    githubUrl: 'https://github.com/josh098900/laptop-survival-101',
     featured: true,
-    completedDate: '2023-12-10',
-    galleryImages: [
-      '/images/projects/chip8-emulator-1.png',
-      '/images/projects/chip8-emulator-2.png'
-    ]
+    completedDate: '2023-11-10'
   },
   {
-    id: 'blockchain-visualizer',
-    title: 'Blockchain Visualizer',
-    description: 'An interactive web application that visualizes blockchain concepts with pixel art graphics. Educational tool for understanding cryptocurrency and distributed ledgers.',
-    technologies: ['Vue.js', 'D3.js', 'Node.js', 'Express', 'MongoDB'],
-    imageUrl: '/images/placeholder-project.svg',
-    demoUrl: 'https://blockchain-viz.vercel.app',
-    githubUrl: 'https://github.com/developer/blockchain-visualizer',
+    id: 'chaos-engine',
+    title: 'Chaos Engine',
+    description: 'A dynamic web application designed for D&D sessions, providing random event generation and campaign management tools. Built to enhance tabletop gaming experiences.',
+    technologies: ['HTML5', 'CSS3', 'JavaScript'],
+    imageUrl: '/images/projects/project-4.png',
+    demoUrl: 'https://josh098900.github.io/chaos_engine/',
+    githubUrl: 'https://github.com/josh098900/chaos_engine',
     featured: false,
-    completedDate: '2023-11-05',
+    completedDate: '2023-10-25'
   },
   {
-    id: 'retro-music-player',
-    title: 'Retro Music Player',
-    description: 'A nostalgic music player with a vintage interface inspired by 80s boomboxes. Features equalizer visualization and playlist management.',
-    technologies: ['React', 'Web Audio API', 'CSS3', 'IndexedDB'],
+    id: 'live-flight-tracker',
+    title: 'Live Flight Tracker',
+    description: 'Real-time flight tracking application displaying live aircraft positions on an interactive 3D globe. Integrates with aviation APIs to provide up-to-date flight information.',
+    technologies: ['HTML5', 'CSS3', 'JavaScript', 'Aviation API'],
     imageUrl: '/images/placeholder-project.svg',
-    demoUrl: 'https://retro-player.surge.sh',
-    githubUrl: 'https://github.com/developer/retro-music-player',
-    featured: false,
-    completedDate: '2023-10-15',
+    demoUrl: 'https://liveflight.vercel.app',
+    githubUrl: 'https://github.com/josh098900/liveflight',
+    featured: true,
+    completedDate: '2024-02-08'
   }
 ];
 
