@@ -1,0 +1,173 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0d1117;
+  --foreground: #f0f6fc;
+  --pixel-primary: #00ff41;
+  --pixel-secondary: #ff6b35;
+  --pixel-accent: #7209b7;
+  --pixel-dark: #0d1117;
+  --pixel-light: #f0f6fc;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-pixel: var(--font-pixel);
+  
+  /* Pixel Art Color Palette */
+  --color-pixel-primary: var(--pixel-primary);
+  --color-pixel-secondary: var(--pixel-secondary);
+  --color-pixel-accent: var(--pixel-accent);
+  --color-pixel-dark: var(--pixel-dark);
+  --color-pixel-light: var(--pixel-light);
+  
+  /* Custom Animations */
+  --animate-pixel-pulse: pixel-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-fade-in: fade-in 0.6s ease-out;
+  --animate-float: float 3s ease-in-out infinite;
+  --animate-blink: blink 1s infinite;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --background: #f0f6fc;
+    --foreground: #0d1117;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0d1117;
+    --foreground: #f0f6fc;
+  }
+}
+
+/* Custom pixel art styles */
+@layer base {
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-pixel), monospace;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+  }
+  
+  /* Pixel art background pattern */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      radial-gradient(circle at 1px 1px, rgba(0, 255, 65, 0.1) 1px, transparent 0);
+    background-size: 20px 20px;
+    pointer-events: none;
+    z-index: -1;
+  }
+}
+
+@layer components {
+  .pixel-button {
+    @apply bg-pixel-primary text-pixel-dark font-pixel text-sm px-4 py-2 border-2 border-pixel-primary;
+    @apply hover:bg-pixel-dark hover:text-pixel-primary transition-colors duration-200;
+    @apply focus:outline-none focus:ring-2 focus:ring-pixel-accent;
+    image-rendering: pixelated;
+  }
+  
+  .pixel-card {
+    @apply bg-pixel-dark border-2 border-pixel-primary p-4;
+    @apply shadow-lg shadow-pixel-primary/20;
+    image-rendering: pixelated;
+  }
+  
+  .pixel-text-glow {
+    text-shadow: 0 0 10px var(--pixel-primary), 0 0 20px var(--pixel-primary);
+  }
+}
+
+@layer utilities {
+  .animate-pixel-pulse {
+    animation: var(--animate-pixel-pulse);
+  }
+  
+  .animate-fade-in {
+    animation: var(--animate-fade-in);
+  }
+  
+  .animate-float {
+    animation: var(--animate-float);
+  }
+  
+  .animate-blink {
+    animation: var(--animate-blink);
+  }
+  
+  /* Background Patterns */
+  .bg-pixel-dots {
+    background-image: radial-gradient(circle at 2px 2px, var(--pixel-primary) 1px, transparent 0);
+    background-size: 20px 20px;
+  }
+  
+  .bg-pixel-grid {
+    background-image: 
+      linear-gradient(var(--pixel-primary) 1px, transparent 1px),
+      linear-gradient(90deg, var(--pixel-primary) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+  
+  .bg-pixel-waves {
+    background-image: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      var(--pixel-primary) 10px,
+      var(--pixel-primary) 11px
+    );
+  }
+}
+
+@keyframes pixel-pulse {
+  0%, 100% {
+    opacity: 1;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 0.8;
+    filter: brightness(1.2);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
