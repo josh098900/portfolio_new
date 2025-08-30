@@ -47,7 +47,7 @@ export const projects: IProject[] = [
     demoUrl: 'https://josh098900.github.io/chaos_engine/',
     githubUrl: 'https://github.com/josh098900/chaos_engine',
     featured: false,
-    completedDate: '2023-10-25'
+    completedDate: '21-11-2024'
   },
   {
     id: 'live-flight-tracker',
