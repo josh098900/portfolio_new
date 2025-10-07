@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Press_Start_2P } from "next/font/google";
 import { MainNavbar, MainFooter } from "@/components/layout";
+import { ScrollProgress } from "@/components/ui";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -106,6 +107,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${pixelFont.variable} antialiased min-h-screen flex flex-col`}
       >
+        {/* Scroll Progress Indicator */}
+        <ScrollProgress />
+        
         {/* Navigation */}
         <MainNavbar />
         

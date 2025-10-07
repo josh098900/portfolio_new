@@ -21,5 +21,11 @@ export {
 } from './SectionHeader';
 export { default as SectionHeaderDefault } from './SectionHeader';
 
+// Progress components
+export { ScrollProgress } from './ScrollProgress';
+
+// Counter components
+export { VisitorCounter } from './VisitorCounter';
+
 // Re-export types for convenience
 export type { IButtonProps, ICardProps, IBaseComponentProps } from '@/data/types';

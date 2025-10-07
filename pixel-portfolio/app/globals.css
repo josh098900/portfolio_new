@@ -92,6 +92,10 @@ html {
   .pixel-text-glow {
     text-shadow: 0 0 10px var(--pixel-primary), 0 0 20px var(--pixel-primary);
   }
+  
+  .shadow-pixel-glow {
+    box-shadow: 0 0 4px var(--pixel-primary), 0 0 8px var(--pixel-primary);
+  }
 }
 
 @layer utilities {

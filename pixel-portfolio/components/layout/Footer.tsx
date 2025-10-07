@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { ISocialLink } from '@/data/types';
 import { SocialIcon } from '@/components/ui/Icon';
+import { VisitorCounter } from '@/components/ui';
 import { getSocialLinks } from '@/data/navigation';
 
 /**
@@ -145,6 +146,11 @@ export const Footer: React.FC<IFooterProps> = ({
               ))}
             </div>
           </div>
+        </div>
+
+        {/* Visitor Counter */}
+        <div className="mb-6 flex justify-center">
+          <VisitorCounter animated={true} />
         </div>
 
         {/* Copyright Section */}
