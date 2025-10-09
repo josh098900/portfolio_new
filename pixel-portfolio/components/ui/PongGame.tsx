@@ -282,57 +282,65 @@ export function PongGame({ isOpen, onClose }: PongGameProps) {
         </div>
 
         {/* Game Canvas */}
-        <div className="border-2 border-pixel-primary mb-4 relative">
+        <div className="border-2 border-pixel-primary mb-4">
           <canvas
             ref={canvasRef}
             width={CANVAS_WIDTH}
             height={CANVAS_HEIGHT}
             className="block w-full max-w-full"
           />
-          
-          {/* Mobile Touch Controls */}
-          {isMobile && gameState.gameRunning && (
-            <>
-              {/* Left Paddle Controls */}
-              <div className="absolute left-2 top-1/2 transform -translate-y-1/2 flex flex-col space-y-2">
+        </div>
+
+        {/* Mobile Touch Controls - Below Canvas */}
+        {isMobile && gameState.gameRunning && (
+          <div className="mb-4 flex justify-center space-x-8">
+            {/* Left Paddle Controls */}
+            <div className="flex flex-col items-center space-y-2">
+              <span className="font-pixel text-pixel-primary text-xs mb-1">
+                {gameState.gameMode === 'single' ? 'YOU' : 'P1'}
+              </span>
+              <div className="flex flex-col space-y-2">
                 <button
                   onTouchStart={() => setTouchControls(prev => ({ ...prev, leftUp: true }))}
                   onTouchEnd={() => setTouchControls(prev => ({ ...prev, leftUp: false }))}
-                  className="w-12 h-12 bg-pixel-primary/20 border-2 border-pixel-primary text-pixel-primary font-pixel text-xs flex items-center justify-center select-none"
+                  className="w-14 h-14 bg-pixel-primary/20 border-2 border-pixel-primary text-pixel-primary font-pixel text-lg flex items-center justify-center select-none active:bg-pixel-primary/40"
                 >
                   ↑
                 </button>
                 <button
                   onTouchStart={() => setTouchControls(prev => ({ ...prev, leftDown: true }))}
                   onTouchEnd={() => setTouchControls(prev => ({ ...prev, leftDown: false }))}
-                  className="w-12 h-12 bg-pixel-primary/20 border-2 border-pixel-primary text-pixel-primary font-pixel text-xs flex items-center justify-center select-none"
+                  className="w-14 h-14 bg-pixel-primary/20 border-2 border-pixel-primary text-pixel-primary font-pixel text-lg flex items-center justify-center select-none active:bg-pixel-primary/40"
                 >
                   ↓
                 </button>
               </div>
+            </div>
 
-              {/* Right Paddle Controls (Two-Player Mode Only) */}
-              {gameState.gameMode === 'two-player' && (
-                <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex flex-col space-y-2">
+            {/* Right Paddle Controls (Two-Player Mode Only) */}
+            {gameState.gameMode === 'two-player' && (
+              <div className="flex flex-col items-center space-y-2">
+                <span className="font-pixel text-pixel-secondary text-xs mb-1">P2</span>
+                <div className="flex flex-col space-y-2">
                   <button
                     onTouchStart={() => setTouchControls(prev => ({ ...prev, rightUp: true }))}
                     onTouchEnd={() => setTouchControls(prev => ({ ...prev, rightUp: false }))}
-                    className="w-12 h-12 bg-pixel-secondary/20 border-2 border-pixel-secondary text-pixel-secondary font-pixel text-xs flex items-center justify-center select-none"
+                    className="w-14 h-14 bg-pixel-secondary/20 border-2 border-pixel-secondary text-pixel-secondary font-pixel text-lg flex items-center justify-center select-none active:bg-pixel-secondary/40"
                   >
                     ↑
                   </button>
                   <button
                     onTouchStart={() => setTouchControls(prev => ({ ...prev, rightDown: true }))}
                     onTouchEnd={() => setTouchControls(prev => ({ ...prev, rightDown: false }))}
-                    className="w-12 h-12 bg-pixel-secondary/20 border-2 border-pixel-secondary text-pixel-secondary font-pixel text-xs flex items-center justify-center select-none"
+                    className="w-14 h-14 bg-pixel-secondary/20 border-2 border-pixel-secondary text-pixel-secondary font-pixel text-lg flex items-center justify-center select-none active:bg-pixel-secondary/40"
                   >
                     ↓
                   </button>
                 </div>
-              )}
-            </>
-          )}
-        </div>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Game Controls */}
         <div className="space-y-4">
