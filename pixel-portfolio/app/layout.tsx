@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Press_Start_2P } from "next/font/google";
 import { MainNavbar, MainFooter } from "@/components/layout";
-import { ScrollProgress } from "@/components/ui";
+import { ScrollProgress, ArcadeButton } from "@/components/ui";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -120,6 +120,9 @@ export default function RootLayout({
         
         {/* Footer */}
         <MainFooter />
+        
+        {/* Floating Arcade Button */}
+        <ArcadeButton />
         
         {/* Skip to main content link for accessibility */}
         <a

@@ -27,5 +27,9 @@ export { ScrollProgress } from './ScrollProgress';
 // Counter components
 export { VisitorCounter } from './VisitorCounter';
 
+// Game components
+export { PongGame } from './PongGame';
+export { ArcadeButton } from './ArcadeButton';
+
 // Re-export types for convenience
 export type { IButtonProps, ICardProps, IBaseComponentProps } from '@/data/types';
