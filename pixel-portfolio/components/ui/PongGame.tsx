@@ -35,6 +35,13 @@ export function PongGame({ isOpen, onClose }: PongGameProps) {
   });
 
   const [highScore, setHighScore] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const [touchControls, setTouchControls] = useState({
+    leftUp: false,
+    leftDown: false,
+    rightUp: false,
+    rightDown: false
+  });
 
   // Game constants
   const CANVAS_WIDTH = 800;
@@ -45,10 +52,13 @@ export function PongGame({ isOpen, onClose }: PongGameProps) {
   const PADDLE_SPEED = 6;
   const WINNING_SCORE = 5;
 
-  // Load high score on mount
+  // Load high score on mount and detect mobile
   useEffect(() => {
     const saved = localStorage.getItem('pong-high-score');
     if (saved) setHighScore(parseInt(saved));
+    
+    // Detect mobile device
+    setIsMobile('ontouchstart' in window || navigator.maxTouchPoints > 0);
   }, []);
 
   // Reset game
@@ -106,11 +116,11 @@ export function PongGame({ isOpen, onClose }: PongGameProps) {
       setGameState(prev => {
         const newState = { ...prev };
 
-        // Handle paddle movement
-        if (keysRef.current.has('w') && newState.leftPaddle.y > 0) {
+        // Handle paddle movement (keyboard + touch)
+        if ((keysRef.current.has('w') || touchControls.leftUp) && newState.leftPaddle.y > 0) {
           newState.leftPaddle.y -= PADDLE_SPEED;
         }
-        if (keysRef.current.has('s') && newState.leftPaddle.y < CANVAS_HEIGHT - PADDLE_HEIGHT) {
+        if ((keysRef.current.has('s') || touchControls.leftDown) && newState.leftPaddle.y < CANVAS_HEIGHT - PADDLE_HEIGHT) {
           newState.leftPaddle.y += PADDLE_SPEED;
         }
 
@@ -136,11 +146,11 @@ export function PongGame({ isOpen, onClose }: PongGameProps) {
             }
           }
         } else {
-          // Two-player mode
-          if (keysRef.current.has('arrowup') && newState.rightPaddle.y > 0) {
+          // Two-player mode (keyboard + touch)
+          if ((keysRef.current.has('arrowup') || touchControls.rightUp) && newState.rightPaddle.y > 0) {
             newState.rightPaddle.y -= PADDLE_SPEED;
           }
-          if (keysRef.current.has('arrowdown') && newState.rightPaddle.y < CANVAS_HEIGHT - PADDLE_HEIGHT) {
+          if ((keysRef.current.has('arrowdown') || touchControls.rightDown) && newState.rightPaddle.y < CANVAS_HEIGHT - PADDLE_HEIGHT) {
             newState.rightPaddle.y += PADDLE_SPEED;
           }
         }
@@ -216,7 +226,7 @@ export function PongGame({ isOpen, onClose }: PongGameProps) {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [isOpen, gameState.gameRunning, highScore]);
+  }, [isOpen, gameState.gameRunning, highScore, touchControls]);
 
   // Render game
   useEffect(() => {
@@ -258,8 +268,8 @@ export function PongGame({ isOpen, onClose }: PongGameProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-      <div className="bg-pixel-dark border-4 border-pixel-primary p-6 max-w-4xl w-full mx-4">
+    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-2">
+      <div className="bg-pixel-dark border-2 md:border-4 border-pixel-primary p-3 md:p-6 max-w-4xl w-full max-h-full overflow-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-4">
           <h2 className="font-pixel text-pixel-primary text-xl">RETRO PONG</h2>
@@ -272,13 +282,56 @@ export function PongGame({ isOpen, onClose }: PongGameProps) {
         </div>
 
         {/* Game Canvas */}
-        <div className="border-2 border-pixel-primary mb-4">
+        <div className="border-2 border-pixel-primary mb-4 relative">
           <canvas
             ref={canvasRef}
             width={CANVAS_WIDTH}
             height={CANVAS_HEIGHT}
             className="block w-full max-w-full"
           />
+          
+          {/* Mobile Touch Controls */}
+          {isMobile && gameState.gameRunning && (
+            <>
+              {/* Left Paddle Controls */}
+              <div className="absolute left-2 top-1/2 transform -translate-y-1/2 flex flex-col space-y-2">
+                <button
+                  onTouchStart={() => setTouchControls(prev => ({ ...prev, leftUp: true }))}
+                  onTouchEnd={() => setTouchControls(prev => ({ ...prev, leftUp: false }))}
+                  className="w-12 h-12 bg-pixel-primary/20 border-2 border-pixel-primary text-pixel-primary font-pixel text-xs flex items-center justify-center select-none"
+                >
+                  ↑
+                </button>
+                <button
+                  onTouchStart={() => setTouchControls(prev => ({ ...prev, leftDown: true }))}
+                  onTouchEnd={() => setTouchControls(prev => ({ ...prev, leftDown: false }))}
+                  className="w-12 h-12 bg-pixel-primary/20 border-2 border-pixel-primary text-pixel-primary font-pixel text-xs flex items-center justify-center select-none"
+                >
+                  ↓
+                </button>
+              </div>
+
+              {/* Right Paddle Controls (Two-Player Mode Only) */}
+              {gameState.gameMode === 'two-player' && (
+                <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex flex-col space-y-2">
+                  <button
+                    onTouchStart={() => setTouchControls(prev => ({ ...prev, rightUp: true }))}
+                    onTouchEnd={() => setTouchControls(prev => ({ ...prev, rightUp: false }))}
+                    className="w-12 h-12 bg-pixel-secondary/20 border-2 border-pixel-secondary text-pixel-secondary font-pixel text-xs flex items-center justify-center select-none"
+                  >
+                    ↑
+                  </button>
+                  <button
+                    onTouchStart={() => setTouchControls(prev => ({ ...prev, rightDown: true }))}
+                    onTouchEnd={() => setTouchControls(prev => ({ ...prev, rightDown: false }))}
+                    className="w-12 h-12 bg-pixel-secondary/20 border-2 border-pixel-secondary text-pixel-secondary font-pixel text-xs flex items-center justify-center select-none"
+                  >
+                    ↓
+                  </button>
+                </div>
+              )}
+            </>
+          )}
         </div>
 
         {/* Game Controls */}
@@ -318,8 +371,8 @@ export function PongGame({ isOpen, onClose }: PongGameProps) {
               
               <p className="font-pixel text-pixel-light text-xs">
                 {gameState.gameMode === 'single' 
-                  ? `You: W/S keys | Bot: AI controlled | First to ${WINNING_SCORE} wins!`
-                  : `Player 1: W/S keys | Player 2: Arrow keys | First to ${WINNING_SCORE} wins!`
+                  ? `You: ${isMobile ? 'Touch controls' : 'W/S keys'} | Bot: AI controlled | First to ${WINNING_SCORE} wins!`
+                  : `Player 1: ${isMobile ? 'Left controls' : 'W/S keys'} | Player 2: ${isMobile ? 'Right controls' : 'Arrow keys'} | First to ${WINNING_SCORE} wins!`
                 }
               </p>
             </div>
