@@ -85,6 +85,8 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
         flex items-center justify-center
         ${prefersReducedMotion ? '' : 'animate-fade-in'}
         transition-all duration-300 ease-in-out
+        p-4 sm:p-6
+        overflow-y-auto
       `}
       role="dialog"
       aria-modal="true"
@@ -101,43 +103,46 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
       {/* Welcome content container */}
       <div 
         className={`
-          relative max-w-6xl mx-auto px-6 py-8
+          relative w-full max-w-6xl mx-auto
           text-center
           ${prefersReducedMotion ? '' : 'animate-slide-up'}
           cursor-default
           transition-transform duration-300 ease-out
+          my-auto
+          min-h-0
         `}
 
       >
         {children}
         
         {/* Play button with coin icon */}
-        <div className="mt-8 flex justify-center">
+        <div className="mt-6 sm:mt-8 flex justify-center px-4">
           <button
             onClick={handlePlayClick}
             className={`
               group relative
               bg-pixel-primary hover:bg-pixel-secondary
               text-pixel-dark hover:text-pixel-light
-              font-pixel text-lg px-8 py-4
+              font-pixel text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4
               border-4 border-pixel-primary hover:border-pixel-secondary
               transition-all duration-200 ease-in-out
               transform hover:scale-105 active:scale-95
               shadow-lg hover:shadow-pixel-glow
               ${prefersReducedMotion ? '' : 'animate-pulse hover:animate-none'}
+              w-full max-w-xs sm:w-auto
             `}
             aria-label="Start exploring the portfolio"
           >
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center justify-center space-x-2 sm:space-x-3">
               {/* Coin icon */}
               <div className={`
-                w-6 h-6 rounded-full 
+                w-5 h-5 sm:w-6 sm:h-6 rounded-full 
                 bg-gradient-to-br from-yellow-400 to-yellow-600
                 border-2 border-yellow-300
                 flex items-center justify-center
                 ${prefersReducedMotion ? '' : 'animate-spin group-hover:animate-bounce'}
               `}>
-                <div className="w-2 h-2 bg-yellow-200 rounded-full"></div>
+                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-yellow-200 rounded-full"></div>
               </div>
               
               {/* Button text */}
@@ -153,7 +158,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
         {/* ESC instruction */}
         <div 
           id="welcome-description"
-          className={`mt-4 text-pixel-primary/60 text-xs font-pixel ${prefersReducedMotion ? '' : 'animate-blink'}`}
+          className={`mt-3 sm:mt-4 text-pixel-primary/60 text-xs font-pixel ${prefersReducedMotion ? '' : 'animate-blink'} px-4`}
         >
           Press ESC to continue
         </div>

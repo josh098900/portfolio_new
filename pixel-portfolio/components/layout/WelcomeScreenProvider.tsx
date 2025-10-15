@@ -16,12 +16,12 @@ export function WelcomeScreenProvider({ children }: WelcomeScreenProviderProps) 
     <>
       {children}
       <WelcomeScreen isVisible={isVisible} onDismiss={dismissWelcomeScreen}>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 items-center max-w-6xl mx-auto">
           {/* 3D Robot Section */}
           <div className="order-2 lg:order-1 flex justify-center">
-            <div className="w-full max-w-md lg:max-w-lg">
+            <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg mx-auto">
               <SplineRobot 
-                className="w-full h-64 sm:h-80 lg:h-96"
+                className="w-full h-48 sm:h-64 md:h-80 lg:h-96"
                 timeout={8000}
                 forceLoad={true}
               />
