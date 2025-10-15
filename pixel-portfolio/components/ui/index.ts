@@ -31,5 +31,10 @@ export { VisitorCounter } from './VisitorCounter';
 export { PongGame } from './PongGame';
 export { ArcadeButton } from './ArcadeButton';
 
+// Welcome screen components
+export { WelcomeScreen } from './WelcomeScreen';
+export { WelcomeContent, SimpleWelcomeContent } from './WelcomeContent';
+export { default as SplineRobot } from './SplineRobot';
+
 // Re-export types for convenience
 export type { IButtonProps, ICardProps, IBaseComponentProps } from '@/data/types';

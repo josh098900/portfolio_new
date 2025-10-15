@@ -27,6 +27,8 @@
   /* Custom Animations */
   --animate-pixel-pulse: pixel-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   --animate-fade-in: fade-in 0.6s ease-out;
+  --animate-fade-out: fade-out 0.4s ease-in;
+  --animate-slide-up: slide-up 0.8s ease-out;
   --animate-float: float 3s ease-in-out infinite;
   --animate-blink: blink 1s infinite;
 }
@@ -107,6 +109,14 @@ html {
     animation: var(--animate-fade-in);
   }
   
+  .animate-fade-out {
+    animation: var(--animate-fade-out);
+  }
+  
+  .animate-slide-up {
+    animation: var(--animate-slide-up);
+  }
+  
   .animate-float {
     animation: var(--animate-float);
   }
@@ -176,5 +186,64 @@ html {
   }
   51%, 100% {
     opacity: 0;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Accessibility: Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  /* Disable specific animations for reduced motion */
+  .animate-pixel-pulse,
+  .animate-fade-in,
+  .animate-fade-out,
+  .animate-slide-up,
+  .animate-float,
+  .animate-blink,
+  .animate-bounce,
+  .animate-pulse,
+  .animate-ping {
+    animation: none !important;
+  }
+  
+  /* Keep essential transforms but remove motion */
+  .animate-fade-in,
+  .animate-fade-out,
+  .animate-slide-up {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
+  
+  .animate-float {
+    transform: translateY(0) !important;
   }
 }

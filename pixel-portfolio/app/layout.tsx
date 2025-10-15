@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Press_Start_2P } from "next/font/google";
-import { MainNavbar, MainFooter } from "@/components/layout";
+import { MainNavbar, MainFooter, WelcomeScreenProvider } from "@/components/layout";
 import { ScrollProgress, ArcadeButton } from "@/components/ui";
 import "./globals.css";
 
@@ -107,30 +107,32 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${pixelFont.variable} antialiased min-h-screen flex flex-col`}
       >
-        {/* Scroll Progress Indicator */}
-        <ScrollProgress />
-        
-        {/* Navigation */}
-        <MainNavbar />
-        
-        {/* Main Content */}
-        <main className="flex-1 pt-16">
-          {children}
-        </main>
-        
-        {/* Footer */}
-        <MainFooter />
-        
-        {/* Floating Arcade Button */}
-        <ArcadeButton />
-        
-        {/* Skip to main content link for accessibility */}
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-pixel-primary text-pixel-dark font-pixel text-sm px-4 py-2 z-50"
-        >
-          Skip to main content
-        </a>
+        <WelcomeScreenProvider>
+          {/* Scroll Progress Indicator */}
+          <ScrollProgress />
+          
+          {/* Navigation */}
+          <MainNavbar />
+          
+          {/* Main Content */}
+          <main className="flex-1 pt-16" id="main-content">
+            {children}
+          </main>
+          
+          {/* Footer */}
+          <MainFooter />
+          
+          {/* Floating Arcade Button */}
+          <ArcadeButton />
+          
+          {/* Skip to main content link for accessibility */}
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-pixel-primary text-pixel-dark font-pixel text-sm px-4 py-2 z-50"
+          >
+            Skip to main content
+          </a>
+        </WelcomeScreenProvider>
       </body>
     </html>
   );
