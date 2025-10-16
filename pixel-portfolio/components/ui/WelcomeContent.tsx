@@ -30,11 +30,11 @@ export const WelcomeContent: React.FC<WelcomeContentProps> = ({
     if (typeof window !== 'undefined') {
       const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
       setPrefersReducedMotion(mediaQuery.matches);
-      
+
       const handleChange = (e: MediaQueryListEvent) => {
         setPrefersReducedMotion(e.matches);
       };
-      
+
       mediaQuery.addEventListener('change', handleChange);
       return () => mediaQuery.removeEventListener('change', handleChange);
     }
@@ -44,7 +44,7 @@ export const WelcomeContent: React.FC<WelcomeContentProps> = ({
     <div className="space-y-6 text-center">
       {/* Main welcome title */}
       <div className="space-y-4">
-        <h1 
+        <h1
           id="welcome-title"
           className={`
             font-pixel text-pixel-primary text-glow
@@ -56,7 +56,7 @@ export const WelcomeContent: React.FC<WelcomeContentProps> = ({
         >
           WELCOME TO MY PORTFOLIO
         </h1>
-        
+
         {/* Pixel art decorative line */}
         <div className="flex justify-center items-center space-x-2" aria-hidden="true">
           <div className="w-8 h-0.5 bg-pixel-secondary"></div>
@@ -67,7 +67,7 @@ export const WelcomeContent: React.FC<WelcomeContentProps> = ({
 
       {/* Portfolio owner information */}
       <div className="space-y-3">
-        <h2 
+        <h2
           className={`
             font-pixel text-pixel-light
             text-lg sm:text-xl md:text-2xl
@@ -77,8 +77,8 @@ export const WelcomeContent: React.FC<WelcomeContentProps> = ({
         >
           {name}
         </h2>
-        
-        <p 
+
+        <p
           className={`
             font-pixel text-pixel-secondary
             text-sm sm:text-base md:text-lg
@@ -101,7 +101,7 @@ export const WelcomeContent: React.FC<WelcomeContentProps> = ({
         `}>
           {subtitle}
         </p>
-        
+
         {/* Pixel art decorative elements */}
         <div className="flex justify-center space-x-4" aria-hidden="true">
           <div className={`w-1 h-1 bg-pixel-primary ${prefersReducedMotion ? '' : 'animate-blink'}`}></div>
@@ -113,7 +113,7 @@ export const WelcomeContent: React.FC<WelcomeContentProps> = ({
       {/* Interactive instruction text */}
       {showInstruction && (
         <div className="mt-8 pt-6 border-t border-pixel-primary/30">
-          <p 
+          <p
             className={`
               font-pixel text-pixel-primary/70
               text-xs sm:text-sm
@@ -143,11 +143,11 @@ export const SimpleWelcomeContent: React.FC<Omit<WelcomeContentProps, 'showInstr
     if (typeof window !== 'undefined') {
       const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
       setPrefersReducedMotion(mediaQuery.matches);
-      
+
       const handleChange = (e: MediaQueryListEvent) => {
         setPrefersReducedMotion(e.matches);
       };
-      
+
       mediaQuery.addEventListener('change', handleChange);
       return () => mediaQuery.removeEventListener('change', handleChange);
     }
@@ -157,30 +157,30 @@ export const SimpleWelcomeContent: React.FC<Omit<WelcomeContentProps, 'showInstr
   return (
     <div className="space-y-4 text-center">
       <div className="text-4xl mb-4" role="img" aria-label="Robot emoji">🤖</div>
-      
-      <h1 
+
+      <h1
         className="font-pixel text-pixel-primary text-2xl md:text-3xl"
         aria-label={`Welcome to ${name}'s portfolio`}
       >
         WELCOME
       </h1>
-      
+
       <div className="space-y-2">
-        <h2 
+        <h2
           className="font-pixel text-pixel-light text-lg"
           aria-label={`Portfolio by ${name}`}
         >
           {name}
         </h2>
-        <p 
+        <p
           className="font-pixel text-pixel-secondary text-sm"
           aria-label={`Role: ${title}`}
         >
           {title}
         </p>
       </div>
-      
-      <p 
+
+      <p
         className={`font-pixel text-pixel-primary/70 text-xs ${prefersReducedMotion ? '' : 'animate-pulse'}`}
         aria-label="Click anywhere to continue to the portfolio"
       >

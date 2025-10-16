@@ -249,13 +249,14 @@ export const Hero: React.FC<IHeroProps> = ({
                 GET IN TOUCH
               </Button>
             </Link>
-            {personalInfo?.resumeUrl && (
-              <Link href={personalInfo.resumeUrl} target="_blank" rel="noopener noreferrer">
-                <Button variant="secondary" size="large">
-                  DOWNLOAD CV
-                </Button>
-              </Link>
-            )}
+            <Link href="https://medium.com/@joshmathers3" target="_blank" rel="noopener noreferrer">
+              <Button variant="outline" size="large">
+                <span className="flex items-center space-x-2">
+                  <span className="text-lg">✍️</span>
+                  <span>READ MY BLOG</span>
+                </span>
+              </Button>
+            </Link>
           </div>
         )}
 

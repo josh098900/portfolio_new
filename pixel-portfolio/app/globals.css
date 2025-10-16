@@ -8,6 +8,8 @@
   --pixel-accent: #7209b7;
   --pixel-dark: #0d1117;
   --pixel-light: #f0f6fc;
+  --medium-green: #00AB6C;
+  --medium-green-dark: #00954A;
 }
 
 @theme inline {
@@ -23,6 +25,8 @@
   --color-pixel-accent: var(--pixel-accent);
   --color-pixel-dark: var(--pixel-dark);
   --color-pixel-light: var(--pixel-light);
+  --color-medium-green: var(--medium-green);
+  --color-medium-green-dark: var(--medium-green-dark);
   
   /* Custom Animations */
   --animate-pixel-pulse: pixel-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
