@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui';
 import { IPersonalInfo } from '@/data/types';
+import { HALLOWEEN_MODE } from '@/lib/constants';
 
 /**
  * Props for the Hero component
@@ -49,7 +50,9 @@ export const Hero: React.FC<IHeroProps> = ({
   useEffect(() => {
     if (!isMounted || !animated || !personalInfo?.title) return;
 
-    const titles = [personalInfo.title, 'PIXEL ARTIST', 'CODE WIZARD', 'DIGITAL CREATOR'].filter(Boolean);
+    const titles = HALLOWEEN_MODE 
+      ? [personalInfo.title, 'PIXEL ARTIST', 'CODE WIZARD', 'DIGITAL CREATOR', 'HAPPY HALLOWEEN', 'SPOOKY CODER'].filter(Boolean)
+      : [personalInfo.title, 'PIXEL ARTIST', 'CODE WIZARD', 'DIGITAL CREATOR'].filter(Boolean);
     const currentTitleText = titles[titleIndex % titles.length];
     
     if (currentTitleText && currentTitle.length < currentTitleText.length) {
@@ -174,17 +177,25 @@ export const Hero: React.FC<IHeroProps> = ({
               const delay = (i * 0.3) % 5;
               const duration = 3 + (i * 0.2) % 4;
               
+              // 🎃 Halloween: Some pixels become pumpkins
+              const isPumpkin = HALLOWEEN_MODE && i % 7 === 0; // Every 7th element
+              
               return (
                 <div
                   key={i}
-                  className="absolute w-2 h-2 bg-pixel-accent animate-float"
+                  className={isPumpkin 
+                    ? "absolute text-2xl animate-float" 
+                    : "absolute w-2 h-2 bg-pixel-accent animate-float"
+                  }
                   style={{
                     left: `${left}%`,
                     top: `${top}%`,
                     animationDelay: `${delay}s`,
                     animationDuration: `${duration}s`
                   }}
-                />
+                >
+                  {isPumpkin ? '🎃' : ''}
+                </div>
               );
             })}
           </div>
@@ -284,6 +295,16 @@ export const Hero: React.FC<IHeroProps> = ({
       <div className="absolute top-4 right-4 w-8 h-8 border-t-2 border-r-2 border-pixel-primary" />
       <div className="absolute bottom-4 left-4 w-8 h-8 border-b-2 border-l-2 border-pixel-primary" />
       <div className="absolute bottom-4 right-4 w-8 h-8 border-b-2 border-r-2 border-pixel-primary" />
+      
+      {/* 🎃 Halloween Pumpkin Decorations */}
+      {HALLOWEEN_MODE && (
+        <>
+          <div className="absolute top-2 left-2 text-2xl animate-pulse">🎃</div>
+          <div className="absolute top-2 right-2 text-2xl animate-pulse" style={{ animationDelay: '0.5s' }}>🎃</div>
+          <div className="absolute bottom-2 left-2 text-2xl animate-pulse" style={{ animationDelay: '1s' }}>🎃</div>
+          <div className="absolute bottom-2 right-2 text-2xl animate-pulse" style={{ animationDelay: '1.5s' }}>🎃</div>
+        </>
+      )}
     </section>
   );
 };

@@ -93,6 +93,7 @@ export const Card: React.FC<ICardProps> = ({
       {...interactiveProps}
       {...props}
     >
+      
       {title && (
         <div className="mb-4 pb-2 border-b border-pixel-primary/30">
           <h3 className="text-pixel-primary text-sm font-pixel leading-tight">
