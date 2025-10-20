@@ -50,13 +50,13 @@ export const projects: IProject[] = [
     completedDate: '21-11-2024'
   },
   {
-    id: 'live-flight-tracker',
-    title: 'Live Flight Tracker',
-    description: 'Real-time flight tracking application displaying live aircraft positions on an interactive 3D globe. Integrates with aviation APIs to provide up-to-date flight information.',
-    technologies: ['HTML5', 'CSS3', 'JavaScript', 'Aviation API'],
-    imageUrl: '/images/placeholder-project.png',
-    demoUrl: 'https://liveflight.vercel.app',
-    githubUrl: 'https://github.com/josh098900/liveflight',
+    id: 'f1-canadian-gp-dashboard',
+    title: 'F1 Canadian GP Dashboard',
+    description: 'Real time weather dashboard for the canadian grand prix',
+    technologies: ['HTML5', 'CSS3', 'JavaScript', 'Nextjs'],
+    imageUrl: '/images/projects/f1-canadian-gp.png',
+    demoUrl: 'https://canadagp.vercel.app/',
+    githubUrl: 'https://github.com/josh098900/canadagp',
     featured: true,
     completedDate: '27-06-2025'
   }
