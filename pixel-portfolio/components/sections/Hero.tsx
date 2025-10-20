@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui';
+import { AudioModal } from '@/components/ui/AudioModal';
 import { IPersonalInfo } from '@/data/types';
 import { HALLOWEEN_MODE } from '@/lib/constants';
 
@@ -38,6 +39,7 @@ export const Hero: React.FC<IHeroProps> = ({
   const [currentTitle, setCurrentTitle] = useState('');
   const [titleIndex, setTitleIndex] = useState(0);
   const [isMounted, setIsMounted] = useState(false);
+  const [isAudioModalOpen, setIsAudioModalOpen] = useState(false);
 
   // Mount effect to prevent hydration mismatch
   useEffect(() => {
@@ -252,22 +254,28 @@ export const Hero: React.FC<IHeroProps> = ({
           <div className={ctaClasses}>
             <Link href="/projects">
               <Button variant="primary" size="large">
-                VIEW MY WORK
+                <span className="flex items-center justify-center">
+                  VIEW MY WORK
+                </span>
               </Button>
             </Link>
             <Link href="/contact">
               <Button variant="outline" size="large">
-                GET IN TOUCH
-              </Button>
-            </Link>
-            <Link href="https://medium.com/@joshmathers3" target="_blank" rel="noopener noreferrer">
-              <Button variant="outline" size="large">
-                <span className="flex items-center space-x-2">
-                  <span className="text-lg">✍️</span>
-                  <span>READ MY BLOG</span>
+                <span className="flex items-center justify-center">
+                  GET IN TOUCH
                 </span>
               </Button>
             </Link>
+            <Button 
+              variant="outline" 
+              size="large"
+              onClick={() => setIsAudioModalOpen(true)}
+            >
+              <span className="flex items-center justify-center space-x-2">
+                <span className="text-lg">🎧</span>
+                <span>LISTEN TO MY BLOG</span>
+              </span>
+            </Button>
           </div>
         )}
 
@@ -305,6 +313,12 @@ export const Hero: React.FC<IHeroProps> = ({
           <div className="absolute bottom-2 right-2 text-2xl animate-pulse" style={{ animationDelay: '1.5s' }}>🎃</div>
         </>
       )}
+
+      {/* Audio Modal */}
+      <AudioModal 
+        isOpen={isAudioModalOpen} 
+        onClose={() => setIsAudioModalOpen(false)} 
+      />
     </section>
   );
 };

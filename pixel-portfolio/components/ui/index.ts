@@ -36,5 +36,8 @@ export { WelcomeScreen } from './WelcomeScreen';
 export { WelcomeContent, SimpleWelcomeContent } from './WelcomeContent';
 export { default as SplineRobot } from './SplineRobot';
 
+// Audio components
+export { AudioModal } from './AudioModal';
+
 // Re-export types for convenience
 export type { IButtonProps, ICardProps, IBaseComponentProps } from '@/data/types';
