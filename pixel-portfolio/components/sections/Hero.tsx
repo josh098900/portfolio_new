@@ -53,7 +53,7 @@ export const Hero: React.FC<IHeroProps> = ({
     if (!isMounted || !animated || !personalInfo?.title) return;
 
     const titles = HALLOWEEN_MODE 
-      ? [personalInfo.title, 'PIXEL ARTIST', 'CODE WIZARD', 'DIGITAL CREATOR', 'HAPPY HALLOWEEN', 'SPOOKY CODER'].filter(Boolean)
+      ? [personalInfo.title, 'PIXEL ARTIST', 'CODE WIZARD', 'DIGITAL CREATOR', 'MERRY CHRISTMAS', 'CHRISTMAS CODER'].filter(Boolean)
       : [personalInfo.title, 'PIXEL ARTIST', 'CODE WIZARD', 'DIGITAL CREATOR'].filter(Boolean);
     const currentTitleText = titles[titleIndex % titles.length];
     
@@ -196,7 +196,7 @@ export const Hero: React.FC<IHeroProps> = ({
                     animationDuration: `${duration}s`
                   }}
                 >
-                  {isPumpkin ? '🎃' : ''}
+                  {isPumpkin ? '⛄️' : ''}
                 </div>
               );
             })}
@@ -307,10 +307,10 @@ export const Hero: React.FC<IHeroProps> = ({
       {/* 🎃 Halloween Pumpkin Decorations */}
       {HALLOWEEN_MODE && (
         <>
-          <div className="absolute top-2 left-2 text-2xl animate-pulse">🎃</div>
-          <div className="absolute top-2 right-2 text-2xl animate-pulse" style={{ animationDelay: '0.5s' }}>🎃</div>
-          <div className="absolute bottom-2 left-2 text-2xl animate-pulse" style={{ animationDelay: '1s' }}>🎃</div>
-          <div className="absolute bottom-2 right-2 text-2xl animate-pulse" style={{ animationDelay: '1.5s' }}>🎃</div>
+          <div className="absolute top-2 left-2 text-2xl animate-pulse">⛄️</div>
+          <div className="absolute top-2 right-2 text-2xl animate-pulse" style={{ animationDelay: '0.5s' }}>⛄️</div>
+          <div className="absolute bottom-2 left-2 text-2xl animate-pulse" style={{ animationDelay: '1s' }}>⛄️</div>
+          <div className="absolute bottom-2 right-2 text-2xl animate-pulse" style={{ animationDelay: '1.5s' }}>⛄️</div>
         </>
       )}
 
