@@ -34,7 +34,6 @@ export { ArcadeButton } from './ArcadeButton';
 // Welcome screen components
 export { WelcomeScreen } from './WelcomeScreen';
 export { WelcomeContent, SimpleWelcomeContent } from './WelcomeContent';
-export { default as SplineRobot } from './SplineRobot';
 
 // Audio components
 export { AudioModal } from './AudioModal';
