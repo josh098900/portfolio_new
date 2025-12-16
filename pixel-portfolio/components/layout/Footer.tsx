@@ -6,6 +6,24 @@ import { VisitorCounter } from '@/components/ui';
 import { getSocialLinks } from '@/data/navigation';
 
 /**
+ * Buy Me a Coffee button component with pixel art styling
+ */
+const BuyMeCoffeeButton: React.FC = () => {
+  return (
+    <a
+      href="https://www.buymeacoffee.com/josh098900"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex items-center gap-2 px-4 py-2 font-pixel text-xs bg-[#33ff0a] text-pixel-dark border-2 border-pixel-dark hover:bg-[#2be009] hover:scale-105 transition-all duration-200 shadow-[2px_2px_0px_0px_rgba(0,0,0,0.8)]"
+      title="Support my work"
+    >
+      <span className="text-base">☕</span>
+      <span>BUY ME A COFFEE</span>
+    </a>
+  );
+};
+
+/**
  * Props for the Footer component
  */
 interface IFooterProps {
@@ -113,6 +131,11 @@ export const Footer: React.FC<IFooterProps> = ({
             </div>
           </div>
         )}
+
+        {/* Buy Me a Coffee Button */}
+        <div className="mb-6 flex justify-center">
+          <BuyMeCoffeeButton />
+        </div>
 
         {/* Footer Links Section */}
         {footerLinks.length > 0 && (
