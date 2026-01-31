@@ -17,10 +17,14 @@
     "preview": "yarn build && yarn start"
   },
   "dependencies": {
+    "@ai-sdk/groq": "^3.0.20",
+    "@ai-sdk/react": "^3.0.68",
     "@vercel/kv": "^3.0.0",
+    "ai": "^6.0.66",
     "next": "15.5.7",
     "react": "19.1.2",
-    "react-dom": "19.1.2"
+    "react-dom": "19.1.2",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

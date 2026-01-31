@@ -38,5 +38,8 @@ export { WelcomeContent, SimpleWelcomeContent } from './WelcomeContent';
 // Audio components
 export { AudioModal } from './AudioModal';
 
+// Chat components
+export { ChatBot } from './ChatBot';
+
 // Re-export types for convenience
 export type { IButtonProps, ICardProps, IBaseComponentProps } from '@/data/types';

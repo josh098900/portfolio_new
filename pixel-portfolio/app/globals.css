@@ -35,6 +35,7 @@
   --animate-slide-up: slide-up 0.8s ease-out;
   --animate-float: float 3s ease-in-out infinite;
   --animate-blink: blink 1s infinite;
+  --animate-bounce-slow: bounce-slow 2s ease-in-out infinite;
 }
 
 /* Force dark mode - override system preferences */
@@ -129,6 +130,10 @@ html {
     animation: var(--animate-blink);
   }
   
+  .animate-bounce-slow {
+    animation: var(--animate-bounce-slow);
+  }
+  
   /* Background Patterns */
   .bg-pixel-dots {
     background-image: radial-gradient(circle at 2px 2px, var(--pixel-primary) 1px, transparent 0);
@@ -190,6 +195,15 @@ html {
   }
   51%, 100% {
     opacity: 0;
+  }
+}
+
+@keyframes bounce-slow {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
   }
 }
 

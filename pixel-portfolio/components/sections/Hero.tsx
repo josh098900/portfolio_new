@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui';
 import { AudioModal } from '@/components/ui/AudioModal';
+import { ChatBot } from '@/components/ui/ChatBot';
 import { IPersonalInfo } from '@/data/types';
 import { HALLOWEEN_MODE } from '@/lib/constants';
 
@@ -40,6 +41,7 @@ export const Hero: React.FC<IHeroProps> = ({
   const [titleIndex, setTitleIndex] = useState(0);
   const [isMounted, setIsMounted] = useState(false);
   const [isAudioModalOpen, setIsAudioModalOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   // Mount effect to prevent hydration mismatch
   useEffect(() => {
@@ -276,6 +278,16 @@ export const Hero: React.FC<IHeroProps> = ({
                 <span>LISTEN TO MY BLOG</span>
               </span>
             </Button>
+            <Button 
+              variant="outline" 
+              size="large"
+              onClick={() => setIsChatOpen(true)}
+            >
+              <span className="flex items-center justify-center space-x-2">
+                <span className="text-lg">🤖</span>
+                <span>ASK MY AI</span>
+              </span>
+            </Button>
           </div>
         )}
 
@@ -318,6 +330,12 @@ export const Hero: React.FC<IHeroProps> = ({
       <AudioModal 
         isOpen={isAudioModalOpen} 
         onClose={() => setIsAudioModalOpen(false)} 
+      />
+
+      {/* Chat Modal */}
+      <ChatBot 
+        isOpen={isChatOpen} 
+        onClose={() => setIsChatOpen(false)} 
       />
     </section>
   );
