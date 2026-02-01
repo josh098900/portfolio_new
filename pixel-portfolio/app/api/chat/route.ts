@@ -116,7 +116,24 @@ export async function POST(req: Request) {
     });
 
     return Response.json({ response: result.text });
-  } catch {
+  } catch (error: unknown) {
+    // Check if it's a Groq rate limit error
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    
+    if (errorMessage.includes('rate_limit') || errorMessage.includes('429')) {
+      return Response.json(
+        { error: 'AI is taking a break! Please try again in a minute.' },
+        { status: 429 }
+      );
+    }
+    
+    if (errorMessage.includes('quota') || errorMessage.includes('limit')) {
+      return Response.json(
+        { error: 'Daily limit reached. Please try again tomorrow!' },
+        { status: 429 }
+      );
+    }
+
     return Response.json(
       { error: 'Something went wrong. Please try again.' },
       { status: 500 }
