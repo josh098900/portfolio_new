@@ -18,56 +18,45 @@ export function VisitorCounter({
   const [displayCount, setDisplayCount] = useState<number>(0);
 
   useEffect(() => {
-    const fetchAndIncrementCount = async () => {
+    let cancelled = false;
+
+    const fetchCount = async () => {
       try {
-        // Check if user has visited before today
-        const today = new Date().toDateString();
-        const lastVisit = localStorage.getItem('portfolio-last-visit');
-        const shouldIncrement = lastVisit !== today;
-        
-        // Get base count from API
-        const response = await fetch('/api/visitor-count');
-        
-        if (response.ok) {
-          const data = await response.json();
-          let finalCount = data.count;
-          
-          // Add personal visit count from localStorage
-          const personalVisits = parseInt(localStorage.getItem('portfolio-visit-count') || '0');
-          
-          if (shouldIncrement) {
-            // Increment personal counter and mark today's visit
-            const newPersonalCount = personalVisits + 1;
-            localStorage.setItem('portfolio-visit-count', newPersonalCount.toString());
-            localStorage.setItem('portfolio-last-visit', today);
-            finalCount += newPersonalCount;
-          } else {
-            finalCount += personalVisits;
-          }
-          
-          setCount(finalCount);
-          
-          // Animate the counter if enabled
-          if (animated && finalCount > 0) {
-            animateCounter(finalCount);
-          } else {
-            setDisplayCount(finalCount);
-          }
+        // POST counts this visitor once (server-side cookie dedupe) and
+        // returns the shared total stored in Redis.
+        const response = await fetch('/api/visitor-count', { method: 'POST' });
+
+        if (!response.ok) {
+          throw new Error(`Visitor count request failed: ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (cancelled) return;
+
+        setCount(data.count);
+
+        if (animated && data.count > 0) {
+          animateCounter(data.count);
+        } else {
+          setDisplayCount(data.count);
         }
       } catch (error) {
+        if (cancelled) return;
         // Log error for debugging
         // eslint-disable-next-line no-console
         console.error('Error fetching visitor count:', error);
-        // Show a fallback count for demo purposes
-        const fallbackCount = 2847 + Math.floor(Math.random() * 100);
-        setCount(fallbackCount);
-        setDisplayCount(fallbackCount);
+        setCount(0);
+        setDisplayCount(0);
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
 
-    fetchAndIncrementCount();
+    fetchCount();
+
+    return () => {
+      cancelled = true;
+    };
   }, [animated]);
 
   const animateCounter = (targetCount: number) => {
