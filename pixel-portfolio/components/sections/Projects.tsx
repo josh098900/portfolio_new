@@ -274,7 +274,7 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, className = '' }) =
                 <ActionIcon action="website" size={32} decorative />
               </div>
               <p className="font-pixel text-pixel-primary/60 text-xs">
-                PROJECT IMAGE
+                COMING SOON
               </p>
             </div>
           </div>
