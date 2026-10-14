@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Josh's portfolio
 
-## Getting Started
+A minimal Next.js portfolio with light and dark themes, three project stories, and a current-work section for Curio.
 
-First, run the development server:
+## Development
 
-```bash
+Requires Node.js 20.9 or newer.
+
+```sh
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open the local URL printed by Next.js. The development server binds to `127.0.0.1`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```sh
+npm run build
+npm run start
+npm run typecheck
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Content
 
-## Learn More
+- `app/page.tsx`: introduction, database contribution, Curio, and about copy.
+- `data/projects.ts`: project links, technologies, and individual project stories.
+- `app/globals.css`: responsive layouts and both colour palettes.
+- `public/projects`: screenshots from the linked projects, captured in October 2026.
 
-To learn more about Next.js, take a look at the following resources:
+The first visit follows the system colour scheme. The theme button saves an explicit preference locally. Fonts are bundled locally through Fontsource, with no runtime font service dependency. The site has no analytics, contact form, credentials, or database dependency.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Content sources
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Academy Fantasy repository: https://github.com/josh098900/f1academy
+- Academy Fantasy completed trial and standings: https://f1academy-mu.vercel.app/
+- Lab Hangout repository and credits: https://github.com/josh098900/clawd_hangout
+- Lab Hangout character creator: https://lab-hangout.vercel.app/
+- Database coursework schema and ERD: https://github.com/InterMaus1154/dbprin_25_cw
 
-## Deploy on Vercel
+The coursework result (90%, highest in the year) and Josh's individual contribution were supplied by Josh. Curio is described only as an in-progress final-year web/iOS project for solo travellers; its decorative contour graphic is portfolio artwork, not a screenshot of the app.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deployment
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The application can be deployed as a standard Next.js project, with `pixel-portfolio` as the project root. No environment variables are required. This first version is prepared in the existing local repository for review.

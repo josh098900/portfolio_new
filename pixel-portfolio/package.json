@@ -1,40 +1,24 @@
 {
-  "name": "pixel-portfolio",
-  "version": "0.1.0",
+  "name": "josh-portfolio",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
-    "build:analyze": "ANALYZE=true next build --turbopack",
-    "build:production": "NODE_ENV=production next build --turbopack",
-    "start": "next start",
-    "start:production": "NODE_ENV=production next start",
-    "lint": "eslint",
-    "lint:fix": "eslint --fix",
-    "type-check": "tsc --noEmit",
-    "clean": "rm -rf .next out",
-    "export": "next build && next export",
-    "preview": "yarn build && yarn start"
+    "dev": "next dev --hostname 127.0.0.1",
+    "build": "next build",
+    "start": "next start --hostname 127.0.0.1",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@ai-sdk/groq": "^3.0.20",
-    "@ai-sdk/react": "^3.0.68",
-    "@vercel/kv": "^3.0.0",
-    "ai": "^6.0.66",
-    "next": "15.5.7",
-    "react": "19.1.2",
-    "react-dom": "19.1.2",
-    "zod": "^4.3.6"
+    "@fontsource/geist": "5.3.0",
+    "@fontsource/instrument-serif": "5.3.0",
+    "next": "16.4.1",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "15.5.7",
-    "tailwindcss": "^4",
-    "typescript": "^5"
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "^5.9.0"
   }
 }

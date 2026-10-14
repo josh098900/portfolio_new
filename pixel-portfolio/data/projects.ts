@@ -1,138 +1,75 @@
-import { IProject } from "./types";
+export type Project = {
+  slug: string;
+  number: string;
+  title: string;
+  category: string;
+  description: string;
+  technologies: string[];
+  github: string;
+  website?: string;
+  websiteLabel?: string;
+  image?: string;
+  imageAlt?: string;
+  status: string;
+  intro: string;
+  sections: { heading: string; body: string }[];
+};
 
-/**
- * Joshua Mathers' real project portfolio
- * Showcasing interactive web applications and creative coding projects
- */
-export const projects: IProject[] = [
+export const projects: Project[] = [
   {
-    id: "travelglobe",
-    title: "TravelGlobe",
-    description:
-      "An interactive 3D visualization of my travel history using Globe.GL. Explore countries I've visited with smooth animations and detailed information overlays.",
-    technologies: ["Globe.GL", "JavaScript", "CSS3", "HTML5"],
-    imageUrl: "/images/projects/project-1.png",
-    demoUrl: "https://josh098900.github.io/travelglobe/",
-    githubUrl: "https://github.com/josh098900/travelglobe",
-    featured: true,
-    completedDate: "10-04-2025",
-  },
-  {
-    id: "severance-review",
-    title: "Severance Fan Project",
-    description:
-      'Interactive fan-made web application for the Apple TV series "Severance". Features immersive UI design inspired by the show\'s aesthetic and interactive elements.',
-    technologies: ["HTML5", "CSS3", "JavaScript"],
-    imageUrl: "/images/projects/project-2.png",
-    demoUrl: "https://josh098900.github.io/severance_review/",
-    githubUrl: "https://github.com/josh098900/severance_review",
-    featured: true,
-    completedDate: "12-12-2024",
-  },
-  {
-    id: "laptop-survival-101",
-    title: "Laptop Survival 101",
-    description:
-      "A humorous interactive game about a lecturer's daily struggles with technology. Features engaging gameplay mechanics and witty commentary on academic life.",
-    technologies: ["HTML5", "CSS3", "JavaScript"],
-    imageUrl: "/images/projects/project-3.png",
-    demoUrl: "https://josh098900.github.io/laptop-survival-101/",
-    githubUrl: "https://github.com/josh098900/laptop-survival-101",
-    featured: true,
-    completedDate: "21-01-2025",
-  },
-  {
-    id: "chaos-engine",
-    title: "Chaos Engine",
-    description:
-      "A dynamic web application designed for D&D sessions, providing random event generation and campaign management tools. Built to enhance tabletop gaming experiences.",
-    technologies: ["HTML5", "CSS3", "JavaScript"],
-    imageUrl: "/images/projects/project-4.png",
-    demoUrl: "https://josh098900.github.io/chaos_engine/",
-    githubUrl: "https://github.com/josh098900/chaos_engine",
-    featured: false,
-    completedDate: "21-11-2024",
-  },
-  {
-    id: "f1-canadian-gp-dashboard",
-    title: "F1 Canadian GP Dashboard",
-    description: "Real time weather dashboard for the canadian grand prix",
-    technologies: ["HTML5", "CSS3", "JavaScript", "Nextjs"],
-    imageUrl: "/images/projects/f1-canadian-gp.png",
-    demoUrl: "https://canadagp.vercel.app/",
-    githubUrl: "https://github.com/josh098900/canadagp",
-    featured: true,
-    completedDate: "27-06-2025",
-  },
-  {
-    id: "academy-fantasy",
+    slug: "academy-fantasy",
+    number: "01",
     title: "Academy Fantasy",
-    description:
-      "An F1 Academy fantasy league where users build teams, track driver performance, and compete across the season.",
-    technologies: ["Nextjs", "TypeScript", "Supabase"],
-    imageUrl: "",
-    demoUrl: "https://f1academy-mu.vercel.app/",
-    githubUrl: "https://github.com/josh098900/f1academy",
-    featured: true,
-    completedDate: "20-05-2026",
+    category: "Full-stack web app",
+    description: "A fantasy league for F1 Academy. Build a team, follow the race weekends, and compete with friends.",
+    technologies: ["Next.js", "TypeScript", "Supabase"],
+    github: "https://github.com/josh098900/f1academy",
+    website: "https://f1academy-mu.vercel.app/",
+    websiteLabel: "View final standings",
+    image: "/projects/academy-fantasy.jpg",
+    imageAlt: "Academy Fantasy's completed-season page with its pink and white title and final leaderboard",
+    status: "Trial complete",
+    intro: "An unofficial, free-to-play fantasy game built around the F1 Academy racing series. The trial season is complete, and the site now preserves the final standings.",
+    sections: [
+      { heading: "The idea", body: "Give F1 Academy fans their own fantasy competition: select four drivers within a budget, choose a boosted driver, and compete across race weekends in global standings and private mini-leagues." },
+      { heading: "Behind the experience", body: "Next.js and TypeScript power the application, with Supabase handling authentication, Postgres data, and realtime updates. The game includes scoring logic, transfer rules, and server-enforced team lock times." },
+      { heading: "From building to running", body: "The project went beyond a prototype into a trial with real players. Its repository includes scoring tests, automated checks, and race-weekend operational documentation. The completed season is available through the final standings." },
+    ],
   },
   {
-    id: "campus-connect",
-    title: "Campus Connect",
-    description:
-      "A university project that scored 72%, keeping students safe across campus with shared resources and community features.",
-    technologies: ["Flutter", "Python", "PostgreSQL"],
-    imageUrl: "",
-    githubUrl: "https://github.com/InterMaus1154/uop_setap_cw",
-    featured: false,
-    completedDate: "19-06-2026",
+    slug: "lab-hangout",
+    number: "02",
+    title: "Lab Hangout",
+    category: "Multiplayer browser game",
+    description: "A small pixel world with a lot going on. Custom characters, shared spaces, and real-time multiplayer.",
+    technologies: ["TypeScript", "Canvas 2D", "Supabase"],
+    github: "https://github.com/josh098900/clawd_hangout",
+    website: "https://lab-hangout.vercel.app/",
+    websiteLabel: "Visit Lab Hangout",
+    image: "/projects/lab-hangout.jpg",
+    imageAlt: "Lab Hangout's pixel-art character creator in a shared laboratory setting",
+    status: "Browser game",
+    intro: "A multiplayer pixel hangout where little lab critters explore, chat, and play together. A project about making a shared space feel alive.",
+    sections: [
+      { heading: "A world to spend time in", body: "Players customise their character and explore connected rooms with shared activities, from whiteboards and music to arcade games. Chat bubbles and emotes make the world social." },
+      { heading: "Drawn in code", body: "The game is built with Vite, TypeScript, and Canvas 2D. Its pixels are drawn programmatically, while Supabase Realtime supports multiplayer presence and interactions." },
+      { heading: "Keeping a shared world working", body: "The repository includes database checks, visual regression checks, and multiplayer smoke tests. The rendering approach and original lab and square sets were adapted with permission from the film “Claw’d Labs, Part 0”, as documented in the project credits." },
+    ],
+  },
+  {
+    slug: "database-principles",
+    number: "03",
+    title: "Database Principles",
+    category: "Group coursework",
+    description: "From entity relationships to a working relational database. Awarded 90% — the highest mark in the year.",
+    technologies: ["PostgreSQL", "SQL", "Data modelling"],
+    github: "https://github.com/InterMaus1154/dbprin_25_cw",
+    status: "90% · Highest in the year",
+    intro: "A group database project modelling the operations of a vehicle service business. Our team achieved 90%, the highest coursework mark in the year.",
+    sections: [
+      { heading: "My contribution", body: "I helped design the entity–relationship diagram, implement and create the database, and write complex SQL queries. Working across the model and implementation meant connecting the structure of the data to the questions it needed to answer." },
+      { heading: "The database", body: "The PostgreSQL schema connects customers, vehicles, bookings, staff, parts, and invoicing. The repository includes the ERD, table definitions, queries, views, triggers, and database roles." },
+      { heading: "A team achievement", body: "The 90% result belongs to the group. My part focused on data modelling, database implementation, and querying, contributing to a complete design and implementation delivered together." },
+    ],
   },
 ];
-
-/**
- * Get all projects
- */
-export const getAllProjects = (): IProject[] => {
-  return projects;
-};
-
-/**
- * Get featured projects only
- */
-export const getFeaturedProjects = (): IProject[] => {
-  return projects.filter((project) => project.featured);
-};
-
-/**
- * Get a project by ID
- */
-export const getProjectById = (id: string): IProject | undefined => {
-  return projects.find((project) => project.id === id);
-};
-
-/**
- * Get projects by technology
- */
-export const getProjectsByTechnology = (technology: string): IProject[] => {
-  return projects.filter((project) =>
-    project.technologies.some((tech) =>
-      tech.toLowerCase().includes(technology.toLowerCase()),
-    ),
-  );
-};
-
-/**
- * Get the most recent projects
- */
-export const getRecentProjects = (limit: number = 3): IProject[] => {
-  return projects
-    .sort((a, b) => {
-      if (!a.completedDate) return 1;
-      if (!b.completedDate) return -1;
-      return (
-        new Date(b.completedDate).getTime() -
-        new Date(a.completedDate).getTime()
-      );
-    })
-    .slice(0, limit);
-};
