@@ -8,6 +8,8 @@ export function ThemeToggle() {
 
   useEffect(() => {
     setTheme(document.documentElement.dataset.theme ?? "light");
+    // Enable palette transitions only after the initial theme has been applied.
+    document.documentElement.dataset.themeReady = "true";
     const preference = window.matchMedia("(prefers-color-scheme: dark)");
     const syncSystemTheme = () => {
       let saved: string | null = null;
@@ -29,7 +31,22 @@ export function ThemeToggle() {
   }
 
   const label = theme ? `Switch to ${theme === "dark" ? "light" : "dark"} mode` : "Switch colour theme";
-  return <button className="icon-button theme-toggle" type="button" onClick={toggle} aria-label={label} title={label}>
-    <Icon name="sun" className="sun-icon" /><Icon name="moon" className="moon-icon" />
-  </button>;
+  return (
+    <button
+      className="theme-switch"
+      type="button"
+      role="switch"
+      aria-checked={theme === "dark"}
+      aria-label="Dark mode"
+      title={label}
+      onClick={toggle}
+    >
+      <span className="theme-switch-track" aria-hidden="true" />
+      <span className="theme-switch-thumb" aria-hidden="true">
+        <span className="theme-switch-glass" />
+      </span>
+      <span className="theme-switch-icon theme-switch-sun" aria-hidden="true"><Icon name="sun" /></span>
+      <span className="theme-switch-icon theme-switch-moon" aria-hidden="true"><Icon name="moon" /></span>
+    </button>
+  );
 }
