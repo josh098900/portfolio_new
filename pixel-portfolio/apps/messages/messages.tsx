@@ -132,7 +132,7 @@ export function Messages() {
     } finally {
       setBusy(false);
       request.current = null;
-      input.current?.focus();
+      input.current?.focus({ preventScroll: true });
     }
   }
 

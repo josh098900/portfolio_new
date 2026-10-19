@@ -40,7 +40,7 @@
   position: absolute;
   inset: 0;
   display: flex;
-  overflow: hidden;
+  overflow: clip;
   border-radius: inherit;
   container: app / inline-size;
 }

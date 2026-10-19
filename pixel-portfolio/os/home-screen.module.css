@@ -10,6 +10,10 @@
   display: block;
 }
 
+:global(html[data-shell="desktop"]) .search {
+  display: none;
+}
+
 .widgets {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -39,7 +43,7 @@
 }
 
 .search {
-  position: fixed;
+  position: absolute;
   left: 50%;
   bottom: calc(max(12px, env(safe-area-inset-bottom)) + 108px);
   display: flex;

@@ -59,6 +59,38 @@ function useShortcuts() {
   }, [store]);
 }
 
+/**
+ * When an on-screen keyboard opens, mobile browsers shrink only the visible
+ * area and pan the page to keep the focused field in view, which would slide
+ * the whole fixed-position OS up. Sizing the OS to the visible area instead
+ * keeps it on screen. Pinch-zoom is left alone (scale isn't 1 then).
+ */
+function useVisibleArea() {
+  useEffect(() => {
+    const viewport = window.visualViewport;
+    if (!viewport) return;
+    const root = document.documentElement;
+    const sync = () => {
+      if (Math.abs(viewport.scale - 1) > 0.01) {
+        root.style.removeProperty("--visible-top");
+        root.style.removeProperty("--visible-height");
+        return;
+      }
+      root.style.setProperty("--visible-top", `${viewport.offsetTop}px`);
+      root.style.setProperty("--visible-height", `${viewport.height}px`);
+    };
+    sync();
+    viewport.addEventListener("resize", sync);
+    viewport.addEventListener("scroll", sync);
+    return () => {
+      viewport.removeEventListener("resize", sync);
+      viewport.removeEventListener("scroll", sync);
+      root.style.removeProperty("--visible-top");
+      root.style.removeProperty("--visible-height");
+    };
+  }, []);
+}
+
 function Dimmer() {
   const brightness = usePrefs(s => s.brightness);
   return <div className={styles.dimmer} style={{ opacity: (1 - brightness) * 0.85 }} aria-hidden="true" />;
@@ -82,6 +114,7 @@ function Desktop() {
   useUrlSync();
   useShortcuts();
   usePrefsSync();
+  useVisibleArea();
   const windows = useOS(useShallow(s => appIds.flatMap(app => s.windows[app] ?? [])));
   const focused = useOS(s => selectFocused(s)?.app ?? null);
 

@@ -74,6 +74,12 @@ export function Terminal() {
     scroller.current?.scrollTo({ top: scroller.current.scrollHeight });
   }, [lines, matrix]);
 
+  // Focus the prompt straight away only with a mouse or trackpad. On touch
+  // screens that would pop up the on-screen keyboard before anyone asked.
+  useEffect(() => {
+    if (matchMedia("(pointer: fine)").matches) field.current?.focus({ preventScroll: true });
+  }, []);
+
   const ctx: Ctx = {
     cwd,
     setCwd,
@@ -136,7 +142,7 @@ export function Terminal() {
     else if (event.key.toLowerCase() === "c" && event.ctrlKey) { event.preventDefault(); print(<><span className={styles.prompt}>visitor@portfolio {pretty(cwd)} %</span> {input}^C</>); setInput(""); }
   }
 
-  return <div className={styles.terminal} onClick={() => { if (!getSelection()?.toString()) field.current?.focus(); }}>
+  return <div className={styles.terminal} onClick={() => { if (!getSelection()?.toString()) field.current?.focus({ preventScroll: true }); }}>
     <header className={styles.titlebar} data-drag-region>visitor — zsh — {pretty(cwd)}</header>
     <div ref={scroller} className={styles.screen}>
       <div role="log" aria-live="polite" aria-label="Terminal output">
@@ -144,9 +150,9 @@ export function Terminal() {
       </div>
       <label className={styles.inputLine}>
         <span className={styles.prompt}>visitor@portfolio {pretty(cwd)} %</span>
-        <input ref={field} value={input} onChange={e => setInput(e.target.value)} onKeyDown={onKeyDown} autoFocus spellCheck={false} autoCapitalize="off" autoComplete="off" autoCorrect="off" aria-label="Command" enterKeyHint="send" />
+        <input ref={field} value={input} onChange={e => setInput(e.target.value)} onKeyDown={onKeyDown} spellCheck={false} autoCapitalize="off" autoComplete="off" autoCorrect="off" aria-label="Command" enterKeyHint="send" />
       </label>
-      {matrix && <Matrix onDone={() => { setMatrix(false); field.current?.focus(); }} />}
+      {matrix && <Matrix onDone={() => { setMatrix(false); field.current?.focus({ preventScroll: true }); }} />}
     </div>
     <div className={styles.chips} role="group" aria-label="Suggested commands">
       {chips.map(c => <button key={c} type="button" onClick={e => { e.stopPropagation(); if (!busy) submit(c); }}>{c}</button>)}

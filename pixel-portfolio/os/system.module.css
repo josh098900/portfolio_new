@@ -1,7 +1,13 @@
+/* Sized to the visible area (see useVisibleArea), so an on-screen keyboard
+   shrinks the OS instead of pushing it off screen. overflow: clip (unlike
+   hidden) means the browser can never scroll it to reveal a focused field. */
 .os {
   position: fixed;
-  inset: 0;
-  overflow: hidden;
+  top: var(--visible-top, 0px);
+  left: 0;
+  right: 0;
+  height: var(--visible-height, 100%);
+  overflow: clip;
 }
 
 .wallpaper {

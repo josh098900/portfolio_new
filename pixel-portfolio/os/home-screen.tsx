@@ -11,7 +11,8 @@ import styles from "./home-screen.module.css";
 export function HomeScreen() {
   const launch = useOS(s => s.launch);
   const setOverlay = useOS(s => s.setOverlay);
-  return <div className={styles.home}>
+  return <>
+    <div className={styles.home}>
     <button type="button" className={`${styles.controls} glass`} aria-label="Control Centre" onClick={() => setOverlay("control-centre")}>
       <Glyph name="controls" size={18} />
     </button>
@@ -35,8 +36,10 @@ export function HomeScreen() {
         </li>;
       })}
     </ul>
+    </div>
+    {/* Outside the scrolling home screen, so it stays put and follows the visible area. */}
     <button type="button" className={`${styles.search} glass`} onClick={() => setOverlay("spotlight")}>
       <Glyph name="search" size={14} /> Search
     </button>
-  </div>;
+  </>;
 }
