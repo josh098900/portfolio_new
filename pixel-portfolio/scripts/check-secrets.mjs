@@ -2,7 +2,7 @@
 // anywhere in the build output, e.g. after an accidental NEXT_PUBLIC_ prefix.
 // It reports the variable name and file, never the value.
 import nextEnv from "@next/env";
-import { readdirSync, readFileSync } from "node:fs";
+import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 
 nextEnv.loadEnvConfig(process.cwd(), false, { info() {}, error: console.error });
@@ -16,7 +16,13 @@ function* files(dir) {
     if (entry.name === "cache") continue;
     const path = join(dir, entry.name);
     if (entry.isDirectory()) yield* files(path);
-    else yield path;
+    else if (entry.isFile()) yield path;
+    else if (entry.isSymbolicLink()) {
+      // Vercel's build output links to dependencies outside .next. Scan linked
+      // files, but don't follow linked folders (they aren't build output and
+      // could loop); skip broken links.
+      try { if (statSync(path).isFile()) yield path; } catch { /* Broken link. */ }
+    }
   }
 }
 
