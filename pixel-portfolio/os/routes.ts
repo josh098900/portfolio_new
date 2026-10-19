@@ -1,9 +1,10 @@
+import { letterboxdUser } from "@/content/links";
 import { findNote, notes } from "@/content/notes";
 import { projects } from "@/content/projects";
 import { findGame, games } from "@/apps/arcade/games";
 import { findSection, settingsSections } from "@/apps/settings/sections";
 
-export const appIds = ["notes", "projects", "resume", "contact", "messages", "maps", "photos", "music", "arcade", "activity", "terminal", "settings"] as const;
+export const appIds = ["notes", "projects", "resume", "contact", "messages", "maps", "photos", "music", "tv", "arcade", "activity", "terminal", "settings"] as const;
 export type AppId = (typeof appIds)[number];
 
 export type AppInfo = {
@@ -25,6 +26,7 @@ export const apps: Record<AppId, AppInfo> = {
   maps: { name: "Maps", description: "A map of the world to explore.", size: { w: 980, h: 640 }, minSize: { w: 360, h: 320 }, ready: true },
   photos: { name: "Photos", description: "Screenshots and photos.", size: { w: 960, h: 640 }, minSize: { w: 360, h: 320 }, ready: true },
   music: { name: "Music", description: "What I'm listening to: Avicii, Tiësto and Gigi Perez.", size: { w: 1060, h: 680 }, minSize: { w: 360, h: 360 }, ready: true },
+  tv: { name: "TV", description: "Films I've watched lately, from my Letterboxd.", size: { w: 1080, h: 700 }, minSize: { w: 360, h: 360 }, ready: Boolean(letterboxdUser) },
   arcade: { name: "Arcade", description: "Pong, Snake, Bricks and Lab Hangout.", size: { w: 900, h: 640 }, minSize: { w: 360, h: 360 }, ready: true },
   activity: { name: "Activity", description: "My GitHub activity as rings.", size: { w: 760, h: 640 }, minSize: { w: 340, h: 320 }, ready: true },
   terminal: { name: "Terminal", description: "Explore this portfolio from the command line.", size: { w: 720, h: 460 }, minSize: { w: 340, h: 240 }, ready: true },
@@ -99,7 +101,7 @@ export function routeTitle(route: Route): { title: string; description: string }
     return { title: `${findSection(route.sub[0])!.name} Settings`, description: apps.settings.description };
   }
   if (route.app === "notes" && route.sub[0] === "about") {
-    return { title: "Josh, software engineering student", description: "I'm Josh, a third-year software engineering student. Explore my projects, see what I'm building, or get in touch." };
+    return { title: "Josh, software engineering student", description: "I'm Josh, a third-year software engineering student looking for graduate software engineering roles. Explore my projects, see what I'm building, or get in touch." };
   }
   return { title: apps[route.app].name, description: apps[route.app].description };
 }

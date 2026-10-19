@@ -5,6 +5,9 @@
 import { githubProfile, linkedInProfile } from "./links";
 import { projects } from "./projects";
 
+/** What Josh is looking for, shown on the About note, Contacts, home screen and in the assistant. */
+export const lookingFor = "Looking for graduate software engineering roles";
+
 export const resume = {
   name: "Joshua Mathers",
   headline: "Software Engineering student",
@@ -12,7 +15,7 @@ export const resume = {
     { label: "LinkedIn", href: linkedInProfile, display: "linkedin.com/in/joshua-mathers-3410a7219" },
     { label: "GitHub", href: githubProfile, display: "github.com/josh098900" },
   ],
-  summary: "Third-year Software Engineering student at the University of Portsmouth. Proficient in Python, R, JavaScript, TypeScript, Next.js and SQL, with hands-on project experience building web interfaces and databases and analysing data with R.",
+  summary: "Third-year Software Engineering student at the University of Portsmouth. Proficient in Python, R, JavaScript, TypeScript, Next.js and SQL, with hands-on project experience building web interfaces and databases and analysing data with R. Looking for graduate software engineering roles after graduating in 2027.",
   education: [
     {
       title: "BSc (Hons) Software Engineering",

@@ -78,9 +78,14 @@
   display: -webkit-box;
   overflow: hidden;
   font-size: 12px;
-  opacity: 0.85;
+  opacity: 0.9;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+}
+
+/* Full strength on the selected (accent-filled) thread, for contrast. */
+.thread[aria-current="true"] .threadText small {
+  opacity: 1;
 }
 
 /* Conversation */

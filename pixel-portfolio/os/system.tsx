@@ -6,6 +6,7 @@ import { useShallow } from "zustand/react/shallow";
 import { ControlCentre } from "./control-centre";
 import { Dock } from "./dock";
 import { HomeScreen } from "./home-screen";
+import { DynamicIsland } from "./island";
 import { MenuBar } from "./menu-bar";
 import { usePrefs, usePrefsSync } from "./prefs";
 import { appIds, pathFromUrl, routeTitle, routeToPath, type Route } from "./routes";
@@ -134,6 +135,7 @@ function Desktop() {
     {focused && <HomeIndicator />}
     <Spotlight />
     <ControlCentre />
+    <DynamicIsland shell={shell} />
     <Dimmer />
   </div>;
 }

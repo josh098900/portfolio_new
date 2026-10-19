@@ -1,7 +1,10 @@
 "use client";
 
 import type { CSSProperties } from "react";
+import { artwork } from "@/content/music";
 import { Glyph } from "./icons";
+import { useLive } from "./live";
+import { selectTrack, useMedia } from "./media";
 import { setTheme, usePrefs, useTheme } from "./prefs";
 import { useOS } from "./store";
 import styles from "./control-centre.module.css";
@@ -16,22 +19,42 @@ function Panel() {
   const setOverlay = useOS(s => s.setOverlay);
   const close = () => setOverlay(null);
   const dark = theme === "dark";
+  const track = useMedia(selectTrack);
+  const playing = useMedia(s => s.playing);
+  const { toggle, step } = useMedia.getState();
+  const flash = useLive(s => s.flash);
+
+  function switchTheme() {
+    setTheme(dark ? "light" : "dark");
+    flash({ glyph: dark ? "sun" : "moon", title: dark ? "Light Mode" : "Dark Mode", detail: "On", tint: dark ? "#ffd60a" : "#5e9eff" });
+  }
+
+  function switchMotion() {
+    setReduceMotion(!reduceMotion);
+    flash({ glyph: "motion", title: "Reduce Motion", detail: reduceMotion ? "Off" : "On", tint: "#30d158" });
+  }
 
   return <div className={styles.backdrop} onPointerDown={e => e.target === e.currentTarget && close()}>
     <div className={styles.panel} role="dialog" aria-label="Control Centre">
-      <button type="button" autoFocus className={`${styles.tile} ${styles.toggle} glass`} aria-pressed={dark} onClick={() => setTheme(dark ? "light" : "dark")}>
+      <button type="button" autoFocus className={`${styles.tile} ${styles.toggle} glass`} aria-pressed={dark} onClick={switchTheme}>
         <span className={styles.toggleIcon}><Glyph name={dark ? "moon" : "sun"} size={20} /></span>
         <span className={styles.label}><strong>Dark Mode</strong><small>{dark ? "On" : "Off"}</small></span>
       </button>
 
-      <button type="button" className={`${styles.tile} ${styles.media} glass`} onClick={() => { close(); launch("music"); }}>
-        <span className={styles.artwork} aria-hidden="true" />
-        <strong>Not Playing</strong>
-        <span className={styles.transport} aria-hidden="true"><Glyph name="prev" size={18} /><Glyph name="play" size={22} /><Glyph name="next" size={18} /></span>
-        <span className={styles.srOnly}>Open Music</span>
-      </button>
+      <div className={`${styles.tile} ${styles.media} glass`} role="group" aria-label="Now Playing">
+        <button type="button" className={styles.mediaOpen} onClick={() => { close(); launch("music"); }} aria-label={track ? `Open Music: ${track.title} by ${track.artist}` : "Open Music"}>
+          {track ? <img src={artwork(track, 112)} alt="" width={56} height={56} className={styles.artwork} /> : <span className={styles.artwork} />}
+          <strong>{track?.title ?? "Not Playing"}</strong>
+          {track && <small>{track.artist}</small>}
+        </button>
+        <span className={styles.transport} data-active={track ? "" : undefined}>
+          <button type="button" onClick={() => step(-1)} aria-label="Previous"><Glyph name="prev" size={18} /></button>
+          <button type="button" onClick={toggle} aria-label={playing ? "Pause" : "Play"}><Glyph name={playing ? "pause" : "play"} size={22} /></button>
+          <button type="button" onClick={() => step(1)} aria-label="Next"><Glyph name="next" size={18} /></button>
+        </span>
+      </div>
 
-      <button type="button" className={`${styles.tile} ${styles.toggle} glass`} aria-pressed={reduceMotion} onClick={() => setReduceMotion(!reduceMotion)}>
+      <button type="button" className={`${styles.tile} ${styles.toggle} glass`} aria-pressed={reduceMotion} onClick={switchMotion}>
         <span className={styles.toggleIcon}><Glyph name="motion" size={20} /></span>
         <span className={styles.label}><strong>Reduce Motion</strong><small>{reduceMotion ? "On" : "Off"}</small></span>
       </button>

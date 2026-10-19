@@ -4,7 +4,10 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { allowedExternalLinks } from "@/content/links";
 import { AppLink } from "@/os/app-link";
 import { Glyph } from "@/os/icons";
+import { useLive } from "@/os/live";
+import { useMedia } from "@/os/media";
 import { pathFromUrl } from "@/os/routes";
+import { selectFocused, useOSStore } from "@/os/store";
 import styles from "./messages.module.css";
 
 type Bubble =
@@ -63,6 +66,7 @@ export function Messages() {
   const request = useRef<AbortController | null>(null);
   const scroller = useRef<HTMLDivElement>(null);
   const input = useRef<HTMLInputElement>(null);
+  const os = useOSStore();
 
   // The conversation lasts for this browser tab only and is never stored on the server.
   useEffect(() => {
@@ -74,6 +78,7 @@ export function Messages() {
     return () => {
       request.current?.abort();
       audio.current?.pause();
+      useLive.getState().setSpeaking(null);
       for (const url of urls.values()) URL.revokeObjectURL(url);
     };
   }, []);
@@ -124,6 +129,9 @@ export function Messages() {
         update({ text: reply });
       }
       update({ text: reply, pending: false, replyId: reply ? replyId : undefined });
+      if (reply && selectFocused(os.getState())?.app !== "messages") {
+        useLive.getState().flash({ glyph: "bubble", title: "Josh's Assistant replied", app: "messages", tint: "#30d158" });
+      }
     } catch {
       if (abort.signal.aborted) return;
       if (reply) update({ pending: false });
@@ -146,6 +154,7 @@ export function Messages() {
     player.pause();
     if (playing === bubble.id) {
       setPlaying(null);
+      useLive.getState().setSpeaking(null);
       return;
     }
     let url = audioUrls.current.get(bubble.replyId);
@@ -170,14 +179,21 @@ export function Messages() {
     }
     player.src = url;
     setPlaying(bubble.id);
-    player.onended = () => setPlaying(current => current === bubble.id ? null : current);
-    player.play().catch(() => setPlaying(null));
+    useMedia.getState().pause();
+    const done = () => {
+      setPlaying(current => current === bubble.id ? null : current);
+      useLive.getState().setSpeaking(null);
+    };
+    useLive.getState().setSpeaking({ stop: () => { player.pause(); done(); } });
+    player.onended = done;
+    player.play().catch(done);
   }
 
   function clear() {
     request.current?.abort();
     audio.current?.pause();
     setPlaying(null);
+    useLive.getState().setSpeaking(null);
     setBubbles([]);
   }
 

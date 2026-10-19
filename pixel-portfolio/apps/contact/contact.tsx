@@ -1,6 +1,7 @@
 "use client";
 
 import { githubProfile, linkedInProfile } from "@/content/links";
+import { lookingFor } from "@/content/resume";
 import { AppLink } from "@/os/app-link";
 import { Glyph, type GlyphName } from "@/os/icons";
 import { useOS } from "@/os/store";
@@ -34,6 +35,7 @@ export function Contacts() {
           <span className={styles.avatar} aria-hidden="true">J</span>
           <h1 id="contact-name">Joshua Mathers</h1>
           <p className={styles.role}>Software Engineering student · University of Portsmouth</p>
+          <p className={styles.status}><span aria-hidden="true" />{lookingFor}</p>
 
           <div className={styles.actions}>
             {actions.map(a => {

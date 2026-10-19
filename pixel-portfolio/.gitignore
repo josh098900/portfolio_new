@@ -11,3 +11,8 @@ out/
 
 # Copied from node_modules by scripts/copy-vendor.mjs
 /public/vendor/
+
+# Playwright output
+/test-results/
+/playwright-report/
+/blob-report/

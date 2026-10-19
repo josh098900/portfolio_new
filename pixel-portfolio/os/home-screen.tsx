@@ -18,7 +18,7 @@ export function HomeScreen() {
     </button>
     <div className={styles.widgets}>
       <button type="button" className={`${styles.widget} glass`} onClick={() => launch("notes")}>
-        <span className={styles.widgetEyebrow}><span className={styles.dot} /> Software engineering student</span>
+        <span className={styles.widgetEyebrow}><span className={styles.dot} /> Open to graduate roles</span>
         <strong>Hi, I&apos;m Josh</strong>
         <span className={styles.widgetText}>Third year, building Curio for solo travellers. Tap to read more.</span>
       </button>

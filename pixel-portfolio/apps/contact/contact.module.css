@@ -102,9 +102,30 @@
 }
 
 .role {
-  margin: 4px 0 18px;
+  margin: 4px 0 10px;
   color: var(--label-secondary);
   font-size: 14px;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 18px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: color-mix(in srgb, #34c759 14%, transparent);
+  color: var(--label);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.status span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #34c759;
+  box-shadow: 0 0 0 3px color-mix(in srgb, #34c759 25%, transparent);
 }
 
 .actions {

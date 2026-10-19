@@ -91,11 +91,35 @@
   border-radius: 28px;
 }
 
+.mediaOpen {
+  display: grid;
+  justify-items: start;
+  gap: 2px;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+
 .artwork {
+  display: block;
   width: 56px;
   height: 56px;
+  margin-bottom: 8px;
   border-radius: 12px;
   background: var(--fill-strong);
+  object-fit: cover;
+}
+
+.media strong,
+.media small {
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .media strong {
@@ -103,10 +127,31 @@
   font-weight: 600;
 }
 
+.media small {
+  color: var(--label-secondary);
+  font-size: 12px;
+}
+
 .transport {
   display: flex;
   justify-content: space-around;
-  color: var(--label-tertiary);
+  color: var(--label-secondary);
+}
+
+.transport[data-active] {
+  color: var(--label);
+}
+
+.transport button {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: inherit;
 }
 
 .slider {
@@ -195,15 +240,6 @@
   color: inherit;
   font: inherit;
   font-size: 13px;
-}
-
-.srOnly {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
 }
 
 /* iPhone and iPad: a full-screen sheet over a dimmed home screen. */

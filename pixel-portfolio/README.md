@@ -1,24 +1,30 @@
 # Josh's portfolio
 
+[![CI](https://github.com/josh098900/portfolio_new/actions/workflows/ci.yml/badge.svg)](https://github.com/josh098900/portfolio_new/actions/workflows/ci.yml)
+
 A portfolio that feels like the device you open it on: an iPhone-style home screen on phones, iPadOS on tablets and a macOS-style desktop with windows and a dock on computers. It opens on an About note in a Notes-style app.
 
 ## Development
 
-Requires Node.js 20.9 or newer.
+Requires Node.js 22.12 or newer.
 
 ```sh
 npm install
 npm run dev
 npm run build
 npm run typecheck
+npm test           # unit tests (Vitest)
+npm run test:e2e   # browser tests (Playwright); run `npm run build` first
 ```
+
+The first time you run the browser tests, install the browsers with `npx playwright install chromium webkit`.
 
 ## How it fits together
 
 - `app/[[...path]]/page.tsx`: one statically generated route for every URL. Each URL is an app (`/projects`, `/notes/curio`), so links can be shared and indexed. Moving between apps updates the address bar without remounting the OS.
 - `os/`: the shell. It includes the window manager store, windows with traffic lights, dragging, resizing and zoom, the dock, the menu bar, the home screen, desktop widgets, Spotlight (⌘K) and Control Centre (dark mode, brightness, Reduce Motion).
 - `os/preflight.ts` and `os/shell.ts`: choose the phone, tablet or desktop shell before first paint, from width and pointer type. The DOM is the same for all three shells and CSS lays out each one, so server rendering never guesses wrong.
-- `apps/`: the twelve apps. They adapt to their window size with container queries, so a narrow desktop window behaves like the iPhone version. To hide an app until it's ready, set `ready: false` in `os/routes.ts`. That removes it from the dock, home screen, Spotlight, menus, sitemap and URLs.
+- `apps/`: the apps. They adapt to their window size with container queries, so a narrow desktop window behaves like the iPhone version. To hide an app until it's ready, set `ready: false` in `os/routes.ts`. That removes it from the dock, home screen, Spotlight, menus, sitemap and URLs.
   - **Notes, Projects, Résumé, Contacts:** the About note, case studies, the CV (Save as PDF prints just the page), and the LinkedIn and GitHub links.
   - **Messages:** Josh's assistant, using Claude Haiku 5.5, with ElevenLabs voice.
   - **Terminal:** a virtual filesystem built from `content/`, with commands and hidden extras. `help` lists the visible commands.
@@ -28,6 +34,8 @@ npm run typecheck
   - **Music:** the songs in `content/music.json`, with 30-second previews. To change the list, edit the IDs in `scripts/update-music.mjs` and run it.
   - **Photos:** project screenshots plus illustrated placeholders.
   - **Settings:** wallpaper, appearance and accessibility.
+  - **TV:** recent films from Josh's public Letterboxd RSS feed through `/api/letterboxd`, cached for an hour. It stays hidden until `letterboxdUser` is set in `content/links.ts`.
+- `os/island.tsx`: the iPhone Dynamic Island. It shows music playing (from the shared player in `os/media.ts`), the assistant speaking and short alerts (`os/live.ts`) while their apps are out of sight, and expands into controls when tapped.
 - `app/wallpapers.css` and `os/wallpapers.ts`: the wallpapers, drawn with CSS gradients. The saved choice is applied before first paint.
 - `app/api/weather/route.ts` and `lib/weather.ts`: London weather for the widgets. It tries Open-Meteo, then MET Norway, and caches successful responses for 30 minutes. Neither needs an API key.
 - `content/`: notes and project write-ups. Edit these to change what the site says.
@@ -38,6 +46,12 @@ npm run typecheck
 - `app/api/speak/route.ts` reads a reply aloud with ElevenLabs. It accepts only IDs of replies the assistant just wrote, never free text.
 - `lib/server/guard.ts` enforces the same-origin check and the rate limits (per visitor and site-wide, per day) in Upstash Redis. Visitors are identified by a hash of their IP address. Locally, without Redis, the limits fall back to memory. On Vercel, without Redis, the endpoints refuse requests.
 - Conversations live only in the visitor's browser tab. Usage counts, without message content, are logged for cost tracking.
+
+## Tests
+
+- `tests/unit/` (Vitest): routing, the Letterboxd parser, the weather fallback, the rate limits and same-origin check, the chat API's validation, and content and privacy rules (no email address or phone number anywhere, no `NEXT_PUBLIC_` variables, no published PDFs). None of them call Anthropic, ElevenLabs or Redis.
+- `tests/e2e/` (Playwright): a production build driven as a Mac (Chrome), an iPhone (WebKit) and an Android phone (Chrome), plus axe accessibility checks on every app in light and dark mode. The test server runs with every API key blanked, so a run can never spend credit, and outside requests are blocked or stubbed.
+- `.github/workflows/ci.yml` runs both on every push and pull request.
 
 ## Environment variables
 

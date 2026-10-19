@@ -5,7 +5,8 @@
   --window-radius: 24px;
 
   --label: #1d1d1f;
-  --label-secondary: rgb(60 60 67 / 0.62);
+  /* Apple uses 0.6, which is under 4.5:1 for small text; 0.76 passes on every light surface here. */
+  --label-secondary: rgb(60 60 67 / 0.76);
   --label-tertiary: rgb(60 60 67 / 0.38);
   --separator: rgb(60 60 67 / 0.18);
   --fill: rgb(120 120 128 / 0.12);
@@ -49,7 +50,7 @@
   --separator: rgb(84 84 88 / 0.65);
   --fill: rgb(120 120 128 / 0.24);
   --fill-strong: rgb(120 120 128 / 0.36);
-  --accent: #2997ff;
+  --accent: #40a0ff;
   --accent-fill: #0071e3;
 
   --window-bg: #242424;

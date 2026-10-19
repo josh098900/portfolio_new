@@ -20,6 +20,7 @@ const components: Partial<Record<AppId, ComponentType<AppProps>>> = {
   maps: dynamic(() => import("./maps/maps").then(m => m.Maps), { ssr: false }),
   photos: dynamic(() => import("./photos/photos").then(m => m.Photos)),
   music: dynamic(() => import("./music/music").then(m => m.Music)),
+  tv: dynamic(() => import("./tv/tv").then(m => m.TV)),
   arcade: dynamic(() => import("./arcade/arcade").then(m => m.Arcade)),
   activity: dynamic(() => import("./activity/activity").then(m => m.Activity)),
   terminal: dynamic(() => import("./terminal/terminal").then(m => m.Terminal)),

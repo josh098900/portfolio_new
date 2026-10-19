@@ -60,6 +60,14 @@ const art: Record<AppId, { background: string; glyph: ReactNode }> = {
     background: "linear-gradient(180deg, #ff6f8e, #f72b4d)",
     glyph: <path d="M25 41.5V18.2l19-4.2v23.5M25 41.5a5.5 4.5 0 1 1-11 0 5.5 4.5 0 0 1 11 0zm19-4a5.5 4.5 0 1 1-11 0 5.5 4.5 0 0 1 11 0zM25 24.5l19-4.2" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />,
   },
+  tv: {
+    background: "linear-gradient(180deg, #3a3a3e, #0c0c0d)",
+    glyph: <>
+      <rect x="10" y="15" width="40" height="26" rx="4" fill="none" stroke="#fff" strokeWidth="3" />
+      <path d="M22 47h16" stroke="#fff" strokeWidth="3" strokeLinecap="round" />
+      <path d="m26.5 22.5 10 5.5-10 5.5z" fill="#fff" />
+    </>,
+  },
   arcade: {
     background: "linear-gradient(180deg, #b989ff, #6a35f5)",
     glyph: <>
@@ -155,6 +163,12 @@ const glyphs = {
   gamepad: <path d="M8 8h8c3 0 5 2.8 5 6.4 0 2.6-1.3 4.1-2.8 4.1-1.8 0-2.7-2.3-4.1-2.3h-4.2c-1.4 0-2.3 2.3-4.1 2.3C4.3 18.5 3 17 3 14.4 3 10.8 5 8 8 8zM8 11v4M6 13h4M15.5 12h.01M17.5 14h.01" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />,
   speaker: <path d="M4 9.5h3l4.5-4v13L7 14.5H4zM15.5 9a4.2 4.2 0 0 1 0 6M18.2 6.4a8 8 0 0 1 0 11.2" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />,
   stop: <rect x="6.5" y="6.5" width="11" height="11" rx="2.5" fill="currentColor" />,
+  bubble: <path d="M12 4.5c-4.8 0-8.5 3.1-8.5 7 0 2.2 1.1 4.1 3 5.4-.2 1.2-.8 2.4-1.8 3.3 1.8-.1 3.3-.7 4.5-1.7.9.2 1.8.3 2.8.3 4.8 0 8.5-3.1 8.5-7s-3.7-7.3-8.5-7.3z" fill="currentColor" />,
+  tv: <><rect x="2.5" y="4.5" width="19" height="12.5" rx="2.2" fill="none" stroke="currentColor" strokeWidth="1.8" /><path d="M8 20.5h8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></>,
+  star: <path d="m12 3.6 2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 17l-5.2 2.8 1-5.9-4.3-4.1 5.9-.8z" fill="currentColor" />,
+  heartFill: <path d="M12 19.5s-7.5-4.4-7.5-10A4.3 4.3 0 0 1 12 6.7a4.3 4.3 0 0 1 7.5 2.8c0 5.6-7.5 10-7.5 10z" fill="currentColor" />,
+  rewatch: <path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3M19.5 4.5v4h-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />,
+  calendar: <><rect x="3.5" y="5" width="17" height="15" rx="2.5" fill="none" stroke="currentColor" strokeWidth="1.8" /><path d="M3.5 10h17M8 3v4M16 3v4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></>,
   send: <path d="M12 19V5.5M6 11.5l6-6 6 6" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />,
   trash: <path d="M4.5 6.5h15M9.5 6.5V4.8h5v1.7M6.5 6.5l1 13h9l1-13M10.2 10v6.5M13.8 10v6.5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />,
   sunny: <><circle cx="12" cy="12" r="4.6" fill="#ffd60a" /><path d="M12 2.4v2.4M12 19.2v2.4M2.4 12h2.4M19.2 12h2.4M5.2 5.2l1.7 1.7M17.1 17.1l1.7 1.7M5.2 18.8l1.7-1.7M17.1 6.9l1.7-1.7" stroke="#ffd60a" strokeWidth="1.9" strokeLinecap="round" /></>,

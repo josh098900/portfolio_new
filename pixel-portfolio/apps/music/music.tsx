@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useShallow } from "zustand/react/shallow";
 import { artists, artwork, formatDuration, playlists, tracks, type Track } from "@/content/music";
 import { Glyph, type GlyphName } from "@/os/icons";
+import { selectTrack, useMedia } from "@/os/media";
 import styles from "./music.module.css";
 
 type View = { kind: "home" } | { kind: "songs" } | { kind: "artists" } | { kind: "artist"; name: string } | { kind: "playlist"; id: string };
-
-const PREVIEW_MS = 30_000;
 
 function Cover({ track, size, className }: { track: Track; size: number; className?: string }) {
   return <img src={artwork(track, size * 2)} alt="" width={size} height={size} loading="lazy" className={className ?? styles.cover} />;
@@ -20,66 +20,14 @@ function Mosaic({ list }: { list: Track[] }) {
 export function Music() {
   const [view, setView] = useState<View>({ kind: "home" });
   const [query, setQuery] = useState("");
-  const [queue, setQueue] = useState<Track[]>(tracks);
-  const [index, setIndex] = useState<number | null>(null);
-  const [playing, setPlaying] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [volume, setVolume] = useState(0.8);
-  const [shuffle, setShuffle] = useState(false);
-  const [repeat, setRepeat] = useState(false);
-  const audio = useRef<HTMLAudioElement | null>(null);
-  const current = index === null ? null : queue[index];
+  const { playing, progress, duration, volume, shuffle, repeat } = useMedia(useShallow(s => ({
+    playing: s.playing, progress: s.progress, duration: s.duration, volume: s.volume, shuffle: s.shuffle, repeat: s.repeat,
+  })));
+  const current = useMedia(selectTrack);
+  const { play, toggle, step, setVolume, setShuffle, setRepeat } = useMedia.getState();
 
-  useEffect(() => {
-    const player = new Audio();
-    audio.current = player;
-    const onTime = () => setProgress(player.currentTime * 1000);
-    const onPause = () => setPlaying(false);
-    const onPlay = () => setPlaying(true);
-    player.addEventListener("timeupdate", onTime);
-    player.addEventListener("pause", onPause);
-    player.addEventListener("play", onPlay);
-    return () => { player.pause(); player.src = ""; };
-  }, []);
-
-  useEffect(() => { if (audio.current) audio.current.volume = volume; }, [volume]);
-
-  // When a preview ends, move on (or loop with repeat on).
-  useEffect(() => {
-    const player = audio.current;
-    if (!player) return;
-    const onEnded = () => {
-      if (index === null) return;
-      if (repeat) { player.currentTime = 0; player.play(); return; }
-      const next = shuffle ? Math.floor(Math.random() * queue.length) : index + 1;
-      if (next < queue.length) play(queue, next); else setPlaying(false);
-    };
-    player.addEventListener("ended", onEnded);
-    return () => player.removeEventListener("ended", onEnded);
-  });
-
-  function play(list: Track[], at: number) {
-    const player = audio.current;
-    if (!player) return;
-    setQueue(list);
-    setIndex(at);
-    setProgress(0);
-    player.src = list[at].preview;
-    player.play().catch(() => setPlaying(false));
-  }
-
-  function toggle() {
-    const player = audio.current;
-    if (!player) return;
-    if (!current) return play(queue, 0);
-    if (player.paused) player.play().catch(() => {}); else player.pause();
-  }
-
-  function step(by: 1 | -1) {
-    if (index === null) return play(queue, 0);
-    if (by === -1 && progress > 3000) { audio.current!.currentTime = 0; return; }
-    play(queue, (index + by + queue.length) % queue.length);
-  }
+  // Quitting Music stops the music, as on a phone. Hiding or minimising it doesn't.
+  useEffect(() => () => useMedia.getState().stop(), []);
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -153,7 +101,7 @@ export function Music() {
       </div>
     </>;
   } else if (view.kind === "songs") {
-    content = <><h1 className={styles.title}>Songs</h1>songList(tracks)</>;
+    content = <><h1 className={styles.title}>Songs</h1>{songList(tracks)}</>;
   } else if (view.kind === "artists") {
     content = <>
       <h1 className={styles.title}>Artists</h1>
@@ -201,18 +149,18 @@ export function Music() {
 
       <div className={`${styles.player} glass`} aria-label="Now playing">
         <div className={styles.transport}>
-          <button type="button" className={styles.minor} aria-pressed={shuffle} onClick={() => setShuffle(s => !s)} aria-label="Shuffle"><Glyph name="shuffle" size={16} /></button>
+          <button type="button" className={styles.minor} aria-pressed={shuffle} onClick={() => setShuffle(!shuffle)} aria-label="Shuffle"><Glyph name="shuffle" size={16} /></button>
           <button type="button" onClick={() => step(-1)} aria-label="Previous"><Glyph name="prev" size={18} /></button>
           <button type="button" className={styles.playButton} onClick={toggle} aria-label={playing ? "Pause" : "Play"}><Glyph name={playing ? "pause" : "play"} size={20} /></button>
           <button type="button" onClick={() => step(1)} aria-label="Next"><Glyph name="next" size={18} /></button>
-          <button type="button" className={styles.minor} aria-pressed={repeat} onClick={() => setRepeat(r => !r)} aria-label="Repeat"><Glyph name="repeat" size={16} /></button>
+          <button type="button" className={styles.minor} aria-pressed={repeat} onClick={() => setRepeat(!repeat)} aria-label="Repeat"><Glyph name="repeat" size={16} /></button>
         </div>
         <div className={styles.now}>
           {current ? <Cover track={current} size={40} className={styles.thumb} /> : <span className={styles.thumbEmpty} aria-hidden="true"><Glyph name={"musicNote"} size={16} /></span>}
           <div className={styles.nowText}>
             <strong>{current?.title ?? "Not Playing"}</strong>
             <small>{current ? `${current.artist} · 30-second preview` : "Pick a song to hear a preview"}</small>
-            <span className={styles.progress} aria-hidden="true"><i style={{ width: `${Math.min(100, (progress / PREVIEW_MS) * 100)}%` }} /></span>
+            <span className={styles.progress} aria-hidden="true"><i style={{ width: `${Math.min(100, (progress / duration) * 100)}%` }} /></span>
           </div>
         </div>
         <div className={styles.extras}>

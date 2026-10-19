@@ -138,7 +138,7 @@ export const commands: Record<string, Command> = {
   },
   clear: { group: "Explore", help: "clear the screen (or press Ctrl+L)", run: (_, ctx) => ctx.clear() },
 
-  whoami: { group: "About Josh", help: "who is Josh?", run: (_, ctx) => ctx.print("josh: third-year software engineering student at the University of Portsmouth. Builds things for the web, and is currently building Curio.") },
+  whoami: { group: "About Josh", help: "who is Josh?", run: (_, ctx) => ctx.print("josh: third-year software engineering student at the University of Portsmouth. Builds things for the web, and is currently building Curio. Looking for graduate software engineering roles: try `hire`.") },
   projects: {
     group: "About Josh", help: "list Josh's projects",
     run: (_, ctx) => ctx.print(<div>{projects.map(p => <p key={p.slug}><span className={styles.cmd}>{p.title.padEnd(20)}</span>{p.category} · {p.role}</p>)}<p className={styles.dim}>Read one with: cat projects/{projects[0].slug}.md, or open it with: open projects/{projects[0].slug}.md</p></div>),

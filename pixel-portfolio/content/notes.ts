@@ -29,6 +29,7 @@ export const notes: Note[] = [
     blocks: [
       { type: "p", text: "A curious mind. A builder at heart." },
       { type: "p", text: "I'm a third-year software engineering student. I make things for the web, turn ideas into working software, and learn something with every build." },
+      { type: "p", text: "I'm currently looking for graduate software engineering roles. I graduate in 2027, and the quickest way to reach me is LinkedIn." },
       { type: "p", text: "My work spans web applications, multiplayer worlds, and relational databases. I like being involved in the whole process: figuring out how the pieces fit together, building them, and making the result feel good to use." },
       { type: "heading", text: "Have a look around" },
       { type: "links", items: [
