@@ -1,0 +1,150 @@
+/* Original wallpapers, drawn with gradients so they cost no image requests.
+   Each id sets its colours on <html> (the desktop) and on any element that
+   carries the same data-wallpaper attribute (the Settings previews). */
+
+.wallpaper-fill {
+  background:
+    radial-gradient(1px 1px at 23px 41px, var(--stars), transparent) 0 0 / 173px 173px,
+    radial-gradient(1px 1px at 97px 13px, var(--stars), transparent) 0 0 / 241px 241px,
+    radial-gradient(1.5px 1.5px at 151px 197px, var(--stars), transparent) 0 0 / 317px 317px,
+    radial-gradient(1px 1px at 61px 129px, var(--stars), transparent) 0 0 / 113px 113px,
+    radial-gradient(1.5px 1.5px at 280px 60px, var(--stars), transparent) 0 0 / 409px 409px,
+    radial-gradient(120% 90% at 10% 0%, var(--wall-1), transparent 60%),
+    radial-gradient(90% 80% at 100% 20%, var(--wall-2), transparent 60%),
+    radial-gradient(100% 90% at 70% 100%, var(--wall-3), transparent 65%),
+    radial-gradient(80% 70% at 0% 100%, var(--wall-4), transparent 60%),
+    var(--wall-base);
+}
+
+/* Aurora, the default. Also used before the pre-paint script runs. */
+:root:not([data-wallpaper]),
+[data-wallpaper="aurora"] {
+  --wall-base: #a9c0e6;
+  --wall-1: #eea6c6;
+  --wall-2: #82a9f6;
+  --wall-3: #6fc4b6;
+  --wall-4: #f5bf86;
+  --stars: transparent;
+}
+
+:root[data-theme="dark"][data-wallpaper="aurora"],
+:root[data-theme="dark"] [data-wallpaper="aurora"] {
+  --wall-base: #05070f;
+  --wall-1: #1d1846;
+  --wall-2: #0d2350;
+  --wall-3: #08303a;
+  --wall-4: #2a1230;
+  --stars: rgb(255 255 255 / 0.85);
+}
+
+[data-wallpaper="dune"] {
+  --wall-base: #e2b98f;
+  --wall-1: #f3a25c;
+  --wall-2: #e7d2b4;
+  --wall-3: #c8693f;
+  --wall-4: #f6dcb8;
+  --stars: transparent;
+}
+
+:root[data-theme="dark"][data-wallpaper="dune"],
+:root[data-theme="dark"] [data-wallpaper="dune"] {
+  --wall-base: #1f120c;
+  --wall-1: #6e3218;
+  --wall-2: #3e2418;
+  --wall-3: #8b4a22;
+  --wall-4: #4a1e10;
+  --stars: transparent;
+}
+
+[data-wallpaper="lagoon"] {
+  --wall-base: #6fb8d4;
+  --wall-1: #a8f0de;
+  --wall-2: #3f8fe0;
+  --wall-3: #27ab9f;
+  --wall-4: #c6efff;
+  --stars: transparent;
+}
+
+:root[data-theme="dark"][data-wallpaper="lagoon"],
+:root[data-theme="dark"] [data-wallpaper="lagoon"] {
+  --wall-base: #021620;
+  --wall-1: #06495b;
+  --wall-2: #0a3570;
+  --wall-3: #03524a;
+  --wall-4: #0c2a40;
+  --stars: transparent;
+}
+
+[data-wallpaper="meadow"] {
+  --wall-base: #a9d48f;
+  --wall-1: #f1ec95;
+  --wall-2: #62b97c;
+  --wall-3: #3a9568;
+  --wall-4: #d6efae;
+  --stars: transparent;
+}
+
+:root[data-theme="dark"][data-wallpaper="meadow"],
+:root[data-theme="dark"] [data-wallpaper="meadow"] {
+  --wall-base: #07150d;
+  --wall-1: #23502b;
+  --wall-2: #0f3a24;
+  --wall-3: #3a5a18;
+  --wall-4: #10301c;
+  --stars: rgb(255 255 240 / 0.5);
+}
+
+[data-wallpaper="dusk"] {
+  --wall-base: #e7969c;
+  --wall-1: #ffcf96;
+  --wall-2: #a873d6;
+  --wall-3: #ff7d5e;
+  --wall-4: #7466d8;
+  --stars: transparent;
+}
+
+:root[data-theme="dark"][data-wallpaper="dusk"],
+:root[data-theme="dark"] [data-wallpaper="dusk"] {
+  --wall-base: #170a21;
+  --wall-1: #5c1f50;
+  --wall-2: #2c1a5e;
+  --wall-3: #7a2b36;
+  --wall-4: #1c1540;
+  --stars: rgb(255 255 255 / 0.55);
+}
+
+[data-wallpaper="graphite"] {
+  --wall-base: #b9bcc4;
+  --wall-1: #e6e7eb;
+  --wall-2: #9ca1ab;
+  --wall-3: #cfd2d8;
+  --wall-4: #868b95;
+  --stars: transparent;
+}
+
+:root[data-theme="dark"][data-wallpaper="graphite"],
+:root[data-theme="dark"] [data-wallpaper="graphite"] {
+  --wall-base: #101012;
+  --wall-1: #2a2b30;
+  --wall-2: #1c1d21;
+  --wall-3: #34353b;
+  --wall-4: #18191c;
+  --stars: transparent;
+}
+
+[data-wallpaper="starfield"],
+:root[data-theme="dark"][data-wallpaper="starfield"],
+:root[data-theme="dark"] [data-wallpaper="starfield"] {
+  --wall-base: #03040a;
+  --wall-1: #1a1446;
+  --wall-2: #0a1c40;
+  --wall-3: #062a30;
+  --wall-4: #22102a;
+  --stars: rgb(255 255 255 / 0.9);
+}
+
+/* Dark wallpapers keep white menu bar text even in light mode. */
+:root[data-wallpaper="starfield"] {
+  --menubar-text: #fff;
+  --menubar-logo-text: #1d1d1f;
+}

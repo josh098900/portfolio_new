@@ -1,0 +1,246 @@
+.resume {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--window-bg);
+}
+
+.toolbar {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 10px;
+  height: 52px;
+  padding: 0 12px;
+  border-bottom: 0.5px solid var(--separator);
+}
+
+:global(html[data-shell="desktop"]) .toolbar {
+  padding-left: 92px;
+}
+
+.heading {
+  display: grid;
+  min-width: 0;
+  line-height: 1.25;
+}
+
+.heading strong,
+.heading span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.heading strong {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.heading span {
+  color: var(--label-secondary);
+  font-size: 11px;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.glass {
+  border: 0;
+  background: var(--control-bg);
+  box-shadow: var(--control-shadow);
+  color: var(--control-icon);
+}
+
+.capsule {
+  display: flex;
+  flex: none;
+  align-items: center;
+  height: 36px;
+  padding: 0 3px;
+  border-radius: 18px;
+}
+
+.capsule button {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 15px;
+  background: none;
+  color: inherit;
+}
+
+.capsule button:disabled {
+  color: var(--label-tertiary);
+}
+
+.save {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 18px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.canvas {
+  flex: 1;
+  overflow: auto;
+  padding: 28px 20px 48px;
+  background: var(--fill);
+}
+
+/* The page stays paper-white in dark mode, as in Preview. */
+.page {
+  --zoom: 1;
+  box-sizing: border-box;
+  width: calc(620px * var(--zoom));
+  max-width: 100%;
+  margin: 0 auto;
+  padding: calc(44px * var(--zoom)) calc(48px * var(--zoom));
+  background: #fff;
+  color: #1d1d1f;
+  font-size: calc(12.5px * var(--zoom));
+  line-height: 1.5;
+  box-shadow: 0 0 0 0.5px rgb(0 0 0 / 0.12), 0 8px 30px rgb(0 0 0 / 0.18);
+}
+
+.page a {
+  color: #0066cc;
+  text-decoration: none;
+}
+
+.masthead {
+  margin-bottom: 1.4em;
+  padding-bottom: 1em;
+  border-bottom: 1px solid #d2d2d7;
+}
+
+.masthead h1 {
+  margin: 0;
+  font-size: 2.3em;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.headline {
+  margin: 0.1em 0 0.4em;
+  color: #6e6e73;
+  font-size: 1.15em;
+}
+
+.contactLine {
+  margin: 0;
+  font-size: 0.95em;
+}
+
+.page section {
+  margin-bottom: 1.3em;
+}
+
+.page h2 {
+  margin: 0 0 0.5em;
+  color: #0066cc;
+  font-size: 0.85em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.page p {
+  margin: 0;
+}
+
+.entry + .entry {
+  margin-top: 0.8em;
+}
+
+.entryHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1em;
+}
+
+.entryHead span {
+  flex: none;
+  color: #6e6e73;
+  font-size: 0.92em;
+}
+
+.place {
+  color: #424245;
+}
+
+.page ul {
+  margin: 0.3em 0 0;
+  padding-left: 1.2em;
+}
+
+.page li + li {
+  margin-top: 0.2em;
+}
+
+.skills {
+  display: grid;
+  gap: 0.35em;
+  margin: 0;
+}
+
+.skills div {
+  display: grid;
+  grid-template-columns: 7.5em 1fr;
+  gap: 1em;
+}
+
+.skills dt {
+  font-weight: 600;
+}
+
+.skills dd {
+  margin: 0;
+}
+
+.references {
+  color: #6e6e73;
+  font-style: italic;
+}
+
+@container app (width < 560px) {
+  .save span {
+    display: none;
+  }
+
+  .save {
+    width: 36px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .canvas {
+    padding: 14px 10px 40px;
+  }
+
+  .page {
+    padding: 22px 18px;
+    font-size: 13px;
+  }
+
+  .entryHead {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .skills div {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}

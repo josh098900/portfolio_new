@@ -2,5 +2,12 @@ node_modules/
 .next/
 out/
 .env*
+!.env.example
 *.tsbuildinfo
 .DS_Store
+
+# Local UI reference screenshots
+/design-refs/
+
+# Copied from node_modules by scripts/copy-vendor.mjs
+/public/vendor/

@@ -1,0 +1,134 @@
+.dock {
+  position: absolute;
+  left: 50%;
+  bottom: 8px;
+  z-index: 9000;
+  translate: -50% 0;
+  padding: 9px 12px 11px;
+  border-radius: 26px;
+}
+
+.list {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  --icon-size: 50px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50px;
+}
+
+:global(html[data-shell="desktop"]) .item:not([data-shells~="desktop"]),
+:global(html[data-shell="tablet"]) .item:not([data-shells~="tablet"]),
+:global(html[data-shell="phone"]) .item:not([data-shells~="phone"]) {
+  display: none;
+}
+
+.button {
+  position: relative;
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.iconWrap {
+  display: block;
+  transform-origin: 50% 100%;
+}
+
+.button:active .icon {
+  filter: brightness(0.82);
+}
+
+.button:focus-visible {
+  outline: none;
+}
+
+.button:focus-visible .icon {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.tooltip {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 14px);
+  translate: -50% 0;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: var(--tooltip-bg);
+  color: var(--label);
+  font-size: 13px;
+  white-space: nowrap;
+  box-shadow: 0 0 0 0.5px var(--separator), 0 4px 14px rgb(0 0 0 / 0.16);
+  backdrop-filter: blur(20px) saturate(1.6);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s;
+}
+
+:global(html[data-shell="desktop"]) .button:hover .tooltip {
+  opacity: 1;
+  bottom: calc(100% + 40px);
+}
+
+.running {
+  position: absolute;
+  bottom: -7px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--label);
+  opacity: 0.75;
+}
+
+.label {
+  display: none;
+}
+
+/* iPhone and iPad: the dock lives on the home screen only. */
+:global(html:not([data-shell="desktop"])) .dock {
+  bottom: max(12px, env(safe-area-inset-bottom));
+  padding: 16px 18px;
+  border-radius: 34px;
+  transition: opacity 0.25s, translate 0.35s cubic-bezier(0.2, 0.9, 0.25, 1);
+}
+
+:global(html:not([data-shell="desktop"])) .item {
+  --icon-size: 62px;
+  width: 62px;
+}
+
+:global(html:not([data-shell="desktop"])) .list {
+  gap: 22px;
+}
+
+:global(html[data-shell="phone"]) .dock {
+  width: calc(100% - 24px);
+  max-width: 420px;
+}
+
+:global(html[data-shell="phone"]) .list {
+  justify-content: space-around;
+  gap: 0;
+}
+
+:global(html:not([data-shell="desktop"])) .running {
+  display: none;
+}
+
+:global(html:not([data-shell="desktop"]) [data-app-open]) .dock {
+  opacity: 0;
+  translate: -50% 140%;
+  pointer-events: none;
+}

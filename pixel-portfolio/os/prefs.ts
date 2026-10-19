@@ -1,0 +1,123 @@
+"use client";
+
+import { useEffect, useSyncExternalStore } from "react";
+import { create } from "zustand";
+import { defaultWallpaper, isWallpaperId, type WallpaperId } from "./wallpapers";
+
+// Per-visitor conveniences, kept in localStorage. Theme and wallpaper live on
+// <html> attributes so the pre-paint script can apply them before hydration.
+
+export type Theme = "light" | "dark";
+export type ThemeMode = Theme | "auto";
+const THEME_KEY = "josh-theme";
+const WALLPAPER_KEY = "josh-wallpaper";
+const PREFS_KEY = "josh-prefs";
+
+type Prefs = {
+  brightness: number;
+  reduceMotion: boolean;
+  themeMode: ThemeMode;
+  setBrightness: (value: number) => void;
+  setReduceMotion: (value: boolean) => void;
+  setThemeMode: (mode: ThemeMode) => void;
+  load: () => void;
+};
+
+const clampBrightness = (value: unknown) => typeof value === "number" ? Math.min(1, Math.max(0.3, value)) : 1;
+
+function store(key: string, value: string | null) {
+  try {
+    if (value === null) localStorage.removeItem(key);
+    else localStorage.setItem(key, value);
+  } catch { /* Settings still apply for this visit without storage. */ }
+}
+
+function read(key: string) {
+  try { return localStorage.getItem(key); } catch { return null; }
+}
+
+const systemTheme = (): Theme => matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+
+/** Swaps an attribute on <html>, cross-fading with a view transition where supported. */
+function transition(update: () => void) {
+  const doc = document as Document & { startViewTransition?: (update: () => void) => unknown };
+  const still = usePrefs.getState().reduceMotion || matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (doc.startViewTransition && !still) doc.startViewTransition(update);
+  else update();
+}
+
+function applyTheme(theme: Theme) {
+  if (document.documentElement.dataset.theme !== theme) transition(() => { document.documentElement.dataset.theme = theme; });
+}
+
+export const usePrefs = create<Prefs>()((set, get) => {
+  const save = () => store(PREFS_KEY, JSON.stringify({ brightness: get().brightness, reduceMotion: get().reduceMotion }));
+  return {
+    brightness: 1,
+    reduceMotion: false,
+    themeMode: "auto",
+    setBrightness: brightness => { set({ brightness: clampBrightness(brightness) }); save(); },
+    setReduceMotion: reduceMotion => { set({ reduceMotion }); save(); },
+    setThemeMode: themeMode => {
+      set({ themeMode });
+      store(THEME_KEY, themeMode === "auto" ? null : themeMode);
+      applyTheme(themeMode === "auto" ? systemTheme() : themeMode);
+    },
+    load: () => {
+      const theme = read(THEME_KEY);
+      set({ themeMode: theme === "light" || theme === "dark" ? theme : "auto" });
+      try {
+        const saved = JSON.parse(read(PREFS_KEY) ?? "null");
+        if (saved) set({ brightness: clampBrightness(saved.brightness), reduceMotion: saved.reduceMotion === true });
+      } catch { /* Ignore unreadable preferences. */ }
+    },
+  };
+});
+
+/** Control Centre's switch: picks an explicit theme, leaving Auto. */
+export function setTheme(theme: Theme) {
+  usePrefs.getState().setThemeMode(theme);
+}
+
+export function setWallpaper(id: WallpaperId) {
+  store(WALLPAPER_KEY, id === defaultWallpaper ? null : id);
+  transition(() => { document.documentElement.dataset.wallpaper = id; });
+}
+
+function subscribeRoot(onChange: () => void) {
+  const observer = new MutationObserver(onChange);
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "data-wallpaper"] });
+  return () => observer.disconnect();
+}
+
+/** The theme on screen; null during server rendering. */
+export function useTheme(): Theme | null {
+  return useSyncExternalStore(subscribeRoot, () => document.documentElement.dataset.theme === "dark" ? "dark" : "light", () => null);
+}
+
+/** The wallpaper on screen; null during server rendering. */
+export function useWallpaper(): WallpaperId | null {
+  return useSyncExternalStore(subscribeRoot, () => {
+    const id = document.documentElement.dataset.wallpaper;
+    return isWallpaperId(id) ? id : defaultWallpaper;
+  }, () => null);
+}
+
+/** Loads saved preferences, and follows the system theme while the mode is Auto. */
+export function usePrefsSync() {
+  useEffect(() => {
+    usePrefs.getState().load();
+    const scheme = matchMedia("(prefers-color-scheme: dark)");
+    const follow = () => {
+      if (usePrefs.getState().themeMode === "auto") applyTheme(systemTheme());
+    };
+    scheme.addEventListener("change", follow);
+    return () => scheme.removeEventListener("change", follow);
+  }, []);
+
+  const reduceMotion = usePrefs(s => s.reduceMotion);
+  useEffect(() => {
+    if (reduceMotion) document.documentElement.dataset.reduceMotion = "";
+    else delete document.documentElement.dataset.reduceMotion;
+  }, [reduceMotion]);
+}

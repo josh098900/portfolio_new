@@ -1,0 +1,710 @@
+/* Layout follows the window, not the viewport, so a narrow desktop window
+   behaves exactly like the iPhone version of the app. */
+.notes {
+  --accent: var(--notes-accent);
+  --list-w: 260px;
+  --toolbar-pad: 12px;
+  position: relative;
+  display: grid;
+  grid-template-columns: 0 var(--list-w) minmax(0, 1fr);
+  grid-template-rows: 52px minmax(0, 1fr);
+  grid-template-areas:
+    "sidebar toolbar toolbar"
+    "sidebar list note";
+  height: 100%;
+  background: var(--window-bg);
+}
+
+.notes[data-sidebar-open] {
+  grid-template-columns: 232px var(--list-w) minmax(0, 1fr);
+}
+
+/* Room for the traffic lights whenever the sidebar isn't underneath them. */
+:global(html[data-shell="desktop"]) .notes:not([data-sidebar-open]) {
+  --toolbar-pad: 92px;
+}
+
+/* Toolbar */
+.toolbar {
+  grid-area: toolbar;
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  padding: 0 10px 0 var(--toolbar-pad);
+  border-bottom: 0.5px solid var(--separator);
+}
+
+.lead {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 12px;
+  width: calc(var(--list-w) - var(--toolbar-pad));
+  min-width: 0;
+}
+
+.tools {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding-left: 12px;
+}
+
+.glass {
+  border: 0;
+  background: var(--control-bg);
+  box-shadow: var(--control-shadow);
+  color: var(--control-icon);
+}
+
+.circle {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 50%;
+}
+
+.circle:not(:disabled):active {
+  filter: brightness(0.92);
+}
+
+.circle:disabled {
+  color: var(--label-tertiary);
+}
+
+.capsule {
+  display: flex;
+  flex: none;
+  align-items: center;
+  height: 36px;
+  padding: 0 3px;
+  border-radius: 18px;
+}
+
+.capsule button {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 15px;
+  background: none;
+  color: inherit;
+}
+
+.capsule button:hover {
+  background: var(--fill);
+}
+
+.aa {
+  font-size: 19px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.heading {
+  display: grid;
+  min-width: 0;
+  line-height: 1.25;
+}
+
+.heading strong,
+.heading span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.heading strong {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.heading span {
+  color: var(--label-secondary);
+  font-size: 11px;
+}
+
+.search {
+  gap: 7px;
+  padding: 0 12px;
+  color: var(--label-secondary);
+}
+
+.search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: none;
+  color: var(--label);
+  font: inherit;
+  font-size: 14px;
+}
+
+.search input::placeholder {
+  color: var(--label-secondary);
+}
+
+.toolbarSearch {
+  flex: 0 1 280px;
+  min-width: 120px;
+}
+
+.foldersBack,
+.noteBack,
+.largeTitle,
+.listSearch,
+.footer,
+.sidebarDone,
+.scrim {
+  display: none;
+}
+
+.toast {
+  position: absolute;
+  top: 60px;
+  right: 14px;
+  z-index: 4;
+  padding: 6px 12px;
+  border-radius: 14px;
+  background: var(--control-bg);
+  box-shadow: var(--control-shadow);
+  color: var(--label-secondary);
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.toast:empty {
+  display: none;
+}
+
+/* Folders sidebar: an inset floating panel that carries the traffic lights. */
+.sidebar {
+  grid-area: sidebar;
+  display: none;
+  min-height: 0;
+  padding: 8px 0 8px 8px;
+}
+
+.notes[data-sidebar-open] .sidebar {
+  display: block;
+}
+
+.sidebarInner {
+  height: 100%;
+  overflow: auto;
+  padding: 44px 10px 12px;
+  border-radius: calc(var(--window-radius) - 8px);
+  background: var(--sidebar-bg);
+  box-shadow: inset 0 0 0 0.5px var(--separator);
+}
+
+.sidebarSection {
+  margin: 8px 8px 4px;
+  color: var(--label-secondary);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.folders,
+.rows,
+.links,
+.checklist {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.folders button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--label);
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+}
+
+.folders button svg {
+  color: var(--accent);
+}
+
+.folders button[aria-current] {
+  background: var(--fill-strong);
+}
+
+.folders button[aria-current] .count {
+  color: var(--label);
+}
+
+.count {
+  margin-left: auto;
+  color: var(--label-secondary);
+  font-size: 12px;
+}
+
+/* Note list */
+.list {
+  grid-area: list;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-right: 0.5px solid var(--separator);
+}
+
+.listScroll {
+  flex: 1;
+  overflow: auto;
+  padding-bottom: 12px;
+}
+
+.group {
+  margin: 14px 16px 4px;
+  padding-bottom: 8px;
+  border-bottom: 0.5px solid var(--separator);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.rows li {
+  position: relative;
+}
+
+.rows li + li::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 16px;
+  right: 16px;
+  height: 0.5px;
+  background: var(--separator);
+}
+
+.rows li:has(> .row[aria-current])::before,
+.rows li:has(> .row[aria-current]) + li::before {
+  opacity: 0;
+}
+
+.row {
+  display: grid;
+  gap: 1px;
+  width: calc(100% - 20px);
+  margin: 3px 10px;
+  padding: 9px 12px 9px 24px;
+  border: 0;
+  border-radius: 10px;
+  background: none;
+  color: var(--label);
+  font: inherit;
+  text-align: left;
+}
+
+.row strong,
+.rowMeta {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.row strong {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.rowMeta,
+.rowFolder {
+  color: var(--label-secondary);
+  font-size: 13px;
+}
+
+.rowMeta time {
+  margin-right: 7px;
+  color: var(--label);
+}
+
+.rowFolder {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.row[aria-current] {
+  background: var(--selection-inactive);
+}
+
+.list:focus-within .row[aria-current] {
+  background: var(--notes-selection);
+}
+
+.empty {
+  margin: 40px 0;
+  color: var(--label-secondary);
+  text-align: center;
+}
+
+/* Note */
+.note {
+  grid-area: note;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.noteScroll {
+  flex: 1;
+  overflow: auto;
+}
+
+.date {
+  margin: 16px 0 10px;
+  color: var(--label-secondary);
+  font-size: 13px;
+  text-align: center;
+}
+
+.noteBody {
+  max-width: 760px;
+  padding: 0 28px 64px;
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.noteBody h1 {
+  margin: 0 0 12px;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+.noteBody h2 {
+  margin: 26px 0 6px;
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.noteBody p {
+  margin: 0 0 12px;
+}
+
+.noteBody ul:not([class]) {
+  margin: 0 0 12px;
+  padding-left: 1.2em;
+}
+
+.noteBody ul:not([class]) li + li {
+  margin-top: 6px;
+}
+
+.checklist {
+  margin-bottom: 12px;
+}
+
+.checklist li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 3px 0;
+}
+
+.checkbox {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  margin-top: 1px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.5px var(--label-tertiary);
+  color: var(--on-notes-accent);
+}
+
+.checklist li[data-done] .checkbox {
+  background: var(--accent);
+  box-shadow: none;
+}
+
+.checklist li[data-done] > span:last-child {
+  color: var(--label-secondary);
+}
+
+.links {
+  display: grid;
+  gap: 2px;
+  margin: 0 0 16px;
+}
+
+.links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--accent-text);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.links a svg {
+  transition: transform 0.15s;
+}
+
+.links a:hover svg {
+  transform: translateX(2px);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Smaller windows lose the formatting tools first, as on macOS. */
+@container app (width < 900px) {
+  .format,
+  .compose {
+    display: none;
+  }
+}
+
+/* Medium: list and note, with folders as an overlay. */
+@container app (width < 820px) {
+  .notes,
+  .notes[data-sidebar-open] {
+    --list-w: 248px;
+    grid-template-columns: var(--list-w) minmax(0, 1fr);
+    grid-template-areas:
+      "toolbar toolbar"
+      "list note";
+  }
+
+  :global(html[data-shell="desktop"]) .notes[data-sidebar-open] {
+    --toolbar-pad: 92px;
+  }
+
+  .sidebar,
+  .notes[data-sidebar-open] .sidebar {
+    position: absolute;
+    inset: 0 auto 0 0;
+    z-index: 5;
+    width: 260px;
+    padding: 8px;
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .sidebarInner {
+    background: var(--sidebar-overlay-bg);
+    box-shadow: inset 0 0 0 0.5px var(--separator), 0 18px 50px rgb(0 0 0 / 0.22);
+  }
+
+  .notes[data-sidebar-open] .scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    display: block;
+  }
+}
+
+/* Narrow: one pane at a time, like the iPhone. */
+@container app (width < 560px) {
+  .notes,
+  .notes[data-sidebar-open] {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "toolbar"
+      "main";
+    background: var(--grouped-bg);
+  }
+
+  .notes[data-view="note"] {
+    background: var(--window-bg);
+  }
+
+  .toolbar {
+    border-bottom: 0;
+  }
+
+  .lead {
+    width: auto;
+  }
+
+  .tools {
+    justify-content: flex-end;
+  }
+
+  .circle {
+    width: 40px;
+    height: 40px;
+  }
+
+  .sidebarToggle,
+  .heading,
+  .toolbarSearch {
+    display: none;
+  }
+
+  .notes[data-view="list"] .foldersBack,
+  .notes[data-view="note"] .noteBack {
+    display: grid;
+  }
+
+  .notes[data-view="list"] .shareGroup {
+    display: none;
+  }
+
+  .shareGroup {
+    height: 40px;
+    border-radius: 20px;
+  }
+
+  .list,
+  .note {
+    grid-area: main;
+    border: 0;
+  }
+
+  .notes[data-view="list"] .note,
+  .notes[data-view="note"] .list {
+    display: none;
+  }
+
+  .sidebar,
+  .notes[data-sidebar-open] .sidebar {
+    width: 100%;
+  }
+
+  .sidebarInner {
+    padding-top: 8px;
+  }
+
+  .sidebarHeader {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .sidebarDone {
+    display: block;
+    padding: 6px;
+    border: 0;
+    background: none;
+    color: var(--accent);
+    font: inherit;
+    font-size: 17px;
+    font-weight: 600;
+  }
+
+  .folders button {
+    padding: 11px 10px;
+    font-size: 17px;
+  }
+
+  .largeTitle {
+    display: block;
+    margin: 2px 20px 10px;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .listSearch {
+    display: flex;
+    flex: none;
+    height: 40px;
+    margin: 0 16px 6px;
+    border-radius: 20px;
+    background: var(--fill);
+  }
+
+  .listSearch input {
+    font-size: 17px;
+  }
+
+  .group {
+    margin: 18px 20px 8px;
+    padding: 0;
+    border: 0;
+    font-size: 20px;
+  }
+
+  .rows {
+    margin: 0 16px;
+    overflow: hidden;
+    border-radius: 22px;
+    background: var(--grouped-cell);
+  }
+
+  .rows li + li::before {
+    right: 0;
+  }
+
+  .rows li:has(> .row[aria-current])::before,
+  .rows li:has(> .row[aria-current]) + li::before {
+    opacity: 1;
+  }
+
+  .row,
+  .row[aria-current],
+  .list:focus-within .row[aria-current] {
+    width: 100%;
+    margin: 0;
+    padding: 12px 16px;
+    border-radius: 0;
+    background: none;
+  }
+
+  .row strong {
+    font-size: 17px;
+  }
+
+  .rowMeta,
+  .rowFolder {
+    font-size: 15px;
+  }
+
+  .footer {
+    display: block;
+    flex: none;
+    margin: 0;
+    padding: 10px 10px var(--home-indicator-space, 10px);
+    color: var(--label-secondary);
+    font-size: 12px;
+    text-align: center;
+  }
+
+  .date {
+    margin-top: 4px;
+  }
+
+  .noteBody {
+    padding: 0 20px 48px;
+    font-size: 17px;
+  }
+
+  .noteBody h2 {
+    font-size: 21px;
+  }
+}

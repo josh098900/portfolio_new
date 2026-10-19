@@ -1,0 +1,215 @@
+.contacts {
+  --group-bg: rgb(0 0 0 / 0.035);
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  height: 100%;
+  background: var(--window-bg);
+}
+
+:global(html[data-theme="dark"]) .contacts {
+  --group-bg: rgb(255 255 255 / 0.05);
+}
+
+.sidebar {
+  min-height: 0;
+  padding: 8px 0 8px 8px;
+}
+
+.sidebarInner {
+  height: 100%;
+  padding: 16px 10px;
+  border-radius: calc(var(--window-radius) - 8px);
+  background: var(--sidebar-bg);
+  box-shadow: inset 0 0 0 0.5px var(--separator);
+}
+
+:global(html[data-shell="desktop"]) .sidebarInner {
+  padding-top: 48px;
+}
+
+.section {
+  margin: 0 8px 6px;
+  color: var(--label-secondary);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: var(--fill-strong);
+  font-size: 13px;
+}
+
+.mini,
+.avatar {
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #6fd0ff, #1f7bf2);
+  color: #fff;
+  font-weight: 700;
+}
+
+.mini {
+  width: 22px;
+  height: 22px;
+  font-size: 11px;
+}
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.toolbar {
+  flex: none;
+  height: 40px;
+}
+
+.scroll {
+  flex: 1;
+  overflow: auto;
+}
+
+.card {
+  display: grid;
+  justify-items: center;
+  max-width: 460px;
+  margin: 0 auto;
+  padding: 0 24px 40px;
+  text-align: center;
+}
+
+.avatar {
+  width: 96px;
+  height: 96px;
+  margin-bottom: 12px;
+  font-size: 44px;
+  box-shadow: 0 6px 20px rgb(31 123 242 / 0.3);
+}
+
+.card h1 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.role {
+  margin: 4px 0 18px;
+  color: var(--label-secondary);
+  font-size: 14px;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 18px;
+}
+
+.action {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  padding: 10px 4px 9px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--group-bg);
+  color: var(--accent);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.action:hover {
+  background: var(--fill-strong);
+}
+
+.actionIcon {
+  display: grid;
+  place-items: center;
+  height: 24px;
+}
+
+.fields {
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 14px;
+  background: var(--group-bg);
+  text-align: left;
+}
+
+.fields div {
+  display: grid;
+  gap: 2px;
+  padding: 10px 16px;
+}
+
+.fields div + div {
+  box-shadow: inset 0 0.5px 0 var(--separator);
+}
+
+.fields dt {
+  color: var(--label-secondary);
+  font-size: 12px;
+}
+
+.fields dd {
+  margin: 0;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.fields a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.note {
+  margin: 14px 0 0;
+  color: var(--label-secondary);
+  font-size: 12px;
+}
+
+@container app (width < 560px) {
+  .contacts {
+    --group-bg: var(--grouped-cell);
+    grid-template-columns: minmax(0, 1fr);
+    background: var(--grouped-bg);
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .toolbar {
+    height: 24px;
+  }
+
+  :global(html[data-shell="desktop"]) .toolbar {
+    height: 48px;
+  }
+
+  .card {
+    padding: 0 16px 48px;
+  }
+
+  .fields,
+  .action {
+    border-radius: 18px;
+  }
+
+  .fields dd {
+    font-size: 16px;
+  }
+}

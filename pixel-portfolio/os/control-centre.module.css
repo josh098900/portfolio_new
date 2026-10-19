@@ -1,0 +1,222 @@
+.backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 9800;
+}
+
+.panel {
+  --glass-bg: rgb(246 246 248 / 0.74);
+  position: absolute;
+  top: calc(var(--menubar-h) + 6px);
+  right: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 344px;
+  color: var(--label);
+  animation: drop 0.2s cubic-bezier(0.2, 0.9, 0.25, 1);
+  transform-origin: 90% 0;
+}
+
+:global(html[data-theme="dark"]) .panel {
+  --glass-bg: rgb(34 36 44 / 0.62);
+}
+
+/* Heavier blur than other glass, so tiles stay legible over busy windows. */
+.panel :global(.glass) {
+  -webkit-backdrop-filter: blur(28px) saturate(1.8);
+  backdrop-filter: blur(28px) saturate(1.8);
+}
+
+@keyframes drop {
+  from { opacity: 0; scale: 0.94; }
+}
+
+.tile {
+  position: relative;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 64px;
+  padding: 8px 10px 8px 9px;
+  border-radius: 32px;
+}
+
+.toggleIcon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--fill-strong);
+  color: var(--label);
+  transition: background 0.2s, color 0.2s;
+}
+
+.toggle[aria-pressed="true"] .toggleIcon {
+  background: #fff;
+  color: #0a84ff;
+}
+
+.label {
+  display: grid;
+  min-width: 0;
+  line-height: 1.2;
+}
+
+.label strong {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.label small {
+  color: var(--label-secondary);
+  font-size: 12px;
+}
+
+.media {
+  grid-row: span 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 14px;
+  border-radius: 28px;
+}
+
+.artwork {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background: var(--fill-strong);
+}
+
+.media strong {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.transport {
+  display: flex;
+  justify-content: space-around;
+  color: var(--label-tertiary);
+}
+
+.slider {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 10px;
+  padding: 14px 16px 16px;
+  border-radius: 28px;
+}
+
+.slider strong {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.sliderRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sliderRow input {
+  flex: 1;
+  height: 22px;
+  margin: 0;
+  background: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.sliderRow input::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--label) var(--fill), var(--fill-strong) var(--fill));
+}
+
+.sliderRow input::-moz-range-track {
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--label) var(--fill), var(--fill-strong) var(--fill));
+}
+
+.sliderRow input::-webkit-slider-thumb {
+  width: 18px;
+  height: 18px;
+  margin-top: -6px;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 0.3);
+  -webkit-appearance: none;
+}
+
+.sliderRow input::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 0.3);
+}
+
+.footer {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.round {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border-radius: 50%;
+  color: inherit;
+}
+
+.pill {
+  position: relative;
+  height: 32px;
+  padding: 0 16px;
+  border-radius: 16px;
+  color: inherit;
+  font: inherit;
+  font-size: 13px;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* iPhone and iPad: a full-screen sheet over a dimmed home screen. */
+:global(html:not([data-shell="desktop"])) .backdrop {
+  background: rgb(0 0 0 / 0.3);
+  -webkit-backdrop-filter: blur(28px);
+  backdrop-filter: blur(28px);
+}
+
+:global(html:not([data-shell="desktop"])) .panel {
+  top: max(56px, env(safe-area-inset-top) + 24px);
+  right: 50%;
+  translate: 50% 0;
+  width: min(340px, 100% - 32px);
+  transform-origin: 50% 0;
+}

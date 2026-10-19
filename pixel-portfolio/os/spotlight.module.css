@@ -1,0 +1,162 @@
+.backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 9800;
+}
+
+.panel {
+  --glass-bg: rgb(250 250 252 / 0.62);
+  position: absolute;
+  top: 19vh;
+  left: 50%;
+  width: min(720px, 100% - 32px);
+  translate: -50% 0;
+  animation: rise 0.18s cubic-bezier(0.2, 0.9, 0.25, 1);
+}
+
+:global(html[data-theme="dark"]) .panel {
+  --glass-bg: rgb(36 38 46 / 0.58);
+}
+
+@keyframes rise {
+  from { opacity: 0; scale: 0.97; }
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bar {
+  position: relative;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 12px;
+  height: 58px;
+  padding: 0 22px;
+  border-radius: 29px;
+  color: var(--label-secondary);
+}
+
+.bar input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: none;
+  color: var(--label);
+  font: inherit;
+  font-size: 24px;
+  letter-spacing: -0.01em;
+}
+
+.bar input::placeholder {
+  color: var(--label-secondary);
+}
+
+.filter {
+  position: relative;
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  padding: 0;
+  border-radius: 50%;
+  color: var(--label-secondary);
+}
+
+.filter[aria-pressed="true"] {
+  --glass-bg: var(--accent-fill);
+  color: #fff;
+}
+
+.results {
+  position: relative;
+  margin: 10px 0 0;
+  padding: 8px;
+  border-radius: 26px;
+}
+
+.results ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.heading {
+  margin: 4px 12px 6px;
+  color: var(--label-secondary);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.results li {
+  display: grid;
+  grid-template-columns: 30px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: 14px;
+  color: var(--label);
+}
+
+.results li[aria-selected="true"] {
+  background: var(--accent-fill);
+  color: #fff;
+}
+
+.title {
+  overflow: hidden;
+  font-size: 15px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.detail {
+  color: var(--label-secondary);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.results li[aria-selected="true"] .detail {
+  color: rgb(255 255 255 / 0.8);
+}
+
+.empty {
+  padding: 18px 20px;
+  color: var(--label-secondary);
+  text-align: center;
+}
+
+/* iPhone and iPad: search takes over the screen above a dimmed home screen. */
+:global(html:not([data-shell="desktop"])) .backdrop {
+  background: rgb(0 0 0 / 0.25);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+}
+
+:global(html:not([data-shell="desktop"])) .panel {
+  top: max(16px, env(safe-area-inset-top));
+  width: min(640px, 100% - 24px);
+}
+
+:global(html[data-shell="phone"]) .filter {
+  display: none;
+}
+
+:global(html[data-shell="phone"]) .bar {
+  height: 50px;
+  padding: 0 16px;
+}
+
+:global(html[data-shell="phone"]) .bar input {
+  font-size: 18px;
+}
+
+:global(html[data-shell="phone"]) .detail {
+  display: none;
+}

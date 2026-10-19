@@ -1,0 +1,215 @@
+/* The "Pro" profile: a dark, slightly translucent terminal in any theme. */
+.terminal {
+  --fg: #e8e8ea;
+  --dim: #9a9aa0;
+  --accent: #64d2ff;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: rgb(22 22 24 / 0.94);
+  color: var(--fg);
+  font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.titlebar {
+  flex: none;
+  height: 40px;
+  padding-top: 12px;
+  color: var(--dim);
+  font-family: -apple-system, BlinkMacSystemFont, "Geist", system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.screen {
+  position: relative;
+  flex: 1;
+  overflow: auto;
+  padding: 4px 14px 14px;
+}
+
+.line {
+  min-height: 1.45em;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.line p {
+  margin: 0;
+}
+
+.line a {
+  color: var(--accent);
+}
+
+.error {
+  color: #ff6961;
+}
+
+.muted,
+.dim {
+  color: var(--dim);
+}
+
+.accent {
+  color: var(--accent);
+}
+
+.prompt {
+  color: #30d158;
+  white-space: nowrap;
+}
+
+.cmd {
+  color: var(--accent);
+  white-space: pre;
+}
+
+.pre {
+  margin: 0;
+  font: inherit;
+  white-space: pre-wrap;
+}
+
+.help {
+  display: grid;
+  gap: 8px;
+  padding: 2px 0;
+}
+
+.helpGroup {
+  color: var(--fg);
+  font-weight: 700;
+}
+
+.columns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 24px;
+}
+
+.dir {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.neofetch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  padding: 4px 0;
+}
+
+.logo {
+  margin: 0;
+  color: var(--accent);
+  font: inherit;
+  line-height: 1.2;
+}
+
+.swatches {
+  display: flex;
+  margin-top: 6px !important;
+}
+
+.swatches i {
+  width: 18px;
+  height: 12px;
+}
+
+.thinking {
+  color: var(--dim);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% { opacity: 0.4; }
+}
+
+.train {
+  margin: 0;
+  overflow: hidden;
+  color: var(--fg);
+  font: inherit;
+  font-size: 11px;
+  line-height: 1.15;
+  white-space: pre;
+  animation: chug 4.5s linear forwards;
+}
+
+@keyframes chug {
+  from { transform: translateX(100%); }
+  to { transform: translateX(-110%); }
+}
+
+.inputLine {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.inputLine input {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: none;
+  color: var(--fg);
+  font: inherit;
+  caret-color: #30d158;
+}
+
+.matrix {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+}
+
+.chips {
+  display: none;
+  flex: none;
+  gap: 8px;
+  padding: 8px 12px 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.chips button {
+  flex: none;
+  padding: 6px 12px;
+  border: 0;
+  border-radius: 14px;
+  background: rgb(255 255 255 / 0.1);
+  color: var(--fg);
+  font: inherit;
+  font-size: 13px;
+}
+
+/* Touch screens have no Tab or arrow keys, so offer one-tap commands. */
+@media (pointer: coarse) {
+  .chips {
+    display: flex;
+    padding-bottom: calc(12px + var(--home-indicator-space, 0px));
+  }
+}
+
+@container app (width < 560px) {
+  .titlebar {
+    padding-top: 14px;
+  }
+
+  :global(html[data-shell="desktop"]) .titlebar {
+    padding-left: 80px;
+  }
+
+  .terminal {
+    font-size: 12px;
+  }
+}

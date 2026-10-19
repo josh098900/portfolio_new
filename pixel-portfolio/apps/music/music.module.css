@@ -1,0 +1,643 @@
+.music {
+  --red: #fa2d48;
+  --glass-bg: rgb(250 250 252 / 0.72);
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr);
+  height: 100%;
+  background: var(--window-bg);
+}
+
+:global(html[data-theme="dark"]) .music {
+  --glass-bg: rgb(44 44 48 / 0.72);
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  margin: 8px 0 8px 8px;
+  padding: 14px 10px 12px;
+  border-radius: calc(var(--window-radius) - 8px);
+  background: var(--sidebar-bg);
+  box-shadow: inset 0 0 0 0.5px var(--separator);
+}
+
+:global(html[data-shell="desktop"]) .sidebar {
+  padding-top: 48px;
+}
+
+.search {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 7px;
+  height: 32px;
+  margin-bottom: 10px;
+  padding: 0 10px;
+  border-radius: 10px;
+  background: var(--fill);
+  color: var(--label-secondary);
+}
+
+.search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: none;
+  color: var(--label);
+  font: inherit;
+  font-size: 13px;
+}
+
+.nav {
+  display: grid;
+  align-content: start;
+  gap: 2px;
+  flex: 1;
+  overflow: auto;
+}
+
+.nav button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 9px;
+  background: none;
+  color: var(--label);
+  font: inherit;
+  font-size: 14px;
+  text-align: left;
+}
+
+.nav button svg {
+  color: var(--red);
+}
+
+.nav button[aria-current] {
+  background: var(--fill-strong);
+}
+
+.navHeading {
+  margin: 14px 8px 4px;
+  color: var(--label-secondary);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.nav .mosaic {
+  width: 26px;
+  height: 26px;
+  border-radius: 5px;
+}
+
+.credit {
+  margin: 8px 6px 0;
+  color: var(--label-secondary);
+  font-size: 11px;
+}
+
+.main {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.phoneTabs {
+  display: none;
+}
+
+.scroll {
+  flex: 1;
+  overflow: auto;
+  padding: 24px 28px 110px;
+}
+
+.title {
+  margin: 8px 0 18px;
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.shelf {
+  margin: 22px 0 10px;
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.picks {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.pick {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  padding: 0;
+  border: 0;
+  border-radius: 14px;
+  background: #222;
+  color: #fff;
+  font: inherit;
+  text-align: left;
+}
+
+.pick img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.pick:hover img {
+  transform: scale(1.03);
+}
+
+.pickText {
+  position: absolute;
+  inset: auto 0 0;
+  display: grid;
+  gap: 2px;
+  padding: 40px 16px 16px;
+  background: linear-gradient(transparent, rgb(0 0 0 / 0.75));
+}
+
+.pickText small {
+  color: rgb(255 255 255 / 0.8);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.pickText strong {
+  font-size: 17px;
+}
+
+.pickText span {
+  color: rgb(255 255 255 / 0.85);
+  font-size: 12px;
+}
+
+.row {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 150px;
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+.tile,
+.artist {
+  display: grid;
+  gap: 2px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--label);
+  font: inherit;
+  text-align: left;
+}
+
+.tile strong,
+.artist strong {
+  overflow: hidden;
+  font-size: 13px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tile small {
+  color: var(--label-secondary);
+  font-size: 12px;
+}
+
+.cover,
+.tile .mosaic {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  margin-bottom: 6px;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 0 0 0.5px var(--separator), 0 4px 12px rgb(0 0 0 / 0.15);
+}
+
+.mosaic {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+}
+
+.mosaic img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.artistGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 22px;
+}
+
+.artist {
+  justify-items: center;
+}
+
+.round {
+  border-radius: 50%;
+}
+
+.pageHead {
+  display: flex;
+  align-items: flex-end;
+  gap: 22px;
+  margin: 8px 0 22px;
+}
+
+.headArt {
+  flex: none;
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.25);
+}
+
+.headArt .mosaic {
+  width: 100%;
+  height: 100%;
+}
+
+.headArt.round {
+  border-radius: 50%;
+}
+
+.pageHead h2 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.pageHead p {
+  margin: 2px 0 12px;
+  color: var(--label-secondary);
+  font-size: 14px;
+}
+
+.headButtons {
+  display: flex;
+  gap: 10px;
+}
+
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.primary {
+  background: #d11a36;
+  color: #fff;
+}
+
+.secondary {
+  background: var(--fill-strong);
+  color: var(--label);
+}
+
+.songs {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.songs th {
+  padding: 6px 8px;
+  border-bottom: 0.5px solid var(--separator);
+  color: var(--label-secondary);
+  font-size: 11px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.songs td {
+  padding: 4px 8px;
+  color: var(--label-secondary);
+}
+
+.songs tbody tr:nth-child(even) {
+  background: var(--fill);
+}
+
+.songs tr[aria-current] td:first-child,
+.songs tr[aria-current] strong {
+  color: var(--red);
+}
+
+.num {
+  width: 28px;
+  text-align: center;
+}
+
+.time {
+  width: 60px;
+  text-align: right;
+}
+
+.songButton {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 2px 0;
+  border: 0;
+  background: none;
+  color: var(--label);
+  font: inherit;
+  text-align: left;
+}
+
+.songButton span {
+  display: grid;
+  min-width: 0;
+}
+
+.songButton strong {
+  overflow: hidden;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.songButton small {
+  color: var(--label-secondary);
+  font-size: 12px;
+}
+
+.thumb {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.thumbEmpty {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  background: var(--fill-strong);
+  color: var(--label-secondary);
+}
+
+.empty {
+  color: var(--label-secondary);
+}
+
+/* Floating glass player, as in Music on macOS Tahoe. */
+.player {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 14px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  height: 64px;
+  padding: 0 16px;
+  border-radius: 32px;
+  color: var(--label);
+}
+
+.transport {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.transport button {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: inherit;
+}
+
+.transport .minor {
+  color: var(--label-secondary);
+}
+
+.transport .minor[aria-pressed="true"] {
+  color: var(--red);
+}
+
+.playButton {
+  width: 42px !important;
+  height: 42px !important;
+}
+
+.now {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.nowText {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  line-height: 1.3;
+}
+
+.nowText strong,
+.nowText small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nowText strong {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.nowText small {
+  color: var(--label-secondary);
+  font-size: 11px;
+}
+
+.progress {
+  height: 3px;
+  margin-top: 4px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--fill-strong);
+}
+
+.progress i {
+  display: block;
+  height: 100%;
+  background: var(--label-secondary);
+  transition: width 0.25s linear;
+}
+
+.extras {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.apple {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.volume {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--label-secondary);
+}
+
+.volume input {
+  width: 90px;
+  accent-color: var(--label-secondary);
+}
+
+.wide {
+  display: table-cell;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@container app (width < 900px) {
+  .wide,
+  .volume,
+  .apple {
+    display: none;
+  }
+
+  .picks {
+    grid-template-columns: repeat(3, 72%);
+    overflow-x: auto;
+  }
+}
+
+/* Narrow: tabs on top and a mini player, as on iPhone. */
+@container app (width < 640px) {
+  .music {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .phoneTabs {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin: 12px auto 0;
+    padding: 2px;
+    border-radius: 10px;
+    background: var(--fill);
+  }
+
+  :global(html[data-shell="desktop"]) .phoneTabs {
+    margin-top: 44px;
+  }
+
+  .phoneTabs button {
+    padding: 5px 14px;
+    border: 0;
+    border-radius: 8px;
+    background: none;
+    color: var(--label);
+    font: inherit;
+    font-size: 13px;
+  }
+
+  .phoneTabs button[aria-pressed="true"] {
+    background: var(--control-bg);
+    box-shadow: var(--control-shadow);
+    font-weight: 600;
+  }
+
+  .scroll {
+    padding: 8px 16px 120px;
+  }
+
+  .title {
+    font-size: 30px;
+  }
+
+  .player {
+    left: 8px;
+    right: 8px;
+    bottom: calc(8px + var(--home-indicator-space, 0px));
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+    padding: 0 8px 0 12px;
+  }
+
+  .now {
+    grid-row: 1;
+  }
+
+  .transport {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .transport .minor,
+  .extras {
+    display: none;
+  }
+
+  .pageHead {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .songs thead {
+    display: none;
+  }
+}

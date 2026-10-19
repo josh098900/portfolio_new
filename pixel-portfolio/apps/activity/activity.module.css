@@ -1,0 +1,193 @@
+/* Dark in every theme, like the Fitness app. */
+.activity {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #000;
+  color: #f2f2f7;
+}
+
+.toolbar {
+  display: flex;
+  flex: none;
+  justify-content: space-between;
+  align-items: center;
+  height: 52px;
+  padding: 0 16px;
+  font-size: 15px;
+}
+
+:global(html[data-shell="desktop"]) .toolbar {
+  padding-left: 92px;
+}
+
+.toolbar a {
+  color: #3de0ff;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.scroll {
+  flex: 1;
+  overflow: auto;
+  padding: 0 16px calc(20px + var(--home-indicator-space, 0px));
+}
+
+.notice {
+  margin: 0 0 12px;
+  color: rgb(242 242 247 / 0.7);
+  font-size: 13px;
+}
+
+.card {
+  margin-bottom: 14px;
+  padding: 16px;
+  border-radius: 20px;
+  background: #1c1c1e;
+}
+
+.card h3 {
+  margin: 0 0 12px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 20px 32px;
+}
+
+.rings {
+  width: 180px;
+  height: 180px;
+}
+
+.progress {
+  transition: stroke-dasharray 1.2s cubic-bezier(0.2, 0.9, 0.25, 1);
+}
+
+.legend {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+}
+
+.legend dt {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.legend dd {
+  margin: 0;
+  font-size: 15px;
+}
+
+.legend strong {
+  font-size: 24px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.legend span {
+  color: rgb(242 242 247 / 0.6);
+  font-size: 12px;
+}
+
+.heat {
+  display: grid;
+  grid-template-columns: repeat(14, 1fr);
+  gap: 5px;
+}
+
+.heat span {
+  aspect-ratio: 1;
+  border-radius: 5px;
+  background: #2c2c2e;
+}
+
+.heat span[data-active] {
+  background: #a6f53b;
+}
+
+.caption {
+  margin: 10px 0 0;
+  color: rgb(242 242 247 / 0.6);
+  font-size: 12px;
+}
+
+.split {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0 14px;
+}
+
+.bars,
+.recent {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 13px;
+}
+
+.bars li {
+  display: grid;
+  grid-template-columns: 90px 1fr 24px;
+  align-items: center;
+  gap: 8px;
+}
+
+.bar {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: #2c2c2e;
+}
+
+.bar i {
+  display: block;
+  height: 100%;
+  border-radius: 4px;
+  background: #3de0ff;
+}
+
+.count {
+  color: rgb(242 242 247 / 0.6);
+  text-align: right;
+}
+
+.recent li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.recent a {
+  overflow: hidden;
+  color: #f2f2f7;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.recent span {
+  flex: none;
+  color: rgb(242 242 247 / 0.6);
+}
+
+.footer {
+  margin: 4px 0 0;
+  color: rgb(242 242 247 / 0.6);
+  font-size: 12px;
+  text-align: center;
+}
+
+@container app (width < 560px) {
+  .heat {
+    grid-template-columns: repeat(7, 1fr);
+  }
+}

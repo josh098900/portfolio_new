@@ -1,0 +1,58 @@
+.os {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
+.wallpaper {
+  position: absolute;
+  inset: 0;
+}
+
+.workspace {
+  position: absolute;
+  inset: var(--menubar-h) 0 0;
+}
+
+:global(html:not([data-shell="desktop"])) .workspace {
+  --home-indicator-space: 34px;
+  inset: 0;
+}
+
+.dimmer {
+  position: absolute;
+  inset: 0;
+  z-index: 9900;
+  background: #000;
+  pointer-events: none;
+}
+
+.homeIndicator {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  z-index: 9600;
+  display: none;
+  translate: -50% 0;
+  width: 180px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  background: none;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.homeIndicator span {
+  display: block;
+  width: 134px;
+  height: 5px;
+  margin: 0 auto;
+  border-radius: 3px;
+  background: var(--label);
+  opacity: 0.85;
+}
+
+:global(html:not([data-shell="desktop"])) .homeIndicator {
+  display: block;
+}

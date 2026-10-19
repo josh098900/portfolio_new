@@ -1,22 +1,40 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "@fontsource/geist/latin-400.css";
 import "@fontsource/geist/latin-500.css";
 import "@fontsource/geist/latin-600.css";
-import "@fontsource/instrument-serif/latin-400-italic.css";
+import "@fontsource/geist/latin-700.css";
 import "./globals.css";
-import { SiteHeader } from "@/components/site-header";
-import { SiteFooter } from "@/components/site-footer";
+import "./wallpapers.css";
+import { defaultShareImage, siteName, siteUrl } from "@/lib/site";
+import { preflightScript } from "@/os/preflight";
+
+const title = "Josh, software engineering student";
+const description = "I'm Josh, a third-year software engineering student. Explore my projects, see what I'm building, or ask my assistant.";
 
 export const metadata: Metadata = {
-  title: { default: "Josh — Software Engineering Student", template: "%s — Josh" },
-  description: "I'm Josh, a third-year software engineering student. Explore my web apps, multiplayer experiments, and database work. Currently building Curio for solo travellers.",
+  metadataBase: new URL(siteUrl),
+  title: { default: title, template: "%s · Josh" },
+  description,
+  openGraph: { type: "website", siteName, title, description, images: [defaultShareImage] },
+  twitter: { card: "summary_large_image" },
 };
 
-const themeScript = `(function(){var theme=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';try{var saved=localStorage.getItem('josh-theme');if(saved==='light'||saved==='dark')theme=saved;}catch(e){}document.documentElement.dataset.theme=theme;})();`;
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#a9c0e6" },
+    { media: "(prefers-color-scheme: dark)", color: "#05070f" },
+  ],
+};
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en-GB" data-scroll-behavior="smooth" suppressHydrationWarning>
-    <head><script dangerouslySetInnerHTML={{ __html: themeScript }} /></head>
-    <body><a href="#main" className="skip-link">Skip to content</a><SiteHeader />{children}<SiteFooter /></body>
+export default function RootLayout({ children }: LayoutProps<"/">) {
+  return <html lang="en-GB" suppressHydrationWarning>
+    <head><script dangerouslySetInnerHTML={{ __html: preflightScript }} /></head>
+    <body>
+      <a href="#main" className="skip-link">Skip to content</a>
+      {children}
+    </body>
   </html>;
 }
