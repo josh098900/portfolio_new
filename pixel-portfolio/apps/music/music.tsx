@@ -1,10 +1,12 @@
 "use client";
 
+import { AnimatePresence } from "motion/react";
 import { useEffect, useMemo, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { artists, artwork, formatDuration, playlists, tracks, type Track } from "@/content/music";
 import { Glyph, type GlyphName } from "@/os/icons";
 import { selectTrack, useMedia } from "@/os/media";
+import { NowPlaying } from "./now-playing";
 import styles from "./music.module.css";
 
 type View = { kind: "home" } | { kind: "songs" } | { kind: "artists" } | { kind: "artist"; name: string } | { kind: "playlist"; id: string };
@@ -24,7 +26,8 @@ export function Music() {
     playing: s.playing, progress: s.progress, duration: s.duration, volume: s.volume, shuffle: s.shuffle, repeat: s.repeat,
   })));
   const current = useMedia(selectTrack);
-  const { play, toggle, step, setVolume, setShuffle, setRepeat } = useMedia.getState();
+  const nowPlaying = useMedia(s => s.nowPlaying);
+  const { play, toggle, step, setVolume, setShuffle, setRepeat, setNowPlaying } = useMedia.getState();
 
   // Quitting Music stops the music, as on a phone. Hiding or minimising it doesn't.
   useEffect(() => () => useMedia.getState().stop(), []);
@@ -155,14 +158,14 @@ export function Music() {
           <button type="button" onClick={() => step(1)} aria-label="Next"><Glyph name="next" size={18} /></button>
           <button type="button" className={styles.minor} aria-pressed={repeat} onClick={() => setRepeat(!repeat)} aria-label="Repeat"><Glyph name="repeat" size={16} /></button>
         </div>
-        <div className={styles.now}>
+        <button type="button" className={styles.now} disabled={!current} onClick={() => setNowPlaying(true)} aria-label={current ? `Now playing: ${current.title} by ${current.artist}. Open full screen` : undefined}>
           {current ? <Cover track={current} size={40} className={styles.thumb} /> : <span className={styles.thumbEmpty} aria-hidden="true"><Glyph name={"musicNote"} size={16} /></span>}
-          <div className={styles.nowText}>
+          <span className={styles.nowText}>
             <strong>{current?.title ?? "Not Playing"}</strong>
             <small>{current ? `${current.artist} · 30-second preview` : "Pick a song to hear a preview"}</small>
             <span className={styles.progress} aria-hidden="true"><i style={{ width: `${Math.min(100, (progress / duration) * 100)}%` }} /></span>
-          </div>
-        </div>
+          </span>
+        </button>
         <div className={styles.extras}>
           {current && <a href={current.appleMusic} target="_blank" rel="noreferrer" className={styles.apple}>Open in Apple Music <Glyph name="arrow" size={11} /></a>}
           <label className={styles.volume}>
@@ -173,5 +176,6 @@ export function Music() {
         </div>
       </div>
     </section>
+    <AnimatePresence>{nowPlaying && current && <NowPlaying key="now-playing" onClose={() => setNowPlaying(false)} />}</AnimatePresence>
   </div>;
 }

@@ -36,8 +36,18 @@ test("music carries on in the Dynamic Island, with controls", async ({ page }) =
   await island(page).getByRole("button", { name: "Pause" }).click();
   await expect(island(page).getByRole("button", { name: "Play" })).toBeVisible();
 
+  // The artwork opens Music straight into the full-screen player.
   await island(page).getByRole("button", { name: "Open Music" }).click();
   await expect(appWindow(page, "music")).not.toHaveAttribute("inert");
+  const player = page.getByRole("dialog", { name: "Now Playing" });
+  await expect(player).toBeVisible();
+  await expect(player.getByRole("slider", { name: "Position" })).toBeVisible();
+  await player.getByRole("button", { name: "Close Now Playing" }).click();
+  await expect(player).toHaveCount(0);
+
+  // And the mini player opens it too.
+  await music.getByRole("button", { name: /Open full screen$/ }).click();
+  await expect(player).toBeVisible();
 });
 
 test("a reply that lands while you're elsewhere shows up in the island", async ({ page }) => {

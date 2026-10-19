@@ -2,6 +2,7 @@
 
 import { useEffect, useSyncExternalStore } from "react";
 import { create } from "zustand";
+import { skyVars } from "./sky";
 import { defaultWallpaper, isWallpaperId, type WallpaperId } from "./wallpapers";
 
 // Per-visitor conveniences, kept in localStorage. Theme and wallpaper live on
@@ -17,9 +18,12 @@ type Prefs = {
   brightness: number;
   reduceMotion: boolean;
   themeMode: ThemeMode;
+  /** The Mac's "hello" screen saver after a while without activity. */
+  screenSaver: boolean;
   setBrightness: (value: number) => void;
   setReduceMotion: (value: boolean) => void;
   setThemeMode: (mode: ThemeMode) => void;
+  setScreenSaver: (value: boolean) => void;
   load: () => void;
 };
 
@@ -51,13 +55,15 @@ function applyTheme(theme: Theme) {
 }
 
 export const usePrefs = create<Prefs>()((set, get) => {
-  const save = () => store(PREFS_KEY, JSON.stringify({ brightness: get().brightness, reduceMotion: get().reduceMotion }));
+  const save = () => store(PREFS_KEY, JSON.stringify({ brightness: get().brightness, reduceMotion: get().reduceMotion, screenSaver: get().screenSaver }));
   return {
     brightness: 1,
     reduceMotion: false,
     themeMode: "auto",
+    screenSaver: true,
     setBrightness: brightness => { set({ brightness: clampBrightness(brightness) }); save(); },
     setReduceMotion: reduceMotion => { set({ reduceMotion }); save(); },
+    setScreenSaver: screenSaver => { set({ screenSaver }); save(); },
     setThemeMode: themeMode => {
       set({ themeMode });
       store(THEME_KEY, themeMode === "auto" ? null : themeMode);
@@ -68,7 +74,7 @@ export const usePrefs = create<Prefs>()((set, get) => {
       set({ themeMode: theme === "light" || theme === "dark" ? theme : "auto" });
       try {
         const saved = JSON.parse(read(PREFS_KEY) ?? "null");
-        if (saved) set({ brightness: clampBrightness(saved.brightness), reduceMotion: saved.reduceMotion === true });
+        if (saved) set({ brightness: clampBrightness(saved.brightness), reduceMotion: saved.reduceMotion === true, screenSaver: saved.screenSaver !== false });
       } catch { /* Ignore unreadable preferences. */ }
     },
   };
@@ -113,6 +119,20 @@ export function usePrefsSync() {
     };
     scheme.addEventListener("change", follow);
     return () => scheme.removeEventListener("change", follow);
+  }, []);
+
+  // Keeps the London Sky wallpaper (and its Settings preview) in step with the real sky.
+  useEffect(() => {
+    const paint = () => {
+      for (const [name, value] of Object.entries(skyVars(Date.now()))) document.documentElement.style.setProperty(name, value);
+    };
+    paint();
+    const id = setInterval(paint, 60_000);
+    document.addEventListener("visibilitychange", paint);
+    return () => {
+      clearInterval(id);
+      document.removeEventListener("visibilitychange", paint);
+    };
   }, []);
 
   const reduceMotion = usePrefs(s => s.reduceMotion);

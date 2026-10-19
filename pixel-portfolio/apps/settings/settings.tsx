@@ -68,7 +68,7 @@ const modes: { id: ThemeMode; label: string }[] = [
 function AppearancePane() {
   const mode = usePrefs(s => s.themeMode);
   const setMode = usePrefs(s => s.setThemeMode);
-  return <Group title="Appearance">
+  return <><Group title="Appearance">
     <div className={styles.modes} role="group" aria-label="Appearance">
       {modes.map(m => <button key={m.id} type="button" className={styles.mode} aria-pressed={mode === m.id} onClick={() => setMode(m.id)}>
         <span className={styles.modePreview} data-mode={m.id} aria-hidden="true"><span /></span>
@@ -76,6 +76,17 @@ function AppearancePane() {
       </button>)}
     </div>
     <p className={styles.hint}>Auto matches your device and switches when it does.</p>
+  </Group><ScreenSaverGroup /></>;
+}
+
+function ScreenSaverGroup() {
+  const screenSaver = usePrefs(s => s.screenSaver);
+  const setScreenSaver = usePrefs(s => s.setScreenSaver);
+  return <Group title="Screen Saver">
+    <div className={styles.row}>
+      <span className={styles.rowText}><strong>Hello</strong><small>On a Mac-sized screen, writes “hello” after two minutes without activity.</small></span>
+      <Switch checked={screenSaver} onChange={setScreenSaver} label="Hello screen saver" />
+    </div>
   </Group>;
 }
 
@@ -113,6 +124,7 @@ const facts: [string, ReactNode][] = [
   ["Assistant", "Claude Haiku 5.5 by Anthropic"],
   ["Voice", "ElevenLabs"],
   ["Weather", "Open-Meteo and MET Norway (CC BY 4.0)"],
+  ["Films", "Letterboxd"],
 ];
 
 function AboutPane() {

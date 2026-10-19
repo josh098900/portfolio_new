@@ -20,10 +20,14 @@ type Media = {
   repeat: boolean;
   /** When playback last paused, so the island can linger for a moment before it goes. */
   pausedAt: number | null;
+  /** Music's full-screen Now Playing view. */
+  nowPlaying: boolean;
   play: (list: Track[], at: number) => void;
   toggle: () => void;
   pause: () => void;
   step: (by: 1 | -1) => void;
+  seek: (ms: number) => void;
+  setNowPlaying: (open: boolean) => void;
   /** Stops and forgets the track, as when Music quits. */
   stop: () => void;
   setVolume: (volume: number) => void;
@@ -71,6 +75,7 @@ export const useMedia = create<Media>()((set, get) => ({
   shuffle: false,
   repeat: false,
   pausedAt: null,
+  nowPlaying: false,
   play: (list, at) => {
     const el = audio();
     set({ queue: list, index: at, progress: 0, duration: PREVIEW_MS });
@@ -94,13 +99,19 @@ export const useMedia = create<Media>()((set, get) => ({
     }
     play(queue, (index + by + queue.length) % queue.length);
   },
+  seek: ms => {
+    if (!player) return;
+    player.currentTime = ms / 1000;
+    set({ progress: ms });
+  },
+  setNowPlaying: nowPlaying => set({ nowPlaying }),
   stop: () => {
     if (player) {
       player.pause();
       player.removeAttribute("src");
       player.load();
     }
-    set({ index: null, playing: false, progress: 0, pausedAt: null });
+    set({ index: null, playing: false, progress: 0, pausedAt: null, nowPlaying: false });
   },
   setVolume: volume => {
     set({ volume });

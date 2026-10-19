@@ -37,7 +37,7 @@ export function CalendarWidget({ className }: { className?: string }) {
   }
   const weeks = Array.from({ length: Math.ceil(cells.length / 7) }, (_, i) => cells.slice(i * 7, i * 7 + 7));
 
-  return <div className={`${styles.widget} ${styles.calendar} glass glass-dark ${className ?? ""}`}>
+  return <div className={`${styles.widget} ${styles.calendar} glass glass-dark ${className ?? ""}`} data-liquid>
     {today && <table>
       <caption>{monthName.format(new Date(today.year, today.month, 1))}</caption>
       <thead><tr>{weekdays.map((d, i) => <th key={i} scope="col" data-weekend={i > 4 || undefined}>{d}</th>)}</tr></thead>
@@ -97,7 +97,7 @@ export function WeatherWidget({ className }: { className?: string }) {
   const state = useWeather();
   const weather = state.status === "ready" ? state.weather : null;
   const look = weather && describe(weather.condition, weather.isDay);
-  return <div className={`${styles.widget} ${styles.status} glass glass-dark ${className ?? ""}`} title={weather ? `Weather data: ${weather.source}` : undefined}>
+  return <div className={`${styles.widget} ${styles.status} glass glass-dark ${className ?? ""}`} data-liquid title={weather ? `Weather data: ${weather.source}` : undefined}>
     <span className={styles.eyebrow}>London <Glyph name="location" size={11} /></span>
     <span className={styles.big}>{weather ? `${Math.round(weather.temperature)}°` : "--°"}</span>
     <span className={styles.footer}>
@@ -110,7 +110,7 @@ export function WeatherWidget({ className }: { className?: string }) {
 
 function CurioWidget() {
   const open = useOS(s => s.open);
-  return <button type="button" className={`${styles.widget} ${styles.status} glass glass-dark`} onClick={() => open({ app: "notes", sub: ["curio"] })}>
+  return <button type="button" className={`${styles.widget} ${styles.status} glass glass-dark`} data-liquid onClick={() => open({ app: "notes", sub: ["curio"] })}>
     <span className={styles.eyebrow}>Now building <Glyph name="location" size={11} /></span>
     <span className={styles.big}>Curio</span>
     <span className={styles.footer}>

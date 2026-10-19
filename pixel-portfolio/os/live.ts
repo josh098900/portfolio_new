@@ -18,9 +18,12 @@ export type Alert = {
 };
 
 type Live = {
+  /** True while the assistant is writing a reply. */
+  thinking: boolean;
   /** Set while the assistant's voice plays; `stop` silences it. */
   speaking: { stop: () => void } | null;
   alert: Alert | null;
+  setThinking: (thinking: boolean) => void;
   setSpeaking: (speaking: Live["speaking"]) => void;
   flash: (alert: Omit<Alert, "id">) => void;
   dismiss: () => void;
@@ -31,8 +34,10 @@ let nextId = 1;
 let timer: ReturnType<typeof setTimeout> | undefined;
 
 export const useLive = create<Live>()(set => ({
+  thinking: false,
   speaking: null,
   alert: null,
+  setThinking: thinking => set({ thinking }),
   setSpeaking: speaking => set({ speaking }),
   flash: alert => {
     clearTimeout(timer);

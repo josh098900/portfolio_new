@@ -79,6 +79,7 @@ export function Messages() {
       request.current?.abort();
       audio.current?.pause();
       useLive.getState().setSpeaking(null);
+      useLive.getState().setThinking(false);
       for (const url of urls.values()) URL.revokeObjectURL(url);
     };
   }, []);
@@ -102,6 +103,7 @@ export function Messages() {
     setBubbles(list => [...list, { id: crypto.randomUUID(), role: "user", text: question }, { id: replyBubble, role: "assistant", text: "", pending: true }]);
     setDraft("");
     setBusy(true);
+    useLive.getState().setThinking(true);
     const abort = new AbortController();
     request.current = abort;
     let reply = "";
@@ -139,6 +141,7 @@ export function Messages() {
       notice("The connection dropped. Please try again.");
     } finally {
       setBusy(false);
+      useLive.getState().setThinking(false);
       request.current = null;
       input.current?.focus({ preventScroll: true });
     }

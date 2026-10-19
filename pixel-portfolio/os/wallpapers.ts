@@ -3,6 +3,7 @@
 
 export const wallpapers = [
   { id: "aurora", name: "Aurora", note: "Pastel by day, starry by night" },
+  { id: "london", name: "London Sky", note: "The real sky over London, right now" },
   { id: "dune", name: "Dune", note: "Sandstone and terracotta" },
   { id: "lagoon", name: "Lagoon", note: "Shallow water and deep blue" },
   { id: "meadow", name: "Meadow", note: "Long grass in late sun" },

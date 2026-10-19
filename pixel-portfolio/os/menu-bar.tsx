@@ -37,6 +37,7 @@ function useMenus(): Menu[] {
       "separator",
       { label: "Settings…", action: () => launch("settings") },
       "separator",
+      { label: "Start Screen Saver", action: () => setOverlay("screensaver") },
       { label: "Reset Desktop", action: reset },
     ] },
     { id: "app", title: name ?? "Desktop", label: name ?? "Desktop", bold: true, items: focused && name ? [

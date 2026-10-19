@@ -86,6 +86,23 @@ function Shelf({ title, films }: { title: string; films: Film[] }) {
   </section>;
 }
 
+/** Josh's reviews as quote cards. Reviews marked as spoilers never reach here. */
+function Reviews({ films }: { films: Film[] }) {
+  if (films.length === 0) return null;
+  return <section className={styles.shelfSection} aria-label="In Josh's words">
+    <h2 className={styles.shelf}>In Josh&apos;s Words</h2>
+    <div className={`${styles.row} ${styles.quoteRow}`}>
+      {films.map(f => <a key={f.id} className={styles.quote} href={f.url} target="_blank" rel="noreferrer">
+        {f.poster && <img src={posterAt(f.poster, "small")} alt="" width={56} height={84} loading="lazy" referrerPolicy="no-referrer" />}
+        <span className={styles.quoteBody}>
+          <span className={styles.quoteTitle}><strong>{f.title}</strong><Stars rating={f.rating} /></span>
+          <q>{f.review}</q>
+        </span>
+      </a>)}
+    </div>
+  </section>;
+}
+
 function Hero({ films }: { films: Film[] }) {
   const [at, setAt] = useState(0);
   const [held, setHeld] = useState(false);
@@ -104,7 +121,7 @@ function Hero({ films }: { films: Film[] }) {
   return <section
     className={styles.hero}
     aria-roledescription="carousel"
-    aria-label="Recently watched"
+    aria-label="Featured films"
     onPointerEnter={() => setHeld(true)}
     onPointerLeave={() => setHeld(false)}
     onFocus={() => setHeld(true)}
@@ -145,12 +162,14 @@ function Stats({ films }: { films: Film[] }) {
   const rated = films.filter(f => f.rating !== null);
   const average = rated.length ? rated.reduce((sum, f) => sum + f.rating!, 0) / rated.length : null;
   const oldest = films.map(f => f.watched).filter((d): d is string => Boolean(d)).sort()[0];
+  const count = (test: (f: Film) => boolean) => films.filter(test).length;
   const items = [
     { value: String(films.length), label: oldest ? `films since ${monthYear.format(asDate(oldest))}` : "films lately" },
     ...(average !== null ? [{ value: `★ ${average.toFixed(1)}`, label: "average rating" }] : []),
-    { value: String(films.filter(f => f.liked).length), label: "loved" },
-    { value: String(films.filter(f => f.rewatch).length), label: "rewatched" },
-  ];
+    { value: String(count(f => f.liked)), label: "loved" },
+    { value: String(count(f => Boolean(f.review))), label: "reviewed" },
+    { value: String(count(f => f.rewatch)), label: "rewatched" },
+  ].filter(i => i.value !== "0").slice(0, 4);
   return <dl className={styles.stats}>
     {items.map(i => <div key={i.label}><dt>{i.label}</dt><dd>{i.value}</dd></div>)}
   </dl>;
@@ -193,7 +212,10 @@ export function TV() {
   const films = useMemo(() => diary?.films ?? [], [diary]);
   const topRated = useMemo(() => films.filter(f => f.rating !== null && f.rating >= 4).sort((a, b) => b.rating! - a.rating!), [films]);
   const loved = useMemo(() => films.filter(f => f.liked), [films]);
+  const reviewed = useMemo(() => films.filter(f => f.review), [films]);
   const profile = diary?.profile ?? letterboxdProfile;
+  // A shelf that would repeat most of Recently Watched adds nothing, so it stays off Home.
+  const distinct = (list: Film[]) => list.length >= 3 && list.length <= films.length * 0.7;
 
   let content: ReactNode;
   if (failed) {
@@ -208,8 +230,9 @@ export function TV() {
       <Hero films={films.filter(f => f.poster).slice(0, HERO_SLIDES)} />
       <Stats films={films} />
       <Shelf title="Recently Watched" films={films} />
-      <Shelf title="Josh's Top Rated" films={topRated} />
-      <Shelf title="Loved" films={loved} />
+      <Reviews films={reviewed} />
+      {distinct(topRated) && <Shelf title="Josh's Top Rated" films={topRated} />}
+      {distinct(loved) && <Shelf title="Loved" films={loved} />}
     </>;
   } else if (view === "diary") {
     content = <><h1 className={styles.title}>Diary</h1><DiaryList films={films} /></>;

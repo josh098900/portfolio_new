@@ -22,12 +22,26 @@ function silentWav(seconds: number) {
 
 const silence = silentWav(20);
 
+const poster = "https://a.ltrbxd.com/resized/film-poster/1/2/3/123-film-0-600-0-900-crop.jpg";
+/** A small, fixed diary, so the TV tests don't depend on Letterboxd. */
+export const diary = {
+  user: "josh098900",
+  profile: "https://letterboxd.com/josh098900/",
+  updated: "2026-10-20T00:00:00.000Z",
+  films: [
+    { id: "1", title: "Tenzing", year: 2026, rating: 5, liked: true, rewatch: false, watched: "2026-10-19", poster, url: "https://letterboxd.com/josh098900/film/tenzing/", review: "A true masterpiece!", spoilers: false },
+    { id: "2", title: "Hamnet", year: 2025, rating: 4.5, liked: true, rewatch: false, watched: "2026-08-17", poster, url: "https://letterboxd.com/josh098900/film/hamnet/", review: "That's all I have to say.", spoilers: false },
+    { id: "3", title: "F1", year: 2025, rating: 3, liked: false, rewatch: true, watched: "2026-04-11", poster, url: "https://letterboxd.com/josh098900/film/f1/", review: null, spoilers: false },
+  ],
+};
+
 /**
  * Tests stay off the internet: the site under test answers for itself, song
  * previews are silent stand-ins, and every other outside request is blocked.
  */
 export const test = base.extend({
   page: async ({ page }, use) => {
+    await page.route("**/api/letterboxd", route => route.fulfill({ json: diary }));
     await page.route(url => url.hostname !== "127.0.0.1", route => {
       if (new URL(route.request().url()).hostname === "audio-ssl.itunes.apple.com") {
         return route.fulfill({ contentType: "audio/wav", body: silence });

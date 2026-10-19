@@ -114,7 +114,7 @@ export function DynamicIsland({ shell }: { shell: Shell | null }) {
   // A second, smaller bubble when music plays while the assistant speaks, as iOS splits the island.
   const bubble = mode === "speaking" && music;
   const transition = reduceMotion ? still : spring;
-  const openMusic = () => { setExpanded(null); launch("music"); };
+  const openMusic = () => { setExpanded(null); launch("music"); useMedia.getState().setNowPlaying(true); };
 
   let content: ReactNode = null;
   if (mode === "alert" && alert) {

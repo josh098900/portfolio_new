@@ -6,7 +6,7 @@ import { homeRoute, type AppId, type Route } from "./routes";
 
 export type Rect = { x: number; y: number; w: number; h: number };
 
-export type Overlay = "spotlight" | "control-centre" | null;
+export type Overlay = "spotlight" | "control-centre" | "screensaver" | null;
 
 export type WindowState = {
   app: AppId;

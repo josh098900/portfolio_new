@@ -96,3 +96,69 @@ test("unknown pages get a 404", async ({ page }) => {
   const response = await page.goto("/definitely-not-a-page");
   expect(response?.status()).toBe(404);
 });
+
+test("TV shows Josh's latest film, review and diary", async ({ page }) => {
+  await page.goto("/tv");
+  const tv = appWindow(page, "tv");
+  const hero = tv.getByRole("region", { name: "Featured films", exact: true });
+  await expect(hero.getByRole("heading", { name: "Tenzing" })).toBeVisible();
+  await expect(hero.getByText("A true masterpiece!")).toBeVisible();
+  await expect(hero.getByRole("img", { name: "Rated 5 out of 5" })).toBeVisible();
+  await expect(tv.getByRole("region", { name: "In Josh's words" })).toContainText("That's all I have to say.");
+
+  await tv.getByRole("navigation").getByRole("button", { name: "Diary" }).click();
+  await expect(tv.getByRole("link", { name: /F1/ })).toHaveAttribute("href", "https://letterboxd.com/josh098900/film/f1/");
+  await expect(tv.getByRole("img", { name: "Rewatch" })).toBeVisible();
+});
+
+test("minimising pours the window into the dock with the genie effect", async ({ page }) => {
+  await page.goto("/");
+  const notes = appWindow(page, "notes");
+  await notes.getByRole("button", { name: "Minimise Notes" }).click();
+  const genie = await notes.evaluate(el => el.getAnimations().some(a => (a.effect as KeyframeEffect).getKeyframes().some(k => String(k.clipPath).startsWith("polygon"))));
+  expect(genie).toBe(true);
+  await expect(notes).toHaveAttribute("inert", "");
+  await page.getByRole("navigation", { name: "Dock" }).getByRole("button", { name: "Notes (open)" }).click();
+  await expect(notes).not.toHaveAttribute("inert");
+  await expect(notes.getByRole("heading", { level: 1, name: /Hi, I'm Josh/ })).toBeVisible();
+});
+
+test("the screen saver writes hello, and any key wakes the desktop", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Portfolio" }).click();
+  await page.getByRole("menuitem", { name: "Start Screen Saver" }).click();
+  const saver = page.locator("svg path[pathLength]").first();
+  await expect(saver).toBeVisible();
+  await page.waitForTimeout(700);
+  await page.keyboard.press("Space");
+  await expect(saver).toHaveCount(0);
+});
+
+test("the assistant's glow shows while it thinks", async ({ page }) => {
+  let release!: () => void;
+  const replied = new Promise<void>(resolve => { release = resolve; });
+  await page.route("**/api/chat", async route => {
+    await replied;
+    await route.fulfill({ status: 200, headers: { "content-type": "text/plain", "x-reply-id": crypto.randomUUID() }, body: "Josh built Academy Fantasy." });
+  });
+  await page.goto("/messages");
+  const messages = appWindow(page, "messages");
+  await messages.getByRole("textbox", { name: "Message Josh's assistant" }).fill("What has Josh built?");
+  await messages.getByRole("button", { name: "Send" }).click();
+  const glow = page.locator("[data-state='thinking']");
+  await expect(glow).toHaveCount(1);
+  release();
+  await expect(messages.getByRole("log")).toContainText("Josh built Academy Fantasy.");
+  await expect(glow).toHaveCount(0);
+});
+
+test("the London Sky wallpaper is painted before the page loads", async ({ page }) => {
+  await page.goto("/settings/wallpaper");
+  await appWindow(page, "settings").getByRole("group", { name: "Wallpapers" }).getByRole("button", { name: "London Sky" }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-wallpaper", "london");
+  // Block the app's JavaScript: the sky must come from the inline pre-paint script alone.
+  await page.route(/\/_next\/static\/.*\.js$/, route => route.abort());
+  await page.reload();
+  const sky = await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue("--sky-top"));
+  expect(sky).toMatch(/^rgb\(\d+ \d+ \d+\)$/);
+});

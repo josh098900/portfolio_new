@@ -1,0 +1,79 @@
+@property --saver-a {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #f7a8c4;
+}
+
+@property --saver-b {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #8fb8ff;
+}
+
+@property --saver-c {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #ffd39a;
+}
+
+/* Soft colours that drift from one set to the next while "hello" is written. */
+.saver {
+  position: absolute;
+  inset: 0;
+  z-index: 9890;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(70% 90% at 15% 20%, var(--saver-a), transparent 70%),
+    radial-gradient(70% 90% at 85% 30%, var(--saver-b), transparent 70%),
+    radial-gradient(80% 80% at 50% 100%, var(--saver-c), transparent 70%),
+    #1b1f3b;
+  cursor: none;
+  animation: palette 40s linear infinite;
+}
+
+@keyframes palette {
+  0%, 100% { --saver-a: #f7a8c4; --saver-b: #8fb8ff; --saver-c: #ffd39a; }
+  20% { --saver-a: #7d5cff; --saver-b: #ff7aa8; --saver-c: #3fd0c9; }
+  40% { --saver-a: #ff9f5a; --saver-b: #ff5e7a; --saver-c: #ffd166; }
+  60% { --saver-a: #2fb8a8; --saver-b: #4f7cff; --saver-c: #b6f09c; }
+  80% { --saver-a: #c86bff; --saver-b: #4fc3ff; --saver-c: #ff9ecf; }
+}
+
+.hello {
+  width: min(70vw, 900px);
+  overflow: visible;
+  filter: drop-shadow(0 6px 24px rgb(0 0 0 / 0.18));
+}
+
+.hello path {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 11;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: write 8s cubic-bezier(0.45, 0.05, 0.35, 1) infinite;
+}
+
+/* Written out, held, then faded before the next pass. */
+@keyframes write {
+  0% { stroke-dashoffset: 1; opacity: 1; }
+  45% { stroke-dashoffset: 0; opacity: 1; }
+  85% { stroke-dashoffset: 0; opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+/* With reduced motion, "hello" is simply there. */
+:global(html[data-reduce-motion]) .hello path {
+  animation: none;
+  stroke-dashoffset: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hello path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}

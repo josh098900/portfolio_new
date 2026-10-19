@@ -1,0 +1,73 @@
+@property --glow-angle {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0deg;
+}
+
+.glow {
+  --glow-colours: #ff6778, #ffba71, #8d9fff, #bc82f3, #f5b9ea, #4fd1ff, #ff6778;
+  position: absolute;
+  inset: 0;
+  z-index: 9880;
+  border-radius: var(--screen-radius, 0);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.7s ease;
+  animation: turn 5s linear infinite paused;
+}
+
+.glow[data-state] {
+  opacity: 1;
+  animation-play-state: running;
+}
+
+.glow[data-state="thinking"] {
+  animation-duration: 2.6s;
+}
+
+.glow[data-state="speaking"] .bloom {
+  animation: breathe 1.6s ease-in-out infinite alternate;
+}
+
+/* A ring of colour: the conic gradient is masked down to its outer edge. */
+.band {
+  position: absolute;
+  inset: 0;
+  padding: var(--band, 4px);
+  border-radius: inherit;
+  background: conic-gradient(from var(--glow-angle), var(--glow-colours));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+/* The same ring, wider and blurred, for the soft light that spills inwards. */
+.bloom {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  filter: blur(22px);
+  opacity: 0.9;
+}
+
+.bloom .band {
+  --band: 22px;
+}
+
+.edge {
+  --band: 3px;
+  opacity: 0.95;
+}
+
+@keyframes turn {
+  to { --glow-angle: 360deg; }
+}
+
+@keyframes breathe {
+  from { opacity: 0.55; }
+  to { opacity: 1; }
+}
+
+:global(html[data-shell="phone"]) .glow {
+  --screen-radius: 0;
+}

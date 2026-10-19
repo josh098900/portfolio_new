@@ -34,7 +34,13 @@ The first time you run the browser tests, install the browsers with `npx playwri
   - **Music:** the songs in `content/music.json`, with 30-second previews. To change the list, edit the IDs in `scripts/update-music.mjs` and run it.
   - **Photos:** project screenshots plus illustrated placeholders.
   - **Settings:** wallpaper, appearance and accessibility.
-  - **TV:** recent films from Josh's public Letterboxd RSS feed through `/api/letterboxd`, cached for an hour. It stays hidden until `letterboxdUser` is set in `content/links.ts`.
+  - **TV:** recent films from Josh's public Letterboxd RSS feed through `/api/letterboxd`, cached for an hour. The username is `letterboxdUser` in `content/links.ts`; TV stays hidden while it's empty.
+- `os/window.tsx`: also the genie effect. Minimising on the Mac builds Web Animations keyframes from the window's and dock icon's positions: a curved `clip-path` funnel plus a stretch, played backwards to restore.
+- `os/liquid-glass.tsx`: Liquid Glass refraction. In Chromium on desktop, glass marked `data-liquid` (the dock and widgets) gets an SVG displacement filter as its backdrop filter, sized to its corners. Other browsers keep frosted glass.
+- `os/sky.ts`: the London Sky wallpaper. It works out the sun's position over London for the current minute and returns colours as CSS variables. It's self-contained because the pre-paint script inlines it, so the sky is right before the page loads.
+- `os/screensaver.tsx`: the Mac's hello screen saver, after two minutes idle (switchable in Settings) or from the  menu.
+- `os/glow.tsx`: the Apple Intelligence glow around the screen while the assistant thinks or speaks.
+- `apps/music/now-playing.tsx`: the full-screen player, with a backdrop drawn from the album art. Swipe down or press Escape to close it.
 - `os/island.tsx`: the iPhone Dynamic Island. It shows music playing (from the shared player in `os/media.ts`), the assistant speaking and short alerts (`os/live.ts`) while their apps are out of sight, and expands into controls when tapped.
 - `app/wallpapers.css` and `os/wallpapers.ts`: the wallpapers, drawn with CSS gradients. The saved choice is applied before first paint.
 - `app/api/weather/route.ts` and `lib/weather.ts`: London weather for the widgets. It tries Open-Meteo, then MET Norway, and caches successful responses for 30 minutes. Neither needs an API key.

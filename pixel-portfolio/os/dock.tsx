@@ -43,7 +43,7 @@ function DockItem({ app, shells, mouseX, magnify }: { app: AppId; shells: Shell[
   const width = useTransform(scale, s => s * BASE);
 
   return <m.li className={styles.item} data-shells={shells.join(" ")} style={magnify ? { width } : undefined}>
-    <button ref={ref} type="button" className={styles.button} aria-label={running ? `${apps[app].name} (open)` : apps[app].name} onClick={() => launch(app)}>
+    <button ref={ref} type="button" className={styles.button} data-dock-app={app} aria-label={running ? `${apps[app].name} (open)` : apps[app].name} onClick={() => launch(app)}>
       <m.span className={styles.iconWrap} style={magnify ? { scale } : undefined}>
         <AppIcon app={app} className={styles.icon} />
       </m.span>
@@ -57,7 +57,7 @@ function DockItem({ app, shells, mouseX, magnify }: { app: AppId; shells: Shell[
 export function Dock({ shell }: { shell: Shell | null }) {
   const mouseX = useMotionValue(Infinity);
   const magnify = shell === "desktop";
-  return <nav className={`${styles.dock} glass`} aria-label="Dock" onPointerMove={e => e.pointerType === "mouse" && mouseX.set(e.clientX)} onPointerLeave={() => mouseX.set(Infinity)}>
+  return <nav className={`${styles.dock} glass`} data-liquid aria-label="Dock" onPointerMove={e => e.pointerType === "mouse" && mouseX.set(e.clientX)} onPointerLeave={() => mouseX.set(Infinity)}>
     <ul className={styles.list}>
       {dockApps.filter(item => apps[item.app].ready).map(item => <DockItem key={item.app} {...item} mouseX={mouseX} magnify={magnify} />)}
     </ul>

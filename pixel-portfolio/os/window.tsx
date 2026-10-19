@@ -1,8 +1,9 @@
 "use client";
 
-import { m } from "motion/react";
-import { memo, useRef, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
+import { m, useReducedMotion } from "motion/react";
+import { memo, useLayoutEffect, useRef, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 import { AppContent } from "@/apps";
+import { usePrefs } from "./prefs";
 import { apps } from "./routes";
 import type { Shell } from "./shell";
 import { useOS, type Rect, type WindowState } from "./store";
@@ -38,6 +39,54 @@ function track(event: ReactPointerEvent, el: HTMLElement, apply: (dx: number, dy
 
 const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
 
+/**
+ * The genie effect, as keyframes for the Web Animations API. A funnel runs from
+ * the window down to its dock icon: first the window stretches into it, its
+ * sides curving in to the icon's width, then it pours through the neck.
+ */
+function genieFrames(win: DOMRect, icon: DOMRect): Keyframe[] {
+  const ease = (t: number) => t * t * (3 - 2 * t);
+  const between = (from: number, to: number, t: number) => from + (to - from) * t;
+  const ramp = (start: number, t: number) => ease(clamp((t - start) / (1 - start), 0, 1));
+  const top = win.top, neck = icon.top + icon.height * 0.35;
+  const centre = win.left + win.width / 2, iconCentre = icon.left + icon.width / 2;
+  // The funnel's left and right edges at depth u (0 at the window's top, 1 at the icon).
+  const edges = (u: number, strength: number) => {
+    const width = between(win.width, between(win.width, icon.width * 0.9, ramp(0.12, u)), strength);
+    const middle = between(centre, between(centre, iconCentre, ramp(0.05, u)), strength);
+    return [middle - width / 2 - win.left, middle + width / 2 - win.left];
+  };
+  const frames: Keyframe[] = [];
+  for (let i = 0; i <= 14; i++) {
+    const p = i / 14;
+    const stretch = ease(clamp(p / 0.42, 0, 1));
+    const pour = ease(clamp((p - 0.42) / 0.58, 0, 1));
+    const upper = between(top, neck, pour);
+    const lower = between(win.bottom, neck + 4, stretch);
+    const height = Math.max(lower - upper, 0.5);
+    // Sample both sides of the funnel along the window's current extent.
+    const left: string[] = [], right: string[] = [];
+    for (let j = 0; j <= 12; j++) {
+      const v = j / 12;
+      const u = clamp((upper + v * height - top) / Math.max(neck - top, 1), 0, 1);
+      const [l, r] = edges(u, stretch);
+      const y = `${(v * 100).toFixed(2)}%`;
+      left.push(`${l.toFixed(1)}px ${y}`);
+      right.unshift(`${r.toFixed(1)}px ${y}`);
+    }
+    frames.push({
+      offset: p,
+      transform: `translateY(${(upper - top).toFixed(1)}px) scaleY(${(height / win.height).toFixed(4)})`,
+      clipPath: `polygon(${[...left, ...right].join(", ")})`,
+      opacity: p < 0.85 ? 1 : between(1, 0, (p - 0.85) / 0.15),
+    });
+  }
+  return frames;
+}
+
+/** The same path played backwards, for restoring from the dock. */
+const reversed = (frames: Keyframe[]) => frames.slice().reverse().map(f => ({ ...f, offset: 1 - (f.offset as number) }));
+
 function TrafficLights({ app, zoomed }: { app: WindowState["app"]; zoomed: boolean }) {
   const close = useOS(s => s.close);
   const minimise = useOS(s => s.minimise);
@@ -65,6 +114,35 @@ export const Window = memo(function Window({ window: win, focused, shell }: { wi
   const info = apps[win.app];
   const desktop = shell === "desktop";
   const titleId = `window-title-${win.app}`;
+  const reduceMotion = usePrefs(s => s.reduceMotion);
+  const deviceStill = useReducedMotion();
+  const genie = desktop && !reduceMotion && !deviceStill;
+  const genieAnimation = useRef<Animation | null>(null);
+  const settled = useRef(false);
+
+  // Minimising on the Mac pours the window into its dock icon; restoring pours it back.
+  useLayoutEffect(() => {
+    if (!settled.current) { settled.current = true; return; }
+    const el = ref.current;
+    const icon = document.querySelector<HTMLElement>(`[data-dock-app="${win.app}"]`);
+    const previous = genieAnimation.current;
+    // Measure the window as it really is, not mid-genie.
+    previous?.cancel();
+    genieAnimation.current = null;
+    if (!genie || !el) return;
+    // Without a dock icon to pour into, slip down and fade instead.
+    const frames = icon
+      ? genieFrames(el.getBoundingClientRect(), icon.getBoundingClientRect())
+      : [{ offset: 0, opacity: 1, transform: "none" }, { offset: 1, opacity: 0, transform: "translateY(40vh) scale(0.3)" }];
+    if (win.minimised) {
+      el.style.transformOrigin = "50% 0";
+      genieAnimation.current = el.animate(frames, { duration: 680, easing: "cubic-bezier(0.4, 0, 0.6, 1)", fill: "forwards" });
+    } else if (previous) {
+      el.style.transformOrigin = "50% 0";
+      const back = el.animate(reversed(frames), { duration: 600, easing: "cubic-bezier(0.3, 0, 0.4, 1)" });
+      back.finished.then(() => { el.style.transformOrigin = ""; }, () => {});
+    }
+  }, [win.minimised, genie, win.app]);
 
   function onPointerDown(event: ReactPointerEvent<HTMLElement>) {
     focus(win.app);
@@ -124,7 +202,7 @@ export const Window = memo(function Window({ window: win, focused, shell }: { wi
     onPointerDown={onPointerDown}
     onDoubleClick={onDoubleClick}
     initial={hidden}
-    animate={win.minimised ? hidden : { opacity: 1, scale: 1, y: 0 }}
+    animate={win.minimised && !genie ? hidden : { opacity: 1, scale: 1, y: 0 }}
     exit={{ opacity: 0, scale: desktop ? 0.92 : 0.88, transition: { duration: 0.18 } }}
     transition={{ type: "spring", stiffness: 420, damping: 36, mass: 0.9 }}
   >
