@@ -29,6 +29,23 @@
   transition: left 0.32s cubic-bezier(0.2, 0.9, 0.25, 1), top 0.32s cubic-bezier(0.2, 0.9, 0.25, 1), width 0.32s cubic-bezier(0.2, 0.9, 0.25, 1), height 0.32s cubic-bezier(0.2, 0.9, 0.25, 1), box-shadow 0.2s;
 }
 
+/* Hidden and background windows stay mounted, keeping their state, but must
+   never catch a tap or a scroll meant for what's in front. Inert alone isn't
+   enough: iOS Safari still sends touch scrolling to inert scroll areas. So they
+   ignore the pointer, and minimised windows leave the page entirely once their
+   animation (the genie, on the Mac) has finished. Restoring shows them at once. */
+.window[inert] {
+  pointer-events: none;
+}
+
+.window[data-minimised] {
+  visibility: hidden;
+}
+
+:global(html:not([data-dragging])) .window[data-minimised] {
+  transition: left 0.32s cubic-bezier(0.2, 0.9, 0.25, 1), top 0.32s cubic-bezier(0.2, 0.9, 0.25, 1), width 0.32s cubic-bezier(0.2, 0.9, 0.25, 1), height 0.32s cubic-bezier(0.2, 0.9, 0.25, 1), box-shadow 0.2s, visibility 0s 0.75s;
+}
+
 .window[data-zoomed] {
   left: 0;
   top: 0;

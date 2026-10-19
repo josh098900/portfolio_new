@@ -198,6 +198,7 @@ export const Window = memo(function Window({ window: win, focused, shell }: { wi
     aria-labelledby={titleId}
     data-focused={focused || undefined}
     data-zoomed={win.zoomed || undefined}
+    data-minimised={win.minimised || undefined}
     inert={win.minimised || (!desktop && shell !== null && !focused)}
     onPointerDown={onPointerDown}
     onDoubleClick={onDoubleClick}

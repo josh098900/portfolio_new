@@ -77,3 +77,34 @@ test("Control Centre flashes the new appearance in the island", async ({ page })
   await expect(page.locator("html")).not.toHaveAttribute("data-theme", before!);
   await expect(island(page).getByRole("status")).toHaveText(before === "dark" ? "Light Mode, On" : "Dark Mode, On");
 });
+
+test("going home clears the app from the address bar, and Back returns to it", async ({ page }) => {
+  await page.goto("/activity");
+  await page.getByRole("button", { name: "Go to Home Screen" }).click();
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page).toHaveTitle("Josh, software engineering student");
+
+  await page.goBack();
+  await expect(page).toHaveURL(/\/activity$/);
+  await expect(appWindow(page, "activity")).not.toHaveAttribute("inert");
+
+  await page.goForward();
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.getByText("Open to graduate roles")).toBeVisible();
+});
+
+test("an app left in the background can't catch taps or scrolls on the home screen", async ({ page }) => {
+  // On iPhone, Activity's hidden page was taking the swipes meant for the home screen.
+  await page.goto("/activity");
+  await page.getByRole("button", { name: "Go to Home Screen" }).click();
+  const activity = appWindow(page, "activity");
+  await expect(activity).toHaveCSS("visibility", "hidden");
+  await expect(activity).toHaveCSS("pointer-events", "none");
+  const hit = await page.evaluate(() => {
+    const { innerWidth: w, innerHeight: h } = window;
+    return document.elementFromPoint(w / 2, h / 2)?.closest("section[aria-labelledby^='window-title-']") ?? null;
+  });
+  expect(hit).toBeNull();
+  await page.getByRole("button", { name: "Settings", exact: true }).click();
+  await expect(appWindow(page, "settings")).not.toHaveAttribute("inert");
+});

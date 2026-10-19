@@ -11,7 +11,7 @@ import { DynamicIsland } from "./island";
 import { LiquidGlass } from "./liquid-glass";
 import { MenuBar } from "./menu-bar";
 import { usePrefs, usePrefsSync } from "./prefs";
-import { appIds, pathFromUrl, routeTitle, routeToPath, type Route } from "./routes";
+import { appIds, homeRoute, pathFromUrl, routeTitle, routeToPath, type Route } from "./routes";
 import { useShell } from "./shell";
 import { ScreenSaver } from "./screensaver";
 import { Spotlight } from "./spotlight";
@@ -20,7 +20,11 @@ import { DesktopWidgets } from "./widgets";
 import { Window } from "./window";
 import styles from "./system.module.css";
 
-/** Keeps the address bar and tab title on the focused app, and follows back/forward. */
+/**
+ * Keeps the address bar and tab title on the focused app, and follows back/forward.
+ * With nothing in front (the home screen), the address is "/", marked as home in
+ * history so Back returns to the app you left and Forward comes home again.
+ */
 function useUrlSync() {
   const store = useOSStore();
   const path = useOS(s => {
@@ -29,14 +33,19 @@ function useUrlSync() {
   });
 
   useEffect(() => {
-    if (path === null) return;
+    if (path === null) {
+      if (location.pathname !== "/" || !history.state?.home) history.pushState({ home: true }, "", "/");
+      document.title = routeTitle(homeRoute).title;
+      return;
+    }
     if (path !== location.pathname) history.pushState(null, "", path);
     const route = pathFromUrl(path);
     if (route) document.title = path === "/" ? routeTitle(route).title : `${routeTitle(route).title} · Josh`;
   }, [path]);
 
   useEffect(() => {
-    const onPopState = () => {
+    const onPopState = (event: PopStateEvent) => {
+      if (event.state?.home) return store.getState().goHome();
       const route = pathFromUrl(location.pathname);
       if (route) store.getState().open(route);
     };
