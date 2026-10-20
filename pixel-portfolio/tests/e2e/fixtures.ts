@@ -48,6 +48,15 @@ export const test = base.extend({
       }
       return route.abort();
     });
+    // Wait for the app to be interactive after every navigation, so typing
+    // can't land before React has taken over the page (slow CI machines).
+    const goto = page.goto.bind(page), reload = page.reload.bind(page);
+    const ready = async (response: Awaited<ReturnType<typeof goto>>) => {
+      if (response?.ok()) await page.locator("html[data-ready]").waitFor({ state: "attached" });
+      return response;
+    };
+    page.goto = async (url, options) => ready(await goto(url, options));
+    page.reload = async options => ready(await reload(options));
     await use(page);
   },
 });

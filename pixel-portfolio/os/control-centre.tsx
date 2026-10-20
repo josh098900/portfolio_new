@@ -5,7 +5,7 @@ import { artwork } from "@/content/music";
 import { Glyph } from "./icons";
 import { useLive } from "./live";
 import { selectTrack, useMedia } from "./media";
-import { setTheme, usePrefs, useTheme } from "./prefs";
+import { setTheme, usePrefs, useTheme, whenTheme } from "./prefs";
 import { useShell } from "./shell";
 import { useOS } from "./store";
 import styles from "./control-centre.module.css";
@@ -29,8 +29,9 @@ function Panel() {
   const setSpatial = usePrefs(s => s.setSpatial);
 
   function switchTheme() {
-    setTheme(dark ? "light" : "dark");
-    flash({ glyph: dark ? "sun" : "moon", title: dark ? "Light Mode" : "Dark Mode", detail: "On", tint: dark ? "#ffd60a" : "#5e9eff" });
+    const next = dark ? "light" : "dark";
+    setTheme(next);
+    whenTheme(next).then(() => flash({ glyph: dark ? "sun" : "moon", title: dark ? "Light Mode" : "Dark Mode", detail: "On", tint: dark ? "#ffd60a" : "#5e9eff" }));
   }
 
   function switchMotion() {

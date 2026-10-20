@@ -158,7 +158,11 @@ test("the London Sky wallpaper is painted before the page loads", async ({ page 
   await expect(page.locator("html")).toHaveAttribute("data-wallpaper", "london");
   // Block the app's JavaScript: the sky must come from the inline pre-paint script alone.
   await page.route(/\/_next\/static\/.*\.js$/, route => route.abort());
-  await page.reload();
+  // A plain reload: with the app's JavaScript blocked, the page never becomes interactive.
+  await Promise.all([
+    page.waitForEvent("load"),
+    page.evaluate(() => { setTimeout(() => location.reload(), 0); }),
+  ]);
   const sky = await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue("--sky-top"));
   expect(sky).toMatch(/^rgb\(\d+ \d+ \d+\)$/);
 });

@@ -100,6 +100,20 @@ export function setTheme(theme: Theme) {
   usePrefs.getState().setThemeMode(theme);
 }
 
+/** Resolves once the page is showing `theme`; the cross-fade can take a moment to swap it in. */
+export function whenTheme(theme: Theme) {
+  return new Promise<void>(resolve => {
+    const root = document.documentElement;
+    if (root.dataset.theme === theme) return resolve();
+    const observer = new MutationObserver(() => {
+      if (root.dataset.theme !== theme) return;
+      observer.disconnect();
+      resolve();
+    });
+    observer.observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+  });
+}
+
 export function setWallpaper(id: WallpaperId) {
   store(WALLPAPER_KEY, id === defaultWallpaper ? null : id);
   transition(() => { document.documentElement.dataset.wallpaper = id; });

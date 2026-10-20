@@ -63,15 +63,10 @@ export function Achievements({ shell }: { shell: Shell | null }) {
   // On a phone the island announces it; elsewhere, a notification slides in.
   useEffect(() => {
     if (!latest) return;
-    // Wait for any alert already in the island (like the Dark Mode one that earned this) to finish.
-    const show = () => useLive.getState().flash({ glyph: "star", title: latest.title, detail: "Unlocked", tint: "#ffd60a", app: "arcade" });
-    let wait: ReturnType<typeof setTimeout> | undefined;
-    if (shell === "phone") {
-      if (useLive.getState().alert) wait = setTimeout(show, 3000);
-      else show();
-    }
+    // Queued, so it waits for any alert already in the island (like the Dark Mode one that earned it).
+    if (shell === "phone") useLive.getState().flash({ glyph: "star", title: latest.title, detail: "Unlocked", tint: "#ffd60a", app: "arcade" }, { queue: true });
     const id = setTimeout(() => useAchievements.getState().clearLatest(), 4200);
-    return () => { clearTimeout(id); clearTimeout(wait); };
+    return () => clearTimeout(id);
   }, [latest, shell]);
 
   const count = useAchievements(s => Object.keys(s.earned).length);

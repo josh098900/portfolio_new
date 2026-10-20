@@ -34,7 +34,8 @@ type Live = {
   setSky: (sky: Live["sky"]) => void;
   setThinking: (thinking: boolean) => void;
   setSpeaking: (speaking: Live["speaking"]) => void;
-  flash: (alert: Omit<Alert, "id">) => void;
+  /** Shows an alert now, or with `queue`, after the one showing (and any waiting) has had its turn. */
+  flash: (alert: Omit<Alert, "id">, options?: { queue?: boolean }) => void;
   dismiss: () => void;
 };
 
@@ -42,25 +43,42 @@ const ALERT_MS = 2800;
 let nextId = 1;
 let timer: ReturnType<typeof setTimeout> | undefined;
 
-export const useLive = create<Live>()(set => ({
-  thinking: false,
-  listening: false,
-  heard: "",
-  question: null,
-  setVoice: patch => set(patch),
-  speaking: null,
-  alert: null,
-  sky: "live",
-  setSky: sky => set({ sky }),
-  setThinking: thinking => set({ thinking }),
-  setSpeaking: speaking => set({ speaking }),
-  flash: alert => {
+const waiting: Omit<Alert, "id">[] = [];
+
+export const useLive = create<Live>()((set, get) => {
+  const show = (alert: Omit<Alert, "id">) => {
     clearTimeout(timer);
     set({ alert: { ...alert, id: nextId++ } });
-    timer = setTimeout(() => set({ alert: null }), ALERT_MS);
-  },
-  dismiss: () => {
-    clearTimeout(timer);
-    set({ alert: null });
-  },
-}));
+    timer = setTimeout(next, ALERT_MS);
+  };
+  // When an alert has had its time, the next one waiting takes its place.
+  const next = () => {
+    const queued = waiting.shift();
+    if (queued) show(queued);
+    else set({ alert: null });
+  };
+  return {
+    thinking: false,
+    listening: false,
+    heard: "",
+    question: null,
+    setVoice: patch => set(patch),
+    speaking: null,
+    alert: null,
+    sky: "live",
+    setSky: sky => set({ sky }),
+    setThinking: thinking => set({ thinking }),
+    setSpeaking: speaking => set({ speaking }),
+    flash: (alert, options) => {
+      if (options?.queue && get().alert) {
+        waiting.push(alert);
+        return;
+      }
+      show(alert);
+    },
+    dismiss: () => {
+      clearTimeout(timer);
+      next();
+    },
+  };
+});

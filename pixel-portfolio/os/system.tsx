@@ -138,6 +138,8 @@ function Desktop() {
   useVisibleArea();
   useHotCorners(shell);
   useSpatial(shell);
+  // Hydrated and interactive: browser tests wait for this before typing or clicking.
+  useEffect(() => { document.documentElement.dataset.ready = ""; }, []);
   const windows = useOS(useShallow(s => appIds.flatMap(app => s.windows[app] ?? [])));
   const focused = useOS(s => selectFocused(s)?.app ?? null);
 
