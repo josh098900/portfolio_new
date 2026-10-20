@@ -8,12 +8,13 @@ import { useEffect } from "react";
 // widgets, which carry little text) gets one, shaped to its own size and corner
 // radius. Elsewhere, and on surfaces with text over busy windows, glass stays frosted.
 
-const NS = "http://www.w3.org/2000/svg";
+export const NS = "http://www.w3.org/2000/svg";
 const MIN_SIZE = 40;
 
-function supported() {
-  const brands = (navigator as Navigator & { userAgentData?: { brands: { brand: string }[] } }).userAgentData?.brands ?? [];
-  return brands.some(b => b.brand === "Chromium")
+export function supported() {
+  // Only Chromium browsers (Chrome, Edge, Opera, Brave) have userAgentData or window.chrome.
+  const chromium = "userAgentData" in navigator || "chrome" in window;
+  return chromium
     && matchMedia("(pointer: fine)").matches
     && !matchMedia("(prefers-reduced-transparency: reduce)").matches;
 }
@@ -35,7 +36,7 @@ function lensMap(width: number, height: number, radius: number, axis: "x" | "y")
   return `data:image/svg+xml,${encodeURIComponent(svg)}`;
 }
 
-const primitive = (name: string, attrs: Record<string, string>) => {
+export const primitive = (name: string, attrs: Record<string, string>) => {
   const node = document.createElementNS(NS, name);
   for (const [key, value] of Object.entries(attrs)) node.setAttribute(key, value);
   return node;

@@ -6,6 +6,7 @@ import { Glyph } from "./icons";
 import { useLive } from "./live";
 import { selectTrack, useMedia } from "./media";
 import { setTheme, usePrefs, useTheme } from "./prefs";
+import { useShell } from "./shell";
 import { useOS } from "./store";
 import styles from "./control-centre.module.css";
 
@@ -23,6 +24,9 @@ function Panel() {
   const playing = useMedia(s => s.playing);
   const { toggle, step } = useMedia.getState();
   const flash = useLive(s => s.flash);
+  const shell = useShell();
+  const spatial = usePrefs(s => s.spatial);
+  const setSpatial = usePrefs(s => s.setSpatial);
 
   function switchTheme() {
     setTheme(dark ? "light" : "dark");
@@ -58,6 +62,11 @@ function Panel() {
         <span className={styles.toggleIcon}><Glyph name="motion" size={20} /></span>
         <span className={styles.label}><strong>Reduce Motion</strong><small>{reduceMotion ? "On" : "Off"}</small></span>
       </button>
+
+      {shell === "desktop" && <button type="button" className={`${styles.tile} ${styles.toggle} ${styles.wide} glass`} aria-pressed={spatial} onClick={() => { setSpatial(!spatial); close(); }}>
+        <span className={styles.toggleIcon}><Glyph name="vision" size={20} /></span>
+        <span className={styles.label}><strong>visionOS</strong><small>{spatial ? "Windows float in space. Tap to come back" : "Float your windows in 3D"}</small></span>
+      </button>}
 
       <label className={`${styles.tile} ${styles.slider} glass`}>
         <strong>Display</strong>

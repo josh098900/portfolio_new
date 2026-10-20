@@ -60,6 +60,22 @@ const art: Record<AppId, { background: string; glyph: ReactNode }> = {
     background: "linear-gradient(180deg, #ff6f8e, #f72b4d)",
     glyph: <path d="M25 41.5V18.2l19-4.2v23.5M25 41.5a5.5 4.5 0 1 1-11 0 5.5 4.5 0 0 1 11 0zm19-4a5.5 4.5 0 1 1-11 0 5.5 4.5 0 0 1 11 0zM25 24.5l19-4.2" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />,
   },
+  appstore: {
+    // Three rounded sticks of blue glass forming an A, crossing near the top.
+    // Each has a light edge where it catches the light, and "screen" blending
+    // makes the crossings brighter, the way overlapping glass does.
+    background: "linear-gradient(180deg, #2c2c31, #0b0b0e)",
+    glyph: <g strokeLinecap="round" style={{ isolation: "isolate" }}>
+      {([
+        ["M16.5 46 33.8 10.2", "M17.9 43.1 32.4 13.1", "-1.7 -0.8"],
+        ["M43.5 46 26.2 10.2", "M42.1 43.1 27.6 13.1", "1.7 -0.8"],
+        ["M11 38h38", "M14.2 38h31.6", "0 -1.9"],
+      ] as const).map(([stick, edge, shift]) => <g key={stick} style={{ mixBlendMode: "screen" }}>
+        <path d={stick} stroke="#3a8fff" strokeWidth="6.6" opacity="0.9" />
+        <path d={edge} stroke="#a8d8ff" strokeWidth="1.3" opacity="0.55" transform={`translate(${shift})`} />
+      </g>)}
+    </g>,
+  },
   tv: {
     background: "linear-gradient(180deg, #3a3a3e, #0c0c0d)",
     glyph: <>
@@ -105,7 +121,7 @@ const art: Record<AppId, { background: string; glyph: ReactNode }> = {
 export function AppIcon({ app, size, className }: { app: AppId; size?: number; className?: string }) {
   const { background, glyph } = art[app];
   const style = { background, ...(size ? { "--icon-size": `${size}px` } : null) } as CSSProperties;
-  return <span className={`${styles.icon} ${className ?? ""}`} style={style} aria-hidden="true">
+  return <span className={`${styles.icon} ${className ?? ""}`} style={style} aria-hidden="true" data-icon>
     <svg viewBox="0 0 60 60">{glyph}</svg>
   </span>;
 }
@@ -163,6 +179,8 @@ const glyphs = {
   gamepad: <path d="M8 8h8c3 0 5 2.8 5 6.4 0 2.6-1.3 4.1-2.8 4.1-1.8 0-2.7-2.3-4.1-2.3h-4.2c-1.4 0-2.3 2.3-4.1 2.3C4.3 18.5 3 17 3 14.4 3 10.8 5 8 8 8zM8 11v4M6 13h4M15.5 12h.01M17.5 14h.01" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />,
   speaker: <path d="M4 9.5h3l4.5-4v13L7 14.5H4zM15.5 9a4.2 4.2 0 0 1 0 6M18.2 6.4a8 8 0 0 1 0 11.2" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />,
   stop: <rect x="6.5" y="6.5" width="11" height="11" rx="2.5" fill="currentColor" />,
+  vision: <path d="M3.5 9.5c0-1.7 1.3-3 3-3h11c1.7 0 3 1.3 3 3v3.2c0 2.4-1.9 4.3-4.3 4.3-1.4 0-2.6-.7-3.4-1.8l-.8-1a1.3 1.3 0 0 0-2 0l-.8 1A4.2 4.2 0 0 1 7.8 17 4.3 4.3 0 0 1 3.5 12.7z" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />,
+  mic: <path d="M12 3.5a3 3 0 0 0-3 3v5.5a3 3 0 0 0 6 0V6.5a3 3 0 0 0-3-3zM6 11.5a6 6 0 0 0 12 0M12 17.5v3M9 20.5h6" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />,
   bubble: <path d="M12 4.5c-4.8 0-8.5 3.1-8.5 7 0 2.2 1.1 4.1 3 5.4-.2 1.2-.8 2.4-1.8 3.3 1.8-.1 3.3-.7 4.5-1.7.9.2 1.8.3 2.8.3 4.8 0 8.5-3.1 8.5-7s-3.7-7.3-8.5-7.3z" fill="currentColor" />,
   tv: <><rect x="2.5" y="4.5" width="19" height="12.5" rx="2.2" fill="none" stroke="currentColor" strokeWidth="1.8" /><path d="M8 20.5h8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></>,
   star: <path d="m12 3.6 2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 17l-5.2 2.8 1-5.9-4.3-4.1 5.9-.8z" fill="currentColor" />,

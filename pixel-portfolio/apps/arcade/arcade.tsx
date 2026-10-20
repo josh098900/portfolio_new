@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
+import { achieve, achievements, useAchievements } from "@/os/achievements";
 import { Glyph } from "@/os/icons";
 import type { AppProps } from "..";
 import { engines, HEIGHT, WIDTH, type Game } from "./engine";
@@ -33,13 +34,17 @@ function Player({ id }: { id: Exclude<GameId, "lab-hangout"> }) {
     game.current = engines[id](canvas.current!, {
       score: value => {
         setScore(value);
+        if (id === "snake" && value >= 10) achieve("snake");
         setBest(prev => {
           if (value <= prev) return prev;
           try { localStorage.setItem(`josh-arcade-${id}`, String(value)); } catch { /* Scores still show without storage. */ }
           return value;
         });
       },
-      status: setStatus,
+      status: text => {
+        setStatus(text);
+        if (id === "pong" && text?.startsWith("You win")) achieve("pong");
+      },
     });
     canvas.current!.focus({ preventScroll: true });
     return () => game.current?.stop();
@@ -89,6 +94,25 @@ function Player({ id }: { id: Exclude<GameId, "lab-hangout"> }) {
   </div>;
 }
 
+/** Game Center-style achievements for exploring the whole portfolio. */
+function Trophies() {
+  const earned = useAchievements(s => s.earned);
+  const count = achievements.filter(a => earned[a.id]).length;
+  return <section className={styles.trophies} aria-labelledby="arcade-achievements">
+    <h2 id="arcade-achievements">Achievements <small>{count} of {achievements.length}</small></h2>
+    <div className={styles.meter} role="progressbar" aria-label="Achievements earned" aria-valuemin={0} aria-valuemax={achievements.length} aria-valuenow={count}>
+      <i style={{ width: `${(count / achievements.length) * 100}%` }} />
+    </div>
+    <ul className={styles.trophyGrid}>
+      {achievements.map(a => <li key={a.id} data-earned={earned[a.id] ? "" : undefined}>
+        <span className={styles.medal} aria-hidden="true"><Glyph name={a.glyph} size={18} /></span>
+        <span><strong>{earned[a.id] ? a.title : "???"}</strong><small>{a.hint}</small></span>
+        <span className={styles.srOnly}>{earned[a.id] ? "Earned" : "Not earned yet"}</span>
+      </li>)}
+    </ul>
+  </section>;
+}
+
 export function Arcade({ sub, navigate }: AppProps) {
   const current = findGame(sub[0]);
 
@@ -119,6 +143,7 @@ export function Arcade({ sub, navigate }: AppProps) {
             <small>{g.blurb}</small>
           </button>)}
         </div>
+        <Trophies />
       </div>}
 
       {current && current.id !== "lab-hangout" && <Player key={current.id} id={current.id} />}

@@ -256,3 +256,7 @@
   width: min(340px, 100% - 32px);
   transform-origin: 50% 0;
 }
+
+.wide {
+  grid-column: 1 / -1;
+}

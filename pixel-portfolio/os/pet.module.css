@@ -1,0 +1,82 @@
+/* Sits on top of the dock; position is set each frame from the dock's place. */
+.pet {
+  position: absolute;
+  z-index: 9001;
+  width: 39px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  background: none;
+  translate: -50% -100%;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sprite {
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 2px 2px rgb(0 0 0 / 0.25));
+}
+
+.pet[data-flip] .sprite {
+  scale: -1 1;
+}
+
+.pet[data-mood="dance"] .sprite {
+  animation: bop 0.44s ease-in-out infinite alternate;
+}
+
+@keyframes bop {
+  from { rotate: -8deg; translate: 0 0; }
+  to { rotate: 8deg; translate: 0 -4px; }
+}
+
+.pet:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+.zzz {
+  position: absolute;
+  top: -12px;
+  right: -8px;
+  color: var(--menubar-text);
+  font-size: 12px;
+  font-weight: 800;
+  animation: drift 2.4s ease-in-out infinite;
+}
+
+.zzz span {
+  position: relative;
+  top: -8px;
+  left: 2px;
+  font-size: 9px;
+}
+
+@keyframes drift {
+  0% { opacity: 0; translate: 0 6px; }
+  30% { opacity: 1; }
+  100% { opacity: 0; translate: 6px -10px; }
+}
+
+.heart {
+  position: absolute;
+  left: 50%;
+  top: -6px;
+  color: #ff4f7a;
+  font-size: 16px;
+  pointer-events: none;
+  translate: -50% 0;
+  animation: float-up 1.1s ease-out forwards;
+}
+
+@keyframes float-up {
+  to { opacity: 0; translate: -50% -34px; scale: 1.4; }
+}
+
+/* On iPhone and iPad it lives on the home screen's dock, so it hides while an app is open. */
+:global(html:not([data-shell="desktop"])) :global([data-app-open]) .pet {
+  display: none;
+}

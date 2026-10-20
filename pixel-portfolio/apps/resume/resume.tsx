@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { resume } from "@/content/resume";
 import { AppLink } from "@/os/app-link";
 import { Glyph } from "@/os/icons";
+import { AirDrop } from "./airdrop";
 import styles from "./resume.module.css";
 
 const zooms = [0.75, 0.9, 1, 1.15, 1.3];
@@ -11,6 +12,7 @@ const zooms = [0.75, 0.9, 1, 1.15, 1.3];
 /** Preview-style viewer for an A4 résumé. "Save as PDF" prints just the page. */
 export function Resume() {
   const [zoom, setZoom] = useState(2);
+  const [airdrop, setAirdrop] = useState(false);
   const page = useRef<HTMLElement>(null);
 
   // Windows clip their content, so printing copies the page into a clean
@@ -41,6 +43,9 @@ export function Resume() {
         <button type="button" onClick={() => setZoom(z => Math.max(0, z - 1))} disabled={zoom === 0} aria-label="Zoom out"><Glyph name="minus" size={16} /></button>
         <button type="button" onClick={() => setZoom(z => Math.min(zooms.length - 1, z + 1))} disabled={zoom === zooms.length - 1} aria-label="Zoom in"><Glyph name="plus" size={16} /></button>
       </div>
+      <button type="button" className={`${styles.glass} ${styles.save}`} onClick={() => setAirdrop(true)} aria-label="AirDrop the CV as a PDF">
+        <Glyph name="share" size={16} /> <span>AirDrop</span>
+      </button>
       <button type="button" className={`${styles.glass} ${styles.save}`} onClick={() => window.print()}>
         <Glyph name="printer" size={16} /> <span>Save as PDF</span>
       </button>
@@ -98,5 +103,6 @@ export function Resume() {
         <p className={styles.references}>References {resume.references.toLowerCase()}</p>
       </article>
     </div>
+    {airdrop && <AirDrop onClose={() => setAirdrop(false)} />}
   </div>;
 }

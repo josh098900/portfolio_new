@@ -162,3 +162,101 @@ test("the London Sky wallpaper is painted before the page loads", async ({ page 
   const sky = await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue("--sky-top"));
   expect(sky).toMatch(/^rgb\(\d+ \d+ \d+\)$/);
 });
+
+test("windows tile from the Window menu and by dragging to an edge", async ({ page }) => {
+  await page.goto("/");
+  const notes = appWindow(page, "notes");
+  await page.getByRole("button", { name: "Window" }).click();
+  await page.getByRole("menuitem", { name: "Tile Left" }).click();
+  await expect.poll(async () => (await notes.boundingBox())?.x).toBeLessThan(20);
+  const box = (await notes.boundingBox())!;
+  expect(box.width).toBeGreaterThan(600);
+  expect(box.width).toBeLessThan(760);
+
+  // Drag by the toolbar to the right edge: a preview shows, and the window lands on the right half.
+  const viewport = page.viewportSize()!;
+  await page.mouse.move(box.x + 300, box.y + 20);
+  await page.mouse.down();
+  await page.mouse.move(viewport.width - 2, box.y + 300, { steps: 12 });
+  await expect(page.locator("[class*=snapPreview]")).toHaveCount(1);
+  await page.mouse.up();
+  await expect.poll(async () => (await notes.boundingBox())!.x).toBeGreaterThan(viewport.width / 2 - 20);
+});
+
+test("the top-left hot corner opens Mission Control, and picking a window brings it forward", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("navigation", { name: "Dock" }).getByRole("button", { name: "Projects", exact: true }).click();
+  await page.mouse.move(200, 200);
+  await page.mouse.move(1, 1, { steps: 5 });
+  const mission = page.getByRole("dialog", { name: "Mission Control" });
+  await expect(mission).toBeVisible();
+  await mission.getByRole("button", { name: "Notes" }).click();
+  await expect(mission).toHaveCount(0);
+  await expect(page).toHaveURL(/\/$/);
+});
+
+test("the App Store lists Josh's projects, and Get turns into Open", async ({ page }) => {
+  await page.goto("/appstore");
+  const store = appWindow(page, "appstore");
+  await store.getByRole("button", { name: /^Lab Hangout:/ }).click();
+  await expect(store.getByRole("heading", { level: 1, name: "Lab Hangout" })).toBeVisible();
+  await store.getByRole("button", { name: "Get Lab Hangout" }).click();
+  await expect(store.getByRole("link", { name: "Open Lab Hangout" })).toHaveAttribute("href", "https://lab-hangout.vercel.app/");
+});
+
+test("AirDrop downloads the CV as a one-page PDF", async ({ page }) => {
+  await page.goto("/resume");
+  await appWindow(page, "resume").getByRole("button", { name: "AirDrop the CV as a PDF" }).click();
+  const sheet = page.getByRole("dialog", { name: "AirDrop" });
+  const download = page.waitForEvent("download");
+  await sheet.getByRole("button", { name: /^Send the CV to your Mac/ }).click();
+  expect((await download).suggestedFilename()).toBe("Joshua-Mathers-CV.pdf");
+  await expect(sheet.getByRole("status")).toHaveText("Delivered");
+});
+
+test("achievements are announced, and listed in Arcade", async ({ page }) => {
+  await page.goto("/resume");
+  await expect(page.getByRole("button", { name: /Achievement unlocked.*Hiring Manager/ })).toBeVisible();
+  await page.goto("/arcade");
+  const trophies = appWindow(page, "arcade").getByRole("region", { name: /Achievements/ });
+  await expect(trophies).toContainText("1 of");
+  await expect(trophies.getByText("Hiring Manager")).toBeVisible();
+});
+
+test("Terminal can make it rain and snow, and clear brings back London's weather", async ({ page }) => {
+  await page.goto("/terminal");
+  const command = appWindow(page, "terminal").getByRole("textbox", { name: "Command" });
+  await command.fill("snow");
+  await command.press("Enter");
+  await expect(page.locator("canvas[data-weather='snow']")).toHaveCount(1);
+  await command.fill("clear");
+  await command.press("Enter");
+  await expect(page.locator("canvas[data-weather='snow']")).toHaveCount(0);
+});
+
+test("visionOS mode floats the windows, and turns off again", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Control Centre" }).click();
+  await page.getByRole("dialog", { name: "Control Centre" }).getByRole("button", { name: /^visionOS/ }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-spatial", "");
+  await page.getByRole("button", { name: "Control Centre" }).click();
+  await page.getByRole("dialog", { name: "Control Centre" }).getByRole("button", { name: /^visionOS/ }).click();
+  await expect(page.locator("html")).not.toHaveAttribute("data-spatial");
+});
+
+test("the glass magnifier follows the pointer", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Help" }).click();
+  await page.getByRole("menuitem", { name: /Glass Magnifier/ }).click();
+  await page.mouse.move(800, 400);
+  await expect(page.locator("[class*=_lens]")).toHaveCount(1);
+  await page.keyboard.press("Escape");
+  await expect(page.locator("[class*=_lens]")).toHaveCount(0);
+});
+
+test("the dock critter can be petted", async ({ page }) => {
+  await page.goto("/");
+  const critter = page.getByRole("button", { name: /Lab critter/ });
+  await critter.click();
+  await expect(critter).toHaveAttribute("data-mood", "happy");
+});

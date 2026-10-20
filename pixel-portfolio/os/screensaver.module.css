@@ -41,20 +41,19 @@
 }
 
 .hello {
-  width: min(70vw, 900px);
+  width: min(72vw, 940px);
   overflow: visible;
-  filter: drop-shadow(0 6px 24px rgb(0 0 0 / 0.18));
 }
 
-.hello path {
-  fill: none;
-  stroke: #fff;
-  stroke-width: 11;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+/* Colours and widths live on each layer; every layer writes out together. */
+.stroke {
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
   animation: write 8s cubic-bezier(0.45, 0.05, 0.35, 1) infinite;
+}
+
+.caustic {
+  mix-blend-mode: overlay;
 }
 
 /* Written out, held, then faded before the next pass. */
@@ -66,13 +65,13 @@
 }
 
 /* With reduced motion, "hello" is simply there. */
-:global(html[data-reduce-motion]) .hello path {
+:global(html[data-reduce-motion]) .stroke {
   animation: none;
   stroke-dashoffset: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hello path {
+  .stroke {
     animation: none;
     stroke-dashoffset: 0;
   }

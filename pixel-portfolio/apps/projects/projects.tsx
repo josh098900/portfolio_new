@@ -45,7 +45,7 @@ function TagDot({ tag }: { tag: string }) {
 
 function Artwork({ project, sizes, priority }: { project: Project; sizes: string; priority?: boolean }) {
   return project.image
-    ? <Image src={project.image} alt={project.imageAlt ?? ""} width={1280} height={720} sizes={sizes} priority={priority} className={styles.image} />
+    ? <Image src={project.image} alt={project.imageAlt ?? ""} width={1280} height={720} sizes={sizes} loading={priority ? "eager" : undefined} fetchPriority={priority ? "high" : undefined} className={styles.image} />
     : <SchemaArt label={priority ? "Diagram of the customers and vehicles tables: one customer has many vehicles" : undefined} />;
 }
 
@@ -154,15 +154,15 @@ export function Projects({ sub, navigate }: AppProps) {
     }
   }
 
-  const sidebarItem = (active: boolean, onClick: () => void, children: ReactNode) =>
-    <li><button type="button" aria-current={active || undefined} onClick={onClick}>{children}</button></li>;
+  const sidebarItem = (key: string, active: boolean, onClick: () => void, children: ReactNode) =>
+    <li key={key}><button type="button" aria-current={active || undefined} onClick={onClick}>{children}</button></li>;
 
   return <div className={styles.projects} data-view={open ? "case" : "browse"} data-sidebar-open={sidebarOpen || undefined}>
     <aside className={styles.sidebar} aria-label="Locations" data-drag-region>
       <div className={styles.sidebarInner}>
         <h3>Favourites</h3>
         <ul>
-          {scopes.map(s => sidebarItem(!open && !tag && scope === s.id, () => { choose(s.id, null); if (open) navigate([]); },
+          {scopes.map(s => sidebarItem(s.id, !open && !tag && scope === s.id, () => { choose(s.id, null); if (open) navigate([]); },
             <><Glyph name="folder" size={16} />{s.label}</>))}
         </ul>
         <h3>Tags</h3>
@@ -222,7 +222,7 @@ export function Projects({ sub, navigate }: AppProps) {
         {visible.length > 0 && view === "gallery" && current && <div className={`${styles.gallery} ${styles.wideOnly}`}>
           <div className={styles.galleryStage}>
             <button type="button" className={styles.galleryArt} onClick={() => openProject(current.slug)} aria-label={`Open ${current.title}`}>
-              <Artwork project={current} sizes="(max-width: 900px) 100vw, 640px" />
+              <Artwork project={current} sizes="(max-width: 900px) 100vw, 640px" priority />
             </button>
             <div className={styles.strip} role="group" aria-label="Projects">
               {visible.map(p => <button key={p.slug} type="button" className={styles.stripItem} aria-pressed={p.slug === current.slug} aria-label={p.title}

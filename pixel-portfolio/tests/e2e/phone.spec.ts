@@ -108,3 +108,13 @@ test("an app left in the background can't catch taps or scrolls on the home scre
   await page.getByRole("button", { name: "Settings", exact: true }).click();
   await expect(appWindow(page, "settings")).not.toHaveAttribute("inert");
 });
+
+test("turning the phone sideways on the home screen shows StandBy", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Go to Home Screen" }).click();
+  await page.setViewportSize({ width: 852, height: 393 });
+  const standby = page.getByRole("dialog", { name: "StandBy" });
+  await expect(standby).toBeVisible();
+  await standby.getByRole("button", { name: /Close StandBy/ }).click();
+  await expect(standby).toHaveCount(0);
+});

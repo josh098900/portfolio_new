@@ -21,7 +21,8 @@
   animation-play-state: running;
 }
 
-.glow[data-state="thinking"] {
+.glow[data-state="thinking"],
+.glow[data-state="listening"] {
   animation-duration: 2.6s;
 }
 

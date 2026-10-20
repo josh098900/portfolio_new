@@ -82,10 +82,22 @@ function AppearancePane() {
 function ScreenSaverGroup() {
   const screenSaver = usePrefs(s => s.screenSaver);
   const setScreenSaver = usePrefs(s => s.setScreenSaver);
-  return <Group title="Screen Saver">
+  const hotCorners = usePrefs(s => s.hotCorners);
+  const setHotCorners = usePrefs(s => s.setHotCorners);
+  const weatherEffects = usePrefs(s => s.weatherEffects);
+  const setWeatherEffects = usePrefs(s => s.setWeatherEffects);
+  return <Group title="Desktop">
     <div className={styles.row}>
-      <span className={styles.rowText}><strong>Hello</strong><small>On a Mac-sized screen, writes “hello” after two minutes without activity.</small></span>
+      <span className={styles.rowText}><strong>Live weather</strong><small>Rain runs down the glass when it&apos;s raining in London, and it snows when London does.</small></span>
+      <Switch checked={weatherEffects} onChange={setWeatherEffects} label="Live weather" />
+    </div>
+    <div className={styles.row}>
+      <span className={styles.rowText}><strong>Hello screen saver</strong><small>On a Mac-sized screen, writes “hello” after two minutes without activity.</small></span>
       <Switch checked={screenSaver} onChange={setScreenSaver} label="Hello screen saver" />
+    </div>
+    <div className={styles.row}>
+      <span className={styles.rowText}><strong>Hot corners</strong><small>Top left: Mission Control. Bottom left: screen saver. Bottom right: show the desktop.</small></span>
+      <Switch checked={hotCorners} onChange={setHotCorners} label="Hot corners" />
     </div>
   </Group>;
 }

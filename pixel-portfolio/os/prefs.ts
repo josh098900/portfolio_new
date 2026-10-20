@@ -20,10 +20,19 @@ type Prefs = {
   themeMode: ThemeMode;
   /** The Mac's "hello" screen saver after a while without activity. */
   screenSaver: boolean;
+  /** Mac hot corners: Mission Control, screen saver and Show Desktop. */
+  hotCorners: boolean;
+  /** Rain and snow on the desktop when it's raining or snowing in London. */
+  weatherEffects: boolean;
+  /** visionOS mode on the Mac: windows float as glass panes in 3D. Not saved. */
+  spatial: boolean;
+  setSpatial: (value: boolean) => void;
   setBrightness: (value: number) => void;
   setReduceMotion: (value: boolean) => void;
   setThemeMode: (mode: ThemeMode) => void;
   setScreenSaver: (value: boolean) => void;
+  setHotCorners: (value: boolean) => void;
+  setWeatherEffects: (value: boolean) => void;
   load: () => void;
 };
 
@@ -55,15 +64,21 @@ function applyTheme(theme: Theme) {
 }
 
 export const usePrefs = create<Prefs>()((set, get) => {
-  const save = () => store(PREFS_KEY, JSON.stringify({ brightness: get().brightness, reduceMotion: get().reduceMotion, screenSaver: get().screenSaver }));
+  const save = () => store(PREFS_KEY, JSON.stringify({ brightness: get().brightness, reduceMotion: get().reduceMotion, screenSaver: get().screenSaver, hotCorners: get().hotCorners, weatherEffects: get().weatherEffects }));
   return {
     brightness: 1,
     reduceMotion: false,
     themeMode: "auto",
     screenSaver: true,
+    hotCorners: true,
+    weatherEffects: true,
+    spatial: false,
+    setSpatial: spatial => set({ spatial }),
     setBrightness: brightness => { set({ brightness: clampBrightness(brightness) }); save(); },
     setReduceMotion: reduceMotion => { set({ reduceMotion }); save(); },
     setScreenSaver: screenSaver => { set({ screenSaver }); save(); },
+    setHotCorners: hotCorners => { set({ hotCorners }); save(); },
+    setWeatherEffects: weatherEffects => { set({ weatherEffects }); save(); },
     setThemeMode: themeMode => {
       set({ themeMode });
       store(THEME_KEY, themeMode === "auto" ? null : themeMode);
@@ -74,7 +89,7 @@ export const usePrefs = create<Prefs>()((set, get) => {
       set({ themeMode: theme === "light" || theme === "dark" ? theme : "auto" });
       try {
         const saved = JSON.parse(read(PREFS_KEY) ?? "null");
-        if (saved) set({ brightness: clampBrightness(saved.brightness), reduceMotion: saved.reduceMotion === true, screenSaver: saved.screenSaver !== false });
+        if (saved) set({ brightness: clampBrightness(saved.brightness), reduceMotion: saved.reduceMotion === true, screenSaver: saved.screenSaver !== false, hotCorners: saved.hotCorners !== false, weatherEffects: saved.weatherEffects !== false });
       } catch { /* Ignore unreadable preferences. */ }
     },
   };

@@ -41,6 +41,16 @@ The first time you run the browser tests, install the browsers with `npx playwri
 - `os/screensaver.tsx`: the Mac's hello screen saver, after two minutes idle (switchable in Settings) or from the  menu.
 - `os/glow.tsx`: the Apple Intelligence glow around the screen while the assistant thinks or speaks.
 - `apps/music/now-playing.tsx`: the full-screen player, with a backdrop drawn from the album art. Swipe down or press Escape to close it.
+- `os/tiling.ts`: window tiling (halves, quarters, fill, centre) from dragging to edges, the green button's menu or the Window menu.
+- `os/mission-control.tsx`: Mission Control, hot corners (Mission Control, screen saver, Show Desktop) and Show Desktop.
+- `os/weather-fx.tsx`: rain and snow on a canvas behind the windows, following London's live weather (Terminal: `rain`, `snow`, `clear`).
+- `os/pet.tsx`: the pixel lab critter on the dock.
+- `os/standby.tsx`: iPhone StandBy in landscape on the home screen.
+- `os/magnifier.tsx`: the Liquid Glass magnifier (hold ⌥), a displacement-filter lens in Chromium.
+- `os/spatial.tsx` and the end of `app/globals.css`: visionOS mode.
+- `os/voice.tsx` and `os/voice-commands.ts`: voice commands through the browser's speech recognition; what isn't a command becomes a question for the assistant.
+- `os/achievements.ts` and `os/achievement-watcher.tsx`: achievements, kept in the browser, listed in Arcade.
+- `apps/appstore/`: the projects as App Store listings. `apps/resume/airdrop.tsx` and `lib/resume-pdf.ts`: AirDrop, and the CV written as a PDF with no library.
 - `os/island.tsx`: the iPhone Dynamic Island. It shows music playing (from the shared player in `os/media.ts`), the assistant speaking and short alerts (`os/live.ts`) while their apps are out of sight, and expands into controls when tapped.
 - `app/wallpapers.css` and `os/wallpapers.ts`: the wallpapers, drawn with CSS gradients. The saved choice is applied before first paint.
 - `app/api/weather/route.ts` and `lib/weather.ts`: London weather for the widgets. It tries Open-Meteo, then MET Norway, and caches successful responses for 30 minutes. Neither needs an API key.

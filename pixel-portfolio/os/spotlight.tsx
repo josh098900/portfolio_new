@@ -6,6 +6,7 @@ import { projects } from "@/content/projects";
 import { AppIcon, Glyph, type GlyphName } from "./icons";
 import { apps, homeRoute, readyApps, type AppId, type Route } from "./routes";
 import { useOS } from "./store";
+import { VoiceButton } from "./voice";
 import styles from "./spotlight.module.css";
 
 type Kind = "App" | "Project" | "Note";
@@ -86,6 +87,7 @@ function SpotlightPanel() {
             onKeyDown={onKeyDown}
           />
         </label>
+        <VoiceButton className={`${styles.filter} glass`} size={24} />
         {filters.map(f => <button key={f.kind} type="button" className={`${styles.filter} glass`} aria-pressed={filter === f.kind} aria-label={`Only ${f.label.toLowerCase()}`} title={f.label}
           onClick={() => { setFilter(current => current === f.kind ? null : f.kind); setActive(0); }}>
           <Glyph name={f.icon} size={24} />

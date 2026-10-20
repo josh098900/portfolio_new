@@ -20,9 +20,18 @@ export type Alert = {
 type Live = {
   /** True while the assistant is writing a reply. */
   thinking: boolean;
+  /** Voice: listening, what was heard so far, and what was done. */
+  listening: boolean;
+  heard: string;
+  /** A question for the assistant, asked by voice; Messages sends it when it opens. */
+  question: string | null;
+  setVoice: (patch: Partial<Pick<Live, "listening" | "heard" | "question">>) => void;
   /** Set while the assistant's voice plays; `stop` silences it. */
   speaking: { stop: () => void } | null;
   alert: Alert | null;
+  /** Terminal's rain, snow and clear commands override London's real weather until reload. */
+  sky: "live" | "rain" | "snow" | "clear";
+  setSky: (sky: Live["sky"]) => void;
   setThinking: (thinking: boolean) => void;
   setSpeaking: (speaking: Live["speaking"]) => void;
   flash: (alert: Omit<Alert, "id">) => void;
@@ -35,8 +44,14 @@ let timer: ReturnType<typeof setTimeout> | undefined;
 
 export const useLive = create<Live>()(set => ({
   thinking: false,
+  listening: false,
+  heard: "",
+  question: null,
+  setVoice: patch => set(patch),
   speaking: null,
   alert: null,
+  sky: "live",
+  setSky: sky => set({ sky }),
   setThinking: thinking => set({ thinking }),
   setSpeaking: speaking => set({ speaking }),
   flash: alert => {

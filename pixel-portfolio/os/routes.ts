@@ -4,7 +4,7 @@ import { projects } from "@/content/projects";
 import { findGame, games } from "@/apps/arcade/games";
 import { findSection, settingsSections } from "@/apps/settings/sections";
 
-export const appIds = ["notes", "projects", "resume", "contact", "messages", "maps", "photos", "music", "tv", "arcade", "activity", "terminal", "settings"] as const;
+export const appIds = ["notes", "projects", "resume", "contact", "messages", "maps", "photos", "music", "tv", "appstore", "arcade", "activity", "terminal", "settings"] as const;
 export type AppId = (typeof appIds)[number];
 
 export type AppInfo = {
@@ -27,6 +27,7 @@ export const apps: Record<AppId, AppInfo> = {
   photos: { name: "Photos", description: "Screenshots and photos.", size: { w: 960, h: 640 }, minSize: { w: 360, h: 320 }, ready: true },
   music: { name: "Music", description: "What I'm listening to: Avicii, Tiësto and Gigi Perez.", size: { w: 1060, h: 680 }, minSize: { w: 360, h: 360 }, ready: true },
   tv: { name: "TV", description: "Films I've watched lately, from my Letterboxd.", size: { w: 1080, h: 700 }, minSize: { w: 360, h: 360 }, ready: Boolean(letterboxdUser) },
+  appstore: { name: "App Store", description: "Josh's projects as apps you can get.", size: { w: 1060, h: 700 }, minSize: { w: 360, h: 360 }, ready: true },
   arcade: { name: "Arcade", description: "Pong, Snake, Bricks and Lab Hangout.", size: { w: 900, h: 640 }, minSize: { w: 360, h: 360 }, ready: true },
   activity: { name: "Activity", description: "My GitHub activity as rings.", size: { w: 760, h: 640 }, minSize: { w: 340, h: 320 }, ready: true },
   terminal: { name: "Terminal", description: "Explore this portfolio from the command line.", size: { w: 720, h: 460 }, minSize: { w: 340, h: 240 }, ready: true },

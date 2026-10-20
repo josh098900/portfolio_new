@@ -91,6 +91,14 @@ export function Messages() {
 
   const notice = (text: string) => setBubbles(list => [...list, { id: crypto.randomUUID(), role: "notice", text }]);
 
+  // A question asked by voice from anywhere in the OS is sent as soon as Messages is ready.
+  const question = useLive(s => s.question);
+  useEffect(() => {
+    if (!question || busy) return;
+    useLive.getState().setVoice({ question: null });
+    send(question);
+  }, [question, busy]);
+
   async function send(text: string) {
     const question = text.trim().slice(0, MAX_CHARS);
     if (!question || busy) return;
@@ -103,6 +111,7 @@ export function Messages() {
     setBubbles(list => [...list, { id: crypto.randomUUID(), role: "user", text: question }, { id: replyBubble, role: "assistant", text: "", pending: true }]);
     setDraft("");
     setBusy(true);
+    window.dispatchEvent(new CustomEvent("josh:achieve", { detail: "small-talk" }));
     useLive.getState().setThinking(true);
     const abort = new AbortController();
     request.current = abort;

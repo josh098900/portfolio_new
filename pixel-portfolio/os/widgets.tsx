@@ -64,7 +64,7 @@ function loadWeather() {
 
 type WeatherState = { status: "loading" } | { status: "ready"; weather: Weather } | { status: "unavailable" };
 
-function useWeather() {
+export function useWeather() {
   const [state, setState] = useState<WeatherState>({ status: "loading" });
   useEffect(() => {
     let alive = true;

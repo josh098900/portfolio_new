@@ -3,19 +3,27 @@
 import { AnimatePresence, domAnimation, LazyMotion, MotionConfig } from "motion/react";
 import { useEffect, useRef } from "react";
 import { useShallow } from "zustand/react/shallow";
+import { Achievements } from "./achievement-watcher";
 import { ControlCentre } from "./control-centre";
 import { Dock } from "./dock";
 import { HomeScreen } from "./home-screen";
 import { Glow } from "./glow";
 import { DynamicIsland } from "./island";
+import { VoiceHUD } from "./voice";
 import { LiquidGlass } from "./liquid-glass";
+import { Magnifier } from "./magnifier";
 import { MenuBar } from "./menu-bar";
+import { Pet } from "./pet";
+import { MissionControl, useHotCorners } from "./mission-control";
 import { usePrefs, usePrefsSync } from "./prefs";
 import { appIds, homeRoute, pathFromUrl, routeTitle, routeToPath, type Route } from "./routes";
 import { useShell } from "./shell";
 import { ScreenSaver } from "./screensaver";
+import { useSpatial } from "./spatial";
 import { Spotlight } from "./spotlight";
+import { StandBy } from "./standby";
 import { OSProvider, selectFocused, useOS, useOSStore } from "./store";
+import { WeatherEffects } from "./weather-fx";
 import { DesktopWidgets } from "./widgets";
 import { Window } from "./window";
 import styles from "./system.module.css";
@@ -128,11 +136,14 @@ function Desktop() {
   useShortcuts();
   usePrefsSync();
   useVisibleArea();
+  useHotCorners(shell);
+  useSpatial(shell);
   const windows = useOS(useShallow(s => appIds.flatMap(app => s.windows[app] ?? [])));
   const focused = useOS(s => selectFocused(s)?.app ?? null);
 
   return <div className={styles.os} data-app-open={focused ? "" : undefined}>
     <div className={`${styles.wallpaper} wallpaper-fill`} aria-hidden="true" />
+    <WeatherEffects />
     <MenuBar />
     <main id="main" className={styles.workspace}>
       <div inert={Boolean(focused) && shell !== null && shell !== "desktop"}>
@@ -144,12 +155,18 @@ function Desktop() {
       </AnimatePresence>
     </main>
     <Dock shell={shell} />
+    <Pet shell={shell} />
     {focused && <HomeIndicator />}
+    <MissionControl shell={shell} />
     <Spotlight />
     <ControlCentre />
+    <StandBy shell={shell} />
     <Glow />
+    <VoiceHUD />
+    <Achievements shell={shell} />
     <ScreenSaver shell={shell} />
     <LiquidGlass />
+    <Magnifier shell={shell} />
     <DynamicIsland shell={shell} />
     <Dimmer />
   </div>;

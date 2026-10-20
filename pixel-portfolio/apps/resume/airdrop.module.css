@@ -1,0 +1,188 @@
+.scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgb(0 0 0 / 0.25);
+  animation: fade 0.2s ease-out;
+}
+
+@keyframes fade {
+  from { opacity: 0; }
+}
+
+.sheet {
+  position: relative;
+  display: grid;
+  gap: 14px;
+  width: min(380px, 100%);
+  padding: 16px 18px 22px;
+  border-radius: 26px;
+  color: var(--label);
+  animation: rise 0.35s cubic-bezier(0.2, 0.9, 0.25, 1);
+}
+
+@keyframes rise {
+  from { opacity: 0; translate: 0 16px; scale: 0.97; }
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.head strong {
+  font-size: 17px;
+}
+
+.close {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--fill-strong);
+  color: var(--label-secondary);
+  rotate: 45deg;
+}
+
+.file {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 14px;
+  background: var(--fill);
+  cursor: grab;
+}
+
+.file span {
+  display: grid;
+}
+
+.file small {
+  color: var(--label-secondary);
+  font-size: 12px;
+}
+
+.pdf {
+  display: grid !important;
+  place-items: center;
+  width: 38px;
+  height: 46px;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #ff5b4f, #e0322a);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.2);
+}
+
+.hint {
+  margin: 0;
+  color: var(--label-secondary);
+  font-size: 13px;
+  text-align: center;
+}
+
+/* The radar: rings pulse out from your device. */
+.radar {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 220px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--accent-fill) 18%, transparent), transparent 70%);
+}
+
+.radar i {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  width: 90px;
+  height: 90px;
+  border: 1.5px solid color-mix(in srgb, var(--accent-fill) 55%, transparent);
+  border-radius: 50%;
+  translate: -50% -50%;
+  animation: ripple 2.7s ease-out infinite;
+}
+
+.radar i:nth-child(2) { animation-delay: 0.9s; }
+.radar i:nth-child(3) { animation-delay: 1.8s; }
+
+@keyframes ripple {
+  from { scale: 0.8; opacity: 0.9; }
+  to { scale: 3.4; opacity: 0; }
+}
+
+.target {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  padding: 8px;
+  border: 0;
+  border-radius: 18px;
+  background: none;
+  color: inherit;
+  font: inherit;
+}
+
+.target strong {
+  font-size: 14px;
+}
+
+.target small {
+  color: var(--label-secondary);
+  font-size: 12px;
+}
+
+.avatar {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(160deg, #9aa6b8, #5b6577);
+  color: #fff;
+  box-shadow: 0 6px 16px rgb(0 0 0 / 0.2);
+  transition: scale 0.2s;
+}
+
+.target[data-over] .avatar,
+.target:hover .avatar {
+  scale: 1.08;
+}
+
+.radar[data-state="sent"] .avatar {
+  background: linear-gradient(160deg, #34c759, #1f9d45);
+}
+
+.progress {
+  position: absolute;
+  inset: -6px;
+  width: calc(100% + 12px);
+  height: calc(100% + 12px);
+  rotate: -90deg;
+}
+
+.progress circle {
+  fill: none;
+  stroke: var(--accent-fill);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 208;
+  stroke-dashoffset: 208;
+  animation: send 1.35s ease-in-out forwards;
+}
+
+@keyframes send {
+  to { stroke-dashoffset: 0; }
+}

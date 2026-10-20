@@ -6,6 +6,7 @@ import { projects } from "@/content/projects";
 import { resume } from "@/content/resume";
 import { setWallpaper, usePrefs, type ThemeMode } from "@/os/prefs";
 import { apps, readyApps, type AppId } from "@/os/routes";
+import { useLive } from "@/os/live";
 import { wallpapers } from "@/os/wallpapers";
 import { nodeAt, pretty, resolve } from "./fs";
 import styles from "./terminal.module.css";
@@ -136,7 +137,11 @@ export const commands: Record<string, Command> = {
       ctx.print(`open: can't open "${target}". Try an app name, like: open music`, "error");
     },
   },
-  clear: { group: "Explore", help: "clear the screen (or press Ctrl+L)", run: (_, ctx) => ctx.clear() },
+  clear: { group: "Explore", help: "clear the screen (or press Ctrl+L)", run: (_, ctx) => {
+    ctx.clear();
+    // Also ends a forced rain or snow, back to London's real weather.
+    if (useLive.getState().sky !== "live") useLive.getState().setSky("live");
+  } },
 
   whoami: { group: "About Josh", help: "who is Josh?", run: (_, ctx) => ctx.print("josh: third-year software engineering student at the University of Portsmouth. Builds things for the web, and is currently building Curio. Looking for graduate software engineering roles: try `hire`.") },
   projects: {
@@ -263,6 +268,8 @@ export const commands: Record<string, Command> = {
   coffee: { run: (_, ctx) => ctx.print(<pre className={styles.pre}>{"      ( (\n       ) )\n    ........\n    |      |]\n    \\      /\n     `----'\nBrewing… Josh runs on this."}</pre>) },
   matrix: { run: (_, ctx) => ctx.effect("matrix") },
   sl: { run: (_, ctx) => ctx.effect("train") },
+  rain: { run: (_, ctx) => { useLive.getState().setSky("rain"); ctx.print("Rain on the glass. Type clear to go back to London's real weather."); } },
+  snow: { run: (_, ctx) => { useLive.getState().setSky("snow"); ctx.print("Let it snow. ❄  Type clear to go back to London's real weather."); } },
   cowsay: { run: (args, ctx) => ctx.print(<pre className={styles.pre}>{cowsay(args.join(" ").slice(0, 40))}</pre>) },
   fortune: { run: (_, ctx) => ctx.print(fortunes[Math.floor(Math.random() * fortunes.length)]) },
   ping: { run: (_, ctx) => ctx.print(<div><p>PING portfolio (127.0.0.1): 56 data bytes</p><p>64 bytes: icmp_seq=0 ttl=64 time=0.042 ms</p><p className={styles.accent}>pong! Want the real thing? Type: pong</p></div>) },
@@ -312,7 +319,11 @@ export async function run(input: string, ctx: Ctx) {
   const [name, ...args] = input.trim().split(/\s+/);
   if (!name) return;
   const command = commands[name] ?? commands[name.toLowerCase()];
-  if (command) return command.run(args, ctx);
+  if (command) {
+    // Commands missing from help are the hidden ones.
+    if (!command.group) window.dispatchEvent(new CustomEvent("josh:achieve", { detail: "hacker" }));
+    return command.run(args, ctx);
+  }
   const guess = visibleCommands.map(c => [c, distance(name.toLowerCase(), c)] as const).sort((a, b) => a[1] - b[1])[0];
   ctx.print(`zsh: command not found: ${name}${guess && guess[1] <= 2 ? `. Did you mean ${guess[0]}?` : ""}`, "error");
 }

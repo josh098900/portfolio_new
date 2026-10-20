@@ -20,6 +20,7 @@ export const dockApps: { app: AppId; shells: Shell[] }[] = [
   { app: "photos", shells: ["desktop"] },
   { app: "music", shells: ["desktop"] },
   { app: "tv", shells: ["desktop"] },
+  { app: "appstore", shells: ["desktop"] },
   { app: "arcade", shells: ["desktop"] },
   { app: "activity", shells: ["desktop"] },
   { app: "terminal", shells: ["desktop", "tablet"] },

@@ -1,0 +1,58 @@
+.mission {
+  position: absolute;
+  inset: 0;
+  z-index: 8500;
+}
+
+.cell {
+  position: absolute;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.cell:hover,
+.cell:focus-visible {
+  outline: 4px solid var(--accent-fill);
+  outline-offset: 3px;
+}
+
+.label {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 12px);
+  translate: -50% 0;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgb(0 0 0 / 0.55);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.empty {
+  position: absolute;
+  inset: 40% 0 auto;
+  margin: 0;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+  text-align: center;
+  text-shadow: 0 2px 12px rgb(0 0 0 / 0.4);
+}
+
+/* The desktop dims behind the spread-out windows. */
+:global(html[data-mission-control]) :global(.wallpaper-fill) {
+  filter: brightness(0.7) blur(6px);
+  transition: filter 0.38s;
+}
+
+:global(html[data-mission-control]) :global([data-liquid]:not(nav)) {
+  opacity: 0.2;
+  transition: opacity 0.38s;
+}

@@ -4,7 +4,10 @@ import { useEffect, useRef, useState, useSyncExternalStore, type KeyboardEvent, 
 import { useShallow } from "zustand/react/shallow";
 import { Glyph } from "./icons";
 import { appIds, apps, homeRoute, readyApps } from "./routes";
-import { selectFocused, useOS } from "./store";
+import { showDesktop } from "./mission-control";
+import { selectFocused, useOS, useOSStore } from "./store";
+import { layoutRect, usableArea, type Layout } from "./tiling";
+import { VoiceButton } from "./voice";
 import styles from "./menu-bar.module.css";
 
 const clockFormat = new Intl.DateTimeFormat("en-GB", { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
@@ -26,10 +29,18 @@ type Menu = { id: string; title: ReactNode; label: string; bold?: boolean; items
 function useMenus(): Menu[] {
   const focused = useOS(s => selectFocused(s));
   const windows = useOS(useShallow(s => appIds.flatMap(app => s.windows[app] ?? [])));
-  const { open, launch, close, minimise, toggleZoom, reset, setOverlay } = useOS(useShallow(s => ({
-    open: s.open, launch: s.launch, close: s.close, minimise: s.minimise, toggleZoom: s.toggleZoom, reset: s.reset, setOverlay: s.setOverlay,
+  const { open, launch, close, minimise, toggleZoom, reset, setOverlay, setRect } = useOS(useShallow(s => ({
+    open: s.open, launch: s.launch, close: s.close, minimise: s.minimise, toggleZoom: s.toggleZoom, reset: s.reset, setOverlay: s.setOverlay, setRect: s.setRect,
   })));
+  const store = useOSStore();
   const name = focused ? apps[focused.app].name : null;
+  const tile = (layout: Layout) => {
+    const area = usableArea();
+    const el = focused && document.querySelector<HTMLElement>(`section[aria-labelledby="window-title-${focused.app}"]`);
+    if (!focused || !area || !el) return;
+    setRect(focused.app, layoutRect(layout, area, { w: el.offsetWidth, h: el.offsetHeight }));
+    if (layout !== "fill" && layout !== "centre") window.dispatchEvent(new CustomEvent("josh:achieve", { detail: "tiling" }));
+  };
 
   return [
     { id: "site", title: <span className={styles.logo} aria-hidden="true">J</span>, label: "Portfolio", items: [
@@ -50,12 +61,23 @@ function useMenus(): Menu[] {
     { id: "window", title: "Window", label: "Window", items: [
       { label: "Minimise", disabled: !focused, action: () => focused && minimise(focused.app) },
       { label: "Zoom", disabled: !focused, action: () => focused && toggleZoom(focused.app) },
+      { label: "Fill", disabled: !focused, action: () => tile("fill") },
+      { label: "Centre", disabled: !focused, action: () => tile("centre") },
+      "separator",
+      { label: "Tile Left", disabled: !focused, action: () => tile("left") },
+      { label: "Tile Right", disabled: !focused, action: () => tile("right") },
+      { label: "Tile Top", disabled: !focused, action: () => tile("top") },
+      { label: "Tile Bottom", disabled: !focused, action: () => tile("bottom") },
+      "separator",
+      { label: "Mission Control", action: () => setOverlay("mission-control") },
+      { label: "Show Desktop", action: () => showDesktop(store.getState) },
       ...(windows.length ? ["separator" as const] : []),
       ...windows.map(w => ({ label: apps[w.app].name, checked: w.app === focused?.app, action: () => open({ app: w.app, sub: w.sub }) })),
     ] },
     { id: "help", title: "Help", label: "Help", items: [
       { label: "Search", shortcut: "⌘K", action: () => setOverlay("spotlight") },
       { label: "Ask Josh's Assistant", action: () => launch("messages") },
+      { label: "Glass Magnifier (hold ⌥)", action: () => window.dispatchEvent(new CustomEvent("josh:magnifier")) },
       "separator",
       { label: "View Source on GitHub", action: () => window.open(SOURCE, "_blank", "noopener,noreferrer") },
     ] },
@@ -158,6 +180,7 @@ export function MenuBar() {
     </nav>
     <div className={styles.right}>
       <span className={styles.status} aria-hidden="true"><Glyph name="wifi" size={15} /></span>
+      <VoiceButton className={styles.title} size={15} />
       <button type="button" className={styles.title} aria-label="Spotlight (⌘K)" aria-expanded={overlay === "spotlight"} onClick={() => toggleOverlay("spotlight")}>
         <Glyph name="search" size={14} />
       </button>
